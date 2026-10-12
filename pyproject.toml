@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "formulaforge"
+version = "0.1.0"
+description = "Formula sheet studio for STEM students: write sheets in Markdown + LaTeX, explore the formula dependency graph, study in optimal order."
+readme = "README.md"
+requires-python = ">=3.10"
+license = { text = "MIT" }
+dependencies = [
+    "pyyaml>=6.0",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8.0",
+    "plotly>=5.0",
+    "matplotlib>=3.8",
+    "pillow>=10.0",
+]
+
+[project.scripts]
+formulaforge = "formulaforge.cli:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

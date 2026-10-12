@@ -1,0 +1,13 @@
+Metadata-Version: 2.4
+Name: formulaforge
+Version: 0.1.0
+Summary: Formula sheet studio for STEM students: write sheets in Markdown + LaTeX, explore the formula dependency graph, study in optimal order.
+License: MIT
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+Requires-Dist: pyyaml>=6.0
+Provides-Extra: dev
+Requires-Dist: pytest>=8.0; extra == "dev"
+Requires-Dist: plotly>=5.0; extra == "dev"
+Requires-Dist: matplotlib>=3.8; extra == "dev"
+Requires-Dist: pillow>=10.0; extra == "dev"

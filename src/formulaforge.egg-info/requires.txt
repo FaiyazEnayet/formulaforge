@@ -1,0 +1,7 @@
+pyyaml>=6.0
+
+[dev]
+pytest>=8.0
+plotly>=5.0
+matplotlib>=3.8
+pillow>=10.0
