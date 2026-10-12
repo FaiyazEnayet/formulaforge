@@ -1,0 +1,204 @@
+course: "AMS 151"
+title: "Applied Calculus I"
+description: "Limits, derivatives, and integrals: the full first-semester calculus arc from the limit definition to the Fundamental Theorem."
+
+formulas:
+  - id: limit-def
+    name: "Limit (definition)"
+    topic: "Limits"
+    latex: '\lim_{x \to a} f(x) = L'
+    description: "f(x) gets arbitrarily close to L as x approaches a. The foundation everything else stands on."
+    tags: [definition]
+    derives_from: []
+
+  - id: limit-laws
+    name: "Limit laws"
+    topic: "Limits"
+    latex: '\lim (f \pm g) = \lim f \pm \lim g, \quad \lim (fg) = \lim f \cdot \lim g, \quad \lim \frac{f}{g} = \frac{\lim f}{\lim g}'
+    description: "Limits pass through arithmetic. The quotient law needs a nonzero denominator limit."
+    tags: [rules]
+    derives_from: [limit-def]
+
+  - id: squeeze
+    name: "Squeeze theorem"
+    topic: "Limits"
+    latex: 'g(x) \le f(x) \le h(x), \ \lim g = \lim h = L \ \Rightarrow \ \lim f = L'
+    description: "Trap f between two functions converging to the same limit. Classic for trig limits."
+    tags: [theorem]
+    derives_from: [limit-laws]
+
+  - id: continuity
+    name: "Continuity"
+    topic: "Limits"
+    latex: '\lim_{x \to a} f(x) = f(a)'
+    description: "No jumps, no holes, no asymptotes at a. The limit equals the value."
+    tags: [definition]
+    derives_from: [limit-def]
+
+  - id: ivt
+    name: "Intermediate Value Theorem"
+    topic: "Limits"
+    latex: 'f \text{ continuous on } [a,b] \ \Rightarrow \ \forall y \text{ between } f(a), f(b) \ \exists c: f(c) = y'
+    description: "A continuous function hits every value between its endpoints. Guarantees roots exist."
+    tags: [theorem]
+    derives_from: [continuity]
+
+  - id: deriv-def
+    name: "Derivative (definition)"
+    topic: "Derivatives"
+    latex: "f'(x) = \\lim_{h \\to 0} \\frac{f(x+h) - f(x)}{h}"
+    description: "Instantaneous rate of change as a limit of average rates. Slope of the tangent line."
+    tags: [definition]
+    derives_from: [limit-def]
+
+  - id: power-rule
+    name: "Power rule"
+    topic: "Derivatives"
+    latex: "\\frac{d}{dx} x^n = n x^{n-1}"
+    description: "The workhorse. Bring the exponent down, subtract one."
+    tags: [rules]
+    derives_from: [deriv-def]
+
+  - id: product-rule
+    name: "Product rule"
+    topic: "Derivatives"
+    latex: "(fg)' = f'g + fg'"
+    description: "Derivative of the first times the second, plus the first times derivative of the second."
+    tags: [rules]
+    derives_from: [deriv-def]
+
+  - id: quotient-rule
+    name: "Quotient rule"
+    topic: "Derivatives"
+    latex: "\\left(\\frac{f}{g}\\right)' = \\frac{f'g - fg'}{g^2}"
+    description: "Low d-high minus high d-low, over low-low. Denominator squared."
+    tags: [rules]
+    derives_from: [product-rule]
+
+  - id: chain-rule
+    name: "Chain rule"
+    topic: "Derivatives"
+    latex: "\\frac{dy}{dx} = \\frac{dy}{du} \\cdot \\frac{du}{dx}"
+    description: "Differentiate the outside, leave the inside, then multiply by the derivative of the inside."
+    tags: [rules]
+    derives_from: [deriv-def]
+
+  - id: trig-derivs
+    name: "Trigonometric derivatives"
+    topic: "Derivatives"
+    latex: "\\frac{d}{dx} \\sin x = \\cos x, \\quad \\frac{d}{dx} \\cos x = -\\sin x, \\quad \\frac{d}{dx} \\tan x = \\sec^2 x"
+    description: "Memorize sine and cosine; tangent follows from the quotient rule."
+    tags: [rules]
+    derives_from: [deriv-def, quotient-rule]
+
+  - id: exp-deriv
+    name: "Exponential derivative"
+    topic: "Derivatives"
+    latex: "\\frac{d}{dx} e^x = e^x, \\quad \\frac{d}{dx} a^x = a^x \\ln a"
+    description: "e^x is its own derivative. Other bases pick up a ln a factor via the chain rule."
+    tags: [rules]
+    derives_from: [chain-rule]
+
+  - id: implicit
+    name: "Implicit differentiation"
+    topic: "Derivatives"
+    latex: "\\frac{d}{dx} F(x, y) = 0 \\ \\Rightarrow \\ \\text{solve for } y'"
+    description: "Differentiate both sides treating y as a function of x, then solve for y'. Chain rule in disguise."
+    tags: [technique]
+    derives_from: [chain-rule]
+
+  - id: linearization
+    name: "Linear approximation"
+    topic: "Applications"
+    latex: "L(x) = f(a) + f'(a)(x - a)"
+    description: "Zoom in close enough and every smooth curve looks like its tangent line."
+    tags: [approximation]
+    derives_from: [deriv-def]
+
+  - id: crit-points
+    name: "Critical points"
+    topic: "Applications"
+    latex: "f'(c) = 0 \\ \\text{or} \\ f'(c) \\text{ undefined}"
+    description: "Candidates for maxima and minima. Fermat's theorem: interior extrema happen here."
+    tags: [optimization]
+    derives_from: [deriv-def]
+
+  - id: mvt
+    name: "Mean Value Theorem"
+    topic: "Applications"
+    latex: "\\exists c \\in (a,b): \\ f'(c) = \\frac{f(b) - f(a)}{b - a}"
+    description: "Somewhere the instantaneous rate equals the average rate. The theoretical backbone of curve analysis."
+    tags: [theorem]
+    derives_from: [deriv-def, crit-points]
+
+  - id: first-deriv-test
+    name: "First derivative test"
+    topic: "Applications"
+    latex: "f' \\text{ changes } + \\to - \\Rightarrow \\text{ local max}; \\ - \\to + \\Rightarrow \\text{ local min}"
+    description: "Read maxima and minima off the sign chart of f'."
+    tags: [curve-sketching]
+    derives_from: [crit-points]
+
+  - id: second-deriv-test
+    name: "Second derivative test"
+    topic: "Applications"
+    latex: "f''(c) > 0 \\Rightarrow \\text{ local min}; \\quad f''(c) < 0 \\Rightarrow \\text{ local max}"
+    description: "Concave up at a critical point means a valley; concave down means a peak."
+    tags: [curve-sketching]
+    derives_from: [crit-points]
+
+  - id: related-rates
+    name: "Related rates"
+    topic: "Applications"
+    latex: "\\frac{d}{dt} [\\text{relation}] \\ \\Rightarrow \\ \\text{equation in rates} \\ \\Rightarrow \\ \\text{substitute}"
+    description: "Differentiate the relating equation with respect to time, then plug in the known values."
+    tags: [technique]
+    derives_from: [implicit, chain-rule]
+
+  - id: optimization
+    name: "Optimization procedure"
+    topic: "Applications"
+    latex: "\\text{model} \\to \\text{single variable} \\to \\text{critical points} \\to \\text{test endpoints}"
+    description: "Write the quantity as one variable, find critical points, check the domain endpoints too."
+    tags: [optimization]
+    derives_from: [crit-points, first-deriv-test]
+
+  - id: antiderivative
+    name: "Antiderivative"
+    topic: "Integrals"
+    latex: "F' = f \\ \\Rightarrow \\ \\int f(x)\\,dx = F(x) + C"
+    description: "Undo differentiation. The +C remembers the lost constant."
+    tags: [definition]
+    derives_from: []
+
+  - id: ftc1
+    name: "Fundamental Theorem, Part 1"
+    topic: "Integrals"
+    latex: "\\frac{d}{dx} \\int_a^x f(t)\\,dt = f(x)"
+    description: "Differentiation undoes integration. Accumulation functions differentiate back to the integrand."
+    tags: [theorem]
+    derives_from: [antiderivative, deriv-def]
+
+  - id: ftc2
+    name: "Fundamental Theorem, Part 2"
+    topic: "Integrals"
+    latex: "\\int_a^b f(x)\\,dx = F(b) - F(a)"
+    description: "Definite integrals evaluate via antiderivatives. Area under the curve, computed exactly."
+    tags: [theorem]
+    derives_from: [ftc1]
+
+  - id: usub
+    name: "u-substitution"
+    topic: "Integrals"
+    latex: "\\int f(g(x)) g'(x)\\,dx = \\int f(u)\\,du, \\quad u = g(x)"
+    description: "The chain rule in reverse. Spot the inner function and its derivative."
+    tags: [technique]
+    derives_from: [chain-rule, antiderivative]
+
+  - id: area-between
+    name: "Area between curves"
+    topic: "Integrals"
+    latex: "A = \\int_a^b [\\text{top}(x) - \\text{bottom}(x)]\\,dx"
+    description: "Integrate the vertical gap between the curves over the interval where they cross."
+    tags: [applications]
+    derives_from: [ftc2]

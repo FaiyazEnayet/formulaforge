@@ -48,12 +48,12 @@ func TestFindsByName(t *testing.T) {
 }
 
 func TestFindsAcrossSheets(t *testing.T) {
-	hits := Search(allSheets(t), "eigenvalues", 20)
+	hits := Search(allSheets(t), "induction", 20)
 	ids := map[string]bool{}
 	for _, h := range hits {
 		ids[h.Form.ID] = true
 	}
-	for _, want := range []string{"eigen-def", "char-poly", "diagonalization"} {
+	for _, want := range []string{"weak-induction"} {
 		if !ids[want] {
 			t.Errorf("missing %s in results", want)
 		}
@@ -87,14 +87,14 @@ func TestTopKRespected(t *testing.T) {
 }
 
 func TestNameBeatsLatex(t *testing.T) {
-	// "mean" appears in the NAME of psy103's mean formula; latex-only
+	// "z-score" appears in the NAME of psy103's z-score formula; latex-only
 	// matches score lower.
-	hits := Search(allSheets(t), "mean", 10)
+	hits := Search(allSheets(t), "z-score", 10)
 	if len(hits) == 0 {
 		t.Fatal("no hits")
 	}
-	if hits[0].Form.ID != "mean" || hits[0].Sheet != "psy103" {
-		t.Errorf("top hit = %s/%s, want psy103/mean", hits[0].Sheet, hits[0].Form.ID)
+	if hits[0].Form.ID != "z-score" || hits[0].Sheet != "psy103" {
+		t.Errorf("top hit = %s/%s, want psy103/z-score", hits[0].Sheet, hits[0].Form.ID)
 	}
 }
 

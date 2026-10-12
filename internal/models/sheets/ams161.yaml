@@ -1,0 +1,212 @@
+course: "AMS 161"
+title: "Applied Calculus II"
+description: "Integration techniques, improper integrals, infinite series, and parametric and polar curves: the second-semester calculus toolkit."
+
+formulas:
+  - id: parts
+    name: "Integration by parts"
+    topic: "Integration techniques"
+    latex: "\\int u\\,dv = uv - \\int v\\,du"
+    description: "The product rule in reverse. Pick u by LIATE: logs before powers."
+    tags: [technique]
+    derives_from: []
+
+  - id: trig-integrals
+    name: "Trigonometric integrals"
+    topic: "Integration techniques"
+    latex: "\\int \\sin^m x \\cos^n x\\,dx, \\quad \\int \\tan^m x \\sec^n x\\,dx"
+    description: "Strip one factor for du, convert the rest with Pythagorean identities."
+    tags: [technique]
+    derives_from: []
+
+  - id: trig-sub
+    name: "Trigonometric substitution"
+    topic: "Integration techniques"
+    latex: "\\sqrt{a^2 - x^2} \\to x = a\\sin\\theta, \\quad \\sqrt{a^2 + x^2} \\to x = a\\tan\\theta, \\quad \\sqrt{x^2 - a^2} \\to x = a\\sec\\theta"
+    description: "Match the radical to a trig identity so it collapses. Draw the reference triangle to convert back."
+    tags: [technique]
+    derives_from: [trig-integrals]
+
+  - id: partial-fractions
+    name: "Partial fractions"
+    topic: "Integration techniques"
+    latex: "\\frac{P(x)}{Q(x)} = \\sum \\frac{A_i}{\\text{linear factors}} + \\sum \\frac{B_i x + C_i}{\\text{quadratics}}"
+    description: "Split a rational function into integrable pieces. Factor the denominator first."
+    tags: [technique]
+    derives_from: []
+
+  - id: improper-def
+    name: "Improper integral (definition)"
+    topic: "Improper integrals"
+    latex: "\\int_a^{\\infty} f(x)\\,dx = \\lim_{t \\to \\infty} \\int_a^t f(x)\\,dx"
+    description: "An improper integral is a limit of proper ones. Converges only if the limit is finite."
+    tags: [definition]
+    derives_from: []
+
+  - id: improper-ptest
+    name: "p-test for improper integrals"
+    topic: "Improper integrals"
+    latex: "\\int_1^{\\infty} \\frac{dx}{x^p} \\text{ converges } \\iff p > 1"
+    description: "The benchmark improper integral. Everything else gets compared to it."
+    tags: [convergence]
+    derives_from: [improper-def]
+
+  - id: seq-limit
+    name: "Sequence limit"
+    topic: "Sequences and series"
+    latex: "\\lim_{n \\to \\infty} a_n = L"
+    description: "A sequence converges if its terms settle toward a finite limit."
+    tags: [definition]
+    derives_from: []
+
+  - id: divergence-test
+    name: "nth-term divergence test"
+    topic: "Sequences and series"
+    latex: "\\lim_{n \\to \\infty} a_n \\ne 0 \\ \\Rightarrow \\ \\sum a_n \\text{ diverges}"
+    description: "If the terms don't go to zero, the series can't converge. Inconclusive when they do."
+    tags: [convergence]
+    derives_from: [seq-limit]
+
+  - id: integral-test
+    name: "Integral test"
+    topic: "Sequences and series"
+    latex: "\\sum_{n=1}^{\\infty} f(n) \\text{ and } \\int_1^{\\infty} f(x)\\,dx \\text{ converge or diverge together}"
+    description: "For positive decreasing f, the series and the integral share the same fate."
+    tags: [convergence]
+    derives_from: [improper-ptest, seq-limit]
+
+  - id: p-series
+    name: "p-series"
+    topic: "Sequences and series"
+    latex: "\\sum_{n=1}^{\\infty} \\frac{1}{n^p} \\text{ converges } \\iff p > 1"
+    description: "The benchmark series. The harmonic series (p = 1) famously diverges."
+    tags: [convergence]
+    derives_from: [integral-test]
+
+  - id: comparison-test
+    name: "Direct comparison test"
+    topic: "Sequences and series"
+    latex: "0 \\le a_n \\le b_n, \\ \\sum b_n \\text{ converges } \\Rightarrow \\ \\sum a_n \\text{ converges}"
+    description: "Bound your series by a known convergent one. Smaller than convergent means convergent."
+    tags: [convergence]
+    derives_from: [integral-test]
+
+  - id: limit-comparison
+    name: "Limit comparison test"
+    topic: "Sequences and series"
+    latex: "\\lim_{n \\to \\infty} \\frac{a_n}{b_n} = c > 0 \\ \\Rightarrow \\ \\sum a_n, \\sum b_n \\text{ share convergence}"
+    description: "Compare growth rates instead of inequalities. Pick b_n from the dominant term."
+    tags: [convergence]
+    derives_from: [comparison-test]
+
+  - id: ratio-test
+    name: "Ratio test"
+    topic: "Sequences and series"
+    latex: "L = \\lim_{n \\to \\infty} \\left|\\frac{a_{n+1}}{a_n}\\right|: \\ L < 1 \\Rightarrow \\text{converges}, \\ L > 1 \\Rightarrow \\text{diverges}"
+    description: "Built for factorials and exponentials. L = 1 means try something else."
+    tags: [convergence]
+    derives_from: [seq-limit]
+
+  - id: root-test
+    name: "Root test"
+    topic: "Sequences and series"
+    latex: "L = \\lim_{n \\to \\infty} \\sqrt[n]{|a_n|}: \\ L < 1 \\Rightarrow \\text{converges}, \\ L > 1 \\Rightarrow \\text{diverges}"
+    description: "The ratio test's sibling, best when terms are nth powers."
+    tags: [convergence]
+    derives_from: [ratio-test]
+
+  - id: alternating-series
+    name: "Alternating series test"
+    topic: "Sequences and series"
+    latex: "b_n \\downarrow 0 \\ \\Rightarrow \\ \\sum (-1)^n b_n \\text{ converges}"
+    description: "Decreasing to zero is enough for alternating series. The error is bounded by the first dropped term."
+    tags: [convergence]
+    derives_from: [seq-limit]
+
+  - id: abs-conv
+    name: "Absolute vs conditional convergence"
+    topic: "Sequences and series"
+    latex: "\\sum |a_n| \\text{ converges } \\Rightarrow \\ \\sum a_n \\text{ converges (absolutely)}"
+    description: "Absolute convergence is stronger. Convergent but not absolutely means conditionally convergent."
+    tags: [convergence]
+    derives_from: [alternating-series]
+
+  - id: power-series
+    name: "Power series and radius of convergence"
+    topic: "Sequences and series"
+    latex: "\\sum_{n=0}^{\\infty} c_n (x-a)^n, \\quad R = \\frac{1}{\\limsup \\sqrt[n]{|c_n|}}"
+    description: "Converges absolutely inside |x - a| < R. Use the ratio test on the terms to find R."
+    tags: [power-series]
+    derives_from: [ratio-test]
+
+  - id: taylor
+    name: "Taylor series"
+    topic: "Sequences and series"
+    latex: "f(x) = \\sum_{n=0}^{\\infty} \\frac{f^{(n)}(a)}{n!} (x-a)^n"
+    description: "Represent a smooth function as an infinite polynomial built from its derivatives at a."
+    tags: [power-series]
+    derives_from: [power-series]
+
+  - id: maclaurin
+    name: "Maclaurin series"
+    topic: "Sequences and series"
+    latex: "e^x = \\sum \\frac{x^n}{n!}, \\quad \\sin x = \\sum (-1)^n \\frac{x^{2n+1}}{(2n+1)!}, \\quad \\cos x = \\sum (-1)^n \\frac{x^{2n}}{(2n)!}"
+    description: "Taylor series centered at zero. Memorize e^x, sin x, cos x, and 1/(1-x); the rest derive from them."
+    tags: [power-series]
+    derives_from: [taylor]
+
+  - id: taylor-remainder
+    name: "Taylor remainder bound"
+    topic: "Sequences and series"
+    latex: "|R_n(x)| \\le \\frac{M |x-a|^{n+1}}{(n+1)!}"
+    description: "The error after n terms is bounded by the next term's worst case. Lagrange form."
+    tags: [error-bound]
+    derives_from: [taylor]
+
+  - id: parametric
+    name: "Parametric equations"
+    topic: "Parametric and polar"
+    latex: "x = x(t), \\quad y = y(t)"
+    description: "Trace a curve with a parameter. One t gives one point; t increasing gives direction."
+    tags: [definition]
+    derives_from: []
+
+  - id: parametric-deriv
+    name: "Parametric derivative"
+    topic: "Parametric and polar"
+    latex: "\\frac{dy}{dx} = \\frac{dy/dt}{dx/dt}"
+    description: "Divide the rates. Chain rule with t as the middleman."
+    tags: [derivatives]
+    derives_from: [parametric]
+
+  - id: parametric-arclen
+    name: "Parametric arc length"
+    topic: "Parametric and polar"
+    latex: "L = \\int_{t_1}^{t_2} \\sqrt{\\left(\\frac{dx}{dt}\\right)^2 + \\left(\\frac{dy}{dt}\\right)^2}\\,dt"
+    description: "Integrate the speed. Pythagoras on infinitesimal steps."
+    tags: [arc-length]
+    derives_from: [parametric-deriv]
+
+  - id: polar
+    name: "Polar coordinates"
+    topic: "Parametric and polar"
+    latex: "x = r\\cos\\theta, \\quad y = r\\sin\\theta, \\quad r^2 = x^2 + y^2"
+    description: "Locate points by radius and angle instead of x and y."
+    tags: [definition]
+    derives_from: []
+
+  - id: polar-area
+    name: "Area in polar coordinates"
+    topic: "Parametric and polar"
+    latex: "A = \\frac{1}{2} \\int_{\\alpha}^{\\beta} r^2\\,d\\theta"
+    description: "Sweep out area with infinitesimal sectors. The 1/2 comes from the sector formula."
+    tags: [area]
+    derives_from: [polar]
+
+  - id: polar-arclen
+    name: "Arc length in polar coordinates"
+    topic: "Parametric and polar"
+    latex: "L = \\int_{\\alpha}^{\\beta} \\sqrt{r^2 + \\left(\\frac{dr}{d\\theta}\\right)^2}\\,d\\theta"
+    description: "The parametric arc length formula with x and y replaced by their polar forms."
+    tags: [arc-length]
+    derives_from: [polar, parametric-arclen]

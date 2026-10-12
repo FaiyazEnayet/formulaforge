@@ -37,8 +37,8 @@ func TestTotalEdges(t *testing.T) {
 		}
 		total += st.Edges
 	}
-	if total != 123 {
-		t.Errorf("total edges = %d, want 123", total)
+	if total != 214 {
+		t.Errorf("total edges = %d, want 214", total)
 	}
 }
 
@@ -78,7 +78,7 @@ func TestTopoOrderDeterministic(t *testing.T) {
 }
 
 func TestWavesCoverAllNodes(t *testing.T) {
-	want := map[string]int{"ams261": 3, "phy131": 5, "mat203": 5, "psy103": 6}
+	want := map[string]int{"ams151": 5, "ams161": 5, "ams210": 5, "ams261": 3, "phy131": 5, "cse213": 5, "cse214": 4, "psy103": 6}
 	for _, name := range models.ListSheets() {
 		g := loadGraph(t, name)
 		waves, err := g.Waves()
@@ -126,7 +126,7 @@ func TestLeverageKnownValues(t *testing.T) {
 		{"phy131", "newton2", 17},
 		{"ams261", "partial-def", 11},
 		{"psy103", "mean", 17},
-		{"mat203", "matrix-mult", 13},
+		{"cse213", "add-rule", 5},
 	}
 	for _, c := range cases {
 		g := loadGraph(t, c.sheet)
@@ -137,7 +137,7 @@ func TestLeverageKnownValues(t *testing.T) {
 }
 
 func TestLeverageRankingSorted(t *testing.T) {
-	g := loadGraph(t, "mat203")
+	g := loadGraph(t, "cse213")
 	r := g.LeverageRanking()
 	for i := 1; i < len(r); i++ {
 		if r[i].Leverage > r[i-1].Leverage {
@@ -147,13 +147,13 @@ func TestLeverageRankingSorted(t *testing.T) {
 			t.Fatal("ties not broken by id")
 		}
 	}
-	if r[0].ID != "matrix-mult" {
-		t.Errorf("top leverage = %s, want matrix-mult", r[0].ID)
+	if r[0].ID != "add-rule" {
+		t.Errorf("top leverage = %s, want add-rule", r[0].ID)
 	}
 }
 
 func TestMinMemorizeSetSizes(t *testing.T) {
-	want := map[string]int{"ams261": 3, "phy131": 6, "mat203": 8, "psy103": 5}
+	want := map[string]int{"ams151": 2, "ams161": 7, "ams210": 8, "ams261": 3, "phy131": 6, "cse213": 13, "cse214": 12, "psy103": 5}
 	for _, name := range models.ListSheets() {
 		g := loadGraph(t, name)
 		ms := g.MinMemorizeSet()

@@ -1,0 +1,236 @@
+course: "CSE 214"
+title: "Data Structures"
+description: "Algorithm analysis and the classic structures: asymptotic notation, recurrences, lists, trees, heaps, hashing, sorting bounds, and graph algorithms."
+
+formulas:
+  - id: bigo-def
+    name: "Big-O definition"
+    topic: "Algorithm analysis"
+    latex: 'f(n) = O(g(n)) \\iff \\exists c > 0, n_0: \\ n \\ge n_0 \\Rightarrow f(n) \\le c\\,g(n)'
+    description: "Asymptotic upper bound. Eventually f grows no faster than g, up to a constant."
+    tags: [asymptotics]
+    derives_from: []
+
+  - id: bigomega-def
+    name: "Big-Omega definition"
+    topic: "Algorithm analysis"
+    latex: 'f(n) = \\Omega(g(n)) \\iff \\exists c > 0, n_0: \\ n \\ge n_0 \\Rightarrow f(n) \\ge c\\,g(n)'
+    description: "Asymptotic lower bound. Eventually f grows at least as fast as g."
+    tags: [asymptotics]
+    derives_from: []
+
+  - id: bigtheta-def
+    name: "Big-Theta definition"
+    topic: "Algorithm analysis"
+    latex: 'f(n) = \\Theta(g(n)) \\iff f(n) = O(g(n)) \\text{ and } f(n) = \\Omega(g(n))'
+    description: "Tight bound. Sandwich f between two constant multiples of g."
+    tags: [asymptotics]
+    derives_from: [bigo-def, bigomega-def]
+
+  - id: limit-rule
+    name: "Limit rule for order comparison"
+    topic: "Algorithm analysis"
+    latex: '\\lim_{n \\to \\infty} \\frac{f(n)}{g(n)} = 0 \\Rightarrow f = o(g); \\quad = c > 0 \\Rightarrow f = \\Theta(g); \\quad = \\infty \\Rightarrow f = \\omega(g)'
+    description: "Compare growth rates with a limit instead of wrestling constants and n_0."
+    tags: [asymptotics]
+    derives_from: [bigo-def]
+
+  - id: master-theorem
+    name: "Master theorem"
+    topic: "Algorithm analysis"
+    latex: 'T(n) = a\\,T(n/b) + \\Theta(n^d): \\ a < b^d \\Rightarrow \\Theta(n^d); \\ a = b^d \\Rightarrow \\Theta(n^d \\log n); \\ a > b^d \\Rightarrow \\Theta(n^{\\log_b a})'
+    description: "Read divide-and-conquer recurrences directly. Compare the work per level against the leaves."
+    tags: [recurrences]
+    derives_from: [bigtheta-def]
+
+  - id: recurrence-unroll
+    name: "Unrolling (substitution) method"
+    topic: "Algorithm analysis"
+    latex: 'T(n) = T(n-1) + c \\ \\Rightarrow \\ T(n) = T(0) + cn = \\Theta(n)'
+    description: "Expand the recurrence repeatedly until the pattern is obvious, then sum it."
+    tags: [recurrences]
+    derives_from: [bigo-def]
+
+  - id: stack-cost
+    name: "Stack operation costs"
+    topic: "Linear structures"
+    latex: '\\text{push, pop, peek} = \\Theta(1)'
+    description: "LIFO discipline. Every operation touches only the top."
+    tags: [stack]
+    derives_from: []
+
+  - id: queue-cost
+    name: "Queue operation costs"
+    topic: "Linear structures"
+    latex: '\\text{enqueue, dequeue, peek} = \\Theta(1)'
+    description: "FIFO discipline. With head and tail pointers, both ends are constant time."
+    tags: [queue]
+    derives_from: []
+
+  - id: linked-insert
+    name: "Linked list insertion"
+    topic: "Linear structures"
+    latex: '\\text{insert after a known node} = \\Theta(1)'
+    description: "Rewire two pointers. No shifting, unlike arrays."
+    tags: [linked-list]
+    derives_from: []
+
+  - id: linked-delete
+    name: "Linked list deletion"
+    topic: "Linear structures"
+    latex: '\\text{delete a known node} = \\Theta(1) \\text{ (singly: needs predecessor)}'
+    description: "Bypass the node by rewiring its predecessor. Doubly linked lists make this trivial."
+    tags: [linked-list]
+    derives_from: [linked-insert]
+
+  - id: array-insert
+    name: "Array insertion cost"
+    topic: "Linear structures"
+    latex: '\\text{insert at position } i = \\Theta(n - i)'
+    description: "Everything after i must shift right. Contiguous memory has a price."
+    tags: [array]
+    derives_from: []
+
+  - id: inorder
+    name: "Inorder traversal"
+    topic: "Trees"
+    latex: '\\text{inorder}(v) = \\text{inorder}(v.\\text{left}) \\to v \\to \\text{inorder}(v.\\text{right})'
+    description: "Left, node, right. Visits a BST's keys in sorted order."
+    tags: [traversal]
+    derives_from: []
+
+  - id: preorder
+    name: "Preorder traversal"
+    topic: "Trees"
+    latex: '\\text{preorder}(v) = v \\to \\text{preorder}(v.\\text{left}) \\to \\text{preorder}(v.\\text{right})'
+    description: "Node first. Reconstructs tree shape when paired with inorder."
+    tags: [traversal]
+    derives_from: []
+
+  - id: postorder
+    name: "Postorder traversal"
+    topic: "Trees"
+    latex: '\\text{postorder}(v) = \\text{postorder}(v.\\text{left}) \\to \\text{postorder}(v.\\text{right}) \\to v'
+    description: "Children before parent. The order for safe deletion and expression evaluation."
+    tags: [traversal]
+    derives_from: []
+
+  - id: bst-prop
+    name: "BST property"
+    topic: "Trees"
+    latex: '\\text{left subtree keys} < v.\\text{key} < \\text{right subtree keys}'
+    description: "The invariant every binary search tree maintains. Inorder traversal yields sorted keys."
+    tags: [bst]
+    derives_from: [inorder]
+
+  - id: bst-search
+    name: "BST search cost"
+    topic: "Trees"
+    latex: '\\text{search} = \\Theta(h), \\quad h = \\text{height}'
+    description: "Each comparison discards a subtree. Degenerate trees degrade to O(n); balanced trees give O(log n)."
+    tags: [bst]
+    derives_from: [bst-prop]
+
+  - id: avl-balance
+    name: "AVL balance factor"
+    topic: "Trees"
+    latex: 'bf(v) = \\text{height}(v.\\text{left}) - \\text{height}(v.\\text{right}) \\in \\{-1, 0, 1\\}'
+    description: "AVL trees keep every node's balance factor in {-1, 0, 1}, guaranteeing logarithmic height."
+    tags: [avl]
+    derives_from: [bst-prop]
+
+  - id: avl-rotate
+    name: "AVL rotations"
+    topic: "Trees"
+    latex: '\\text{single rotation fixes } |bf| = 2 \\text{ outer case}; \\text{ double rotation fixes inner case}'
+    description: "Rotations restore balance in O(1) while preserving the BST ordering."
+    tags: [avl]
+    derives_from: [avl-balance]
+
+  - id: heap-parent
+    name: "Heap parent index"
+    topic: "Heaps"
+    latex: '\\text{parent}(i) = \\left\\lfloor \\frac{i-1}{2} \\right\\rfloor'
+    description: "Array-based binary heap, zero-indexed. Climb toward the root."
+    tags: [heap]
+    derives_from: []
+
+  - id: heap-children
+    name: "Heap children indices"
+    topic: "Heaps"
+    latex: '\\text{left}(i) = 2i+1, \\quad \\text{right}(i) = 2i+2'
+    description: "Children of node i. Sift down by comparing with the smaller (or larger) child."
+    tags: [heap]
+    derives_from: [heap-parent]
+
+  - id: heapify
+    name: "Heapify (sift down)"
+    topic: "Heaps"
+    latex: '\\text{heapify} = O(\\log n), \\quad \\text{build-heap} = O(n)'
+    description: "Restore the heap property top-down in logarithmic time. Building from an array is linear."
+    tags: [heap]
+    derives_from: [heap-children]
+
+  - id: load-factor
+    name: "Load factor"
+    topic: "Hashing"
+    latex: '\\alpha = \\frac{n}{m}'
+    description: "Items per bucket. Hash table performance is governed by alpha."
+    tags: [hash-table]
+    derives_from: []
+
+  - id: chaining
+    name: "Separate chaining"
+    topic: "Hashing"
+    latex: '\\text{expected search} = \\Theta(1 + \\alpha)'
+    description: "Collisions form linked lists in each bucket. Keep alpha bounded for constant-time ops."
+    tags: [hash-table]
+    derives_from: [load-factor]
+
+  - id: linear-probing
+    name: "Linear probing"
+    topic: "Hashing"
+    latex: 'h(k, i) = (h(k) + i) \\bmod m'
+    description: "Open addressing: probe successive slots. Suffers primary clustering; keep alpha below ~0.7."
+    tags: [hash-table]
+    derives_from: [load-factor]
+
+  - id: sort-lower-bound
+    name: "Comparison sort lower bound"
+    topic: "Sorting"
+    latex: '\\text{any comparison sort} = \\Omega(n \\log n)'
+    description: "n! possible orders need log(n!) comparisons. No comparison sort beats this asymptotically."
+    tags: [lower-bound]
+    derives_from: [bigomega-def]
+
+  - id: merge-quicksort
+    name: "Merge sort and quicksort"
+    topic: "Sorting"
+    latex: '\\text{merge} = \\Theta(n \\log n) \\text{ always}; \\quad \\text{quick} = \\Theta(n \\log n) \\text{ avg}, \\Theta(n^2) \\text{ worst}'
+    description: "Merge sort pays O(n) extra space for guaranteed performance. Quicksort is faster in practice but needs a good pivot."
+    tags: [sorting]
+    derives_from: [bigtheta-def, sort-lower-bound]
+
+  - id: adj-space
+    name: "Adjacency matrix vs list"
+    topic: "Graphs"
+    latex: '\\text{matrix} = \\Theta(V^2) \\text{ space}; \\quad \\text{list} = \\Theta(V + E) \\text{ space}'
+    description: "Matrices answer edge queries in O(1). Lists win on sparse graphs."
+    tags: [representation]
+    derives_from: []
+
+  - id: bfs-dfs
+    name: "BFS and DFS cost"
+    topic: "Graphs"
+    latex: '\\text{BFS, DFS} = \\Theta(V + E)'
+    description: "Each vertex and edge is processed a constant number of times. BFS finds shortest paths in unweighted graphs."
+    tags: [traversal]
+    derives_from: [adj-space]
+
+  - id: dijkstra-relax
+    name: "Dijkstra relaxation"
+    topic: "Graphs"
+    latex: '\\text{dist}[v] = \\min(\\text{dist}[v], \\text{dist}[u] + w(u, v))'
+    description: "Relax every edge out of the settled vertex. With a binary heap: O((V + E) log V). Needs non-negative weights."
+    tags: [shortest-path]
+    derives_from: [bfs-dfs]

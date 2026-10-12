@@ -2,7 +2,7 @@
 
 [![tests](https://img.shields.io/badge/tests-64%20passing-brightgreen)](https://github.com/FaiyazEnayet/formulaforge)
 [![go](https://img.shields.io/badge/go-1.24%2B-blue)](go.mod)
-[![formulas](https://img.shields.io/badge/formulas-100-orange)](internal/models/sheets/)
+[![formulas](https://img.shields.io/badge/formulas-214-orange)](internal/models/sheets/)
 [![license](https://img.shields.io/badge/license-MIT-lightgrey)](LICENSE)
 
 Every STEM student builds a formula sheet before each exam. formulaforge is the tool that makes the sheet *smart*.
@@ -13,7 +13,7 @@ Write your sheet in YAML + LaTeX. formulaforge renders it to a beautiful printab
 
 [![formulaforge dashboard preview](docs/demo.gif)](https://faiyazenayet.github.io/formulaforge/docs/dashboard.html)
 
-**[Open the interactive dashboard](https://faiyazenayet.github.io/formulaforge/docs/dashboard.html).** Explore the dependency graph for four real courses, click any formula to trace its derivation chain, and watch the minimum-memorize set light up.
+**[Open the interactive dashboard](https://faiyazenayet.github.io/formulaforge/docs/dashboard.html).** Explore the dependency graph for eight real courses, click any formula to trace its derivation chain, and watch the minimum-memorize set light up.
 
 ## What it does
 
@@ -35,8 +35,8 @@ formulaforge sheets
 formulaforge build phy131 -o phy131.html
 formulaforge graph phy131
 formulaforge study-order ams261
-formulaforge search "eigenvalue"
-formulaforge practice mat203 --mode derive --n 10
+formulaforge search "induction"
+formulaforge practice cse213 --mode derive --n 10
 formulaforge export psy103 --format tex -o psy103.tex
 formulaforge export phy131 --format anki -o phy131.tsv
 formulaforge dashboard -o docs/dashboard.html
@@ -75,16 +75,20 @@ PHY 131 Classical Physics I
 
 ## Seeded sheets
 
-Four complete, hand-checked sheets ship inside the binary. 100 formulas, 123 derivation edges, every one validated:
+Eight complete, hand-checked sheets ship inside the binary. 214 formulas, 214 derivation edges, every one validated:
 
 | Sheet | Course | Formulas | Min. memorize |
 |-------|--------|----------|---------------|
+| `ams151` | Applied Calculus I | 25 | 2 |
+| `ams161` | Applied Calculus II | 26 | 7 |
+| `ams210` | Applied Linear Algebra | 30 | 8 |
 | `ams261` | Calculus III | 21 | 3 |
 | `phy131` | Classical Physics I | 27 | 6 |
-| `mat203` | Linear Algebra | 30 | 8 |
+| `cse213` | Foundations of Computer Science II | 34 | 13 |
+| `cse214` | Data Structures | 29 | 12 |
 | `psy103` | Introduction to Psychology | 22 | 5 |
 
-AMS 261 covers partial derivatives through Stokes' and the divergence theorem. PHY 131 runs from kinematics to angular momentum. MAT 203 goes from matrix multiplication to the spectral theorem. PSY 103 covers the quantitative core of intro psych: descriptive statistics, z-scores, correlation and regression, and inferential stats.
+AMS 151 runs from limits through the Fundamental Theorem. AMS 161 covers integration techniques, series convergence tests, and parametric and polar curves. AMS 210 is vectors, matrices, eigenvalues, and least squares. AMS 261 covers partial derivatives through Stokes' and the divergence theorem. PHY 131 runs from kinematics to angular momentum. CSE 213 follows the actual course syllabus: counting and probability, graphs and trees, regular expressions and finite-state automata, on a small logic foundation. CSE 214 covers algorithm analysis, recurrences, linked structures, trees, heaps, hashing, sorting bounds, and graph algorithms. PSY 103 covers the quantitative core of intro psych: descriptive statistics, z-scores, correlation and regression, and inferential stats.
 
 ## Architecture
 
