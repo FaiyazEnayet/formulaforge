@@ -1,2 +1,0 @@
-[console_scripts]
-formulaforge = formulaforge.cli:main
