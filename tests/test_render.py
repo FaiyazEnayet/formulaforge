@@ -10,7 +10,7 @@ from formulaforge.models import load_sheet_by_name
 from formulaforge.render import render_html, render_pdf, sanitize_for_pdf
 
 
-@pytest.fixture(params=["ams261", "phy131", "mat203", "che131"])
+@pytest.fixture(params=["ams261", "phy131", "mat203", "psy103"])
 def sheet(request):
     return load_sheet_by_name(request.param)
 

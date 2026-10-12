@@ -35,7 +35,7 @@ formulaforge graph phy131
 formulaforge study-order ams261
 formulaforge search "eigenvalue"
 formulaforge practice mat203 --mode derive --n 10
-formulaforge export che131 --format pdf -o che131.pdf
+formulaforge export psy103 --format pdf -o psy103.pdf
 formulaforge export phy131 --format anki -o phy131.apkg
 ```
 
@@ -71,16 +71,16 @@ PHY 131 Classical Physics I
 
 ## Seeded sheets
 
-Four complete, hand-checked sheets ship with the tool. 99 formulas, 115 derivation edges, every one verified:
+Four complete, hand-checked sheets ship with the tool. 100 formulas, 123 derivation edges, every one verified:
 
 | Sheet | Course | Formulas | Min. memorize |
 |-------|--------|----------|---------------|
 | `ams261` | Calculus III | 21 | 3 |
 | `phy131` | Classical Physics I | 27 | 6 |
 | `mat203` | Linear Algebra | 30 | 8 |
-| `che131` | General Chemistry I | 21 | 8 |
+| `psy103` | Introduction to Psychology | 22 | 5 |
 
-AMS 261 covers partial derivatives through Stokes' and the divergence theorem. PHY 131 runs from kinematics to angular momentum. MAT 203 goes from matrix multiplication to the spectral theorem. CHE 131 covers stoichiometry, gas laws, thermochemistry, and atomic structure.
+AMS 261 covers partial derivatives through Stokes' and the divergence theorem. PHY 131 runs from kinematics to angular momentum. MAT 203 goes from matrix multiplication to the spectral theorem. PSY 103 covers the statistics behind the science: descriptive stats, z-scores, correlation and regression, and inferential testing.
 
 ## Architecture
 
@@ -104,7 +104,7 @@ graph TD
 ```
 formulaforge/
   src/formulaforge/   models, graph, search, render, anki, practice, cli
-  sheets/             ams261, phy131, mat203, che131 (YAML)
+  sheets/             ams261, phy131, mat203, psy103 (YAML)
   tests/              46 pytest tests
   examples/           dashboard + GIF generators (reproducible)
   docs/               dashboard.html, demo.gif

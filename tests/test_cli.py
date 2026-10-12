@@ -20,7 +20,7 @@ def run(*args):
 def test_sheets_lists_four():
     r = run("sheets")
     assert r.returncode == 0
-    for name in ["ams261", "phy131", "mat203", "che131"]:
+    for name in ["ams261", "phy131", "mat203", "psy103"]:
         assert name in r.stdout
 
 
@@ -54,7 +54,7 @@ def test_study_order(tmp_path):
 
 def test_export_pdf_and_anki(tmp_path):
     pdf = str(tmp_path / "s.pdf")
-    r = run("export", "che131", "--format", "pdf", "-o", pdf)
+    r = run("export", "psy103", "--format", "pdf", "-o", pdf)
     assert r.returncode == 0 and os.path.getsize(pdf) > 5000
     apkg = str(tmp_path / "s.apkg")
     r = run("export", "ams261", "--format", "anki", "-o", apkg)

@@ -5,7 +5,7 @@ from formulaforge.search import search, tokenize
 
 
 def sheets():
-    return {n: load_sheet_by_name(n) for n in ["ams261", "phy131", "mat203", "che131"]}
+    return {n: load_sheet_by_name(n) for n in ["ams261", "phy131", "mat203", "psy103"]}
 
 
 def test_tokenize():
@@ -24,8 +24,8 @@ def test_finds_across_sheets():
 
 
 def test_topic_weighted():
-    hits = search(sheets(), "gas law")
-    assert hits and hits[0][1] == "che131"
+    hits = search(sheets(), "z-score")
+    assert hits and hits[0][1] == "psy103"
 
 
 def test_empty_query_no_results():
