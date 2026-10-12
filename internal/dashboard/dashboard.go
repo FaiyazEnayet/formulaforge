@@ -251,8 +251,20 @@ const pageHead = `<!DOCTYPE html>
 const pageJS = `
 const DATA = __DATA__;
 const ORDER = __ORDER__;
-const DARK = {paper_bgcolor: '#141b2c', plot_bgcolor: '#141b2c',
-  font: {color: '#e8ecf4'}, xaxis: {gridcolor: '#232f4a'}, yaxis: {gridcolor: '#232f4a'}};
+function dark(extra) {
+  // Deep-merge helper: per-panel axis options must survive alongside the
+  // dark theme (a flat Object.assign with DARK wiped them). Bar panels also
+  // declare yaxis type explicitly: Plotly's category auto-detection fails
+  // for plots rendered after a markers+text scatter, leaving bars blank.
+  extra = extra || {};
+  return {
+    paper_bgcolor: '#141b2c', plot_bgcolor: '#141b2c',
+    font: {color: '#e8ecf4'},
+    margin: extra.margin, hovermode: extra.hovermode,
+    xaxis: Object.assign({gridcolor: '#232f4a'}, extra.xaxis),
+    yaxis: Object.assign({gridcolor: '#232f4a'}, extra.yaxis)
+  };
+}
 
 const sheetSel = document.getElementById('sheet');
 ORDER.forEach(n => { const o = document.createElement('option'); o.value = n;
@@ -285,8 +297,8 @@ function renderGraph() {
   adj = {};
   Object.keys(d.nodes).forEach(id => adj[id] = {p: d.nodes[id].prereqs, c: d.nodes[id].children});
   Plotly.newPlot('graph', [edgeTraces(d), nodeTrace(d)],
-    Object.assign({margin: {l: 20, r: 20, t: 10, b: 20},
-      xaxis: {visible: false}, yaxis: {visible: false}, hovermode: 'closest'}, DARK),
+    dark({margin: {l: 20, r: 20, t: 10, b: 20},
+      xaxis: {visible: false}, yaxis: {visible: false}, hovermode: 'closest'}),
     {responsive: true, displayModeBar: false});
   document.getElementById('graph').on('plotly_click', onNodeClick);
 }
@@ -325,8 +337,9 @@ function renderTimeline() {
     [{y: t.map(r => r.name), x: t.map(r => Math.max(r.leverage, 0.4)), type: 'bar', orientation: 'h',
       marker: {color: t.map(r => r.color)}, hovertemplate: '<b>%{y}</b><br>wave %{customdata}<extra></extra>',
       customdata: t.map(r => r.wave), showlegend: false}],
-    Object.assign({margin: {l: 230, r: 20, t: 10, b: 30},
-      xaxis: {title: 'formulas unlocked'}, yaxis: {autorange: 'reversed', tickfont: {size: 10}}}, DARK),
+    dark({margin: {l: 230, r: 20, t: 10, b: 30},
+      xaxis: {title: 'formulas unlocked'},
+      yaxis: {type: 'category', autorange: 'reversed', tickfont: {size: 10}}}),
     {responsive: true, displayModeBar: false});
 }
 function renderLeverage() {
@@ -334,8 +347,9 @@ function renderLeverage() {
   Plotly.newPlot('leverage',
     [{y: L.map(r => r.name), x: L.map(r => r.unlocks), type: 'bar', orientation: 'h',
       marker: {color: '#7fb3ff'}, hovertemplate: '<b>%{y}</b><br>unlocks %{x} formulas<extra></extra>', showlegend: false}],
-    Object.assign({margin: {l: 230, r: 20, t: 10, b: 30},
-      xaxis: {title: 'formulas unlocked'}, yaxis: {autorange: 'reversed', tickfont: {size: 10}}}, DARK),
+    dark({margin: {l: 230, r: 20, t: 10, b: 30},
+      xaxis: {title: 'formulas unlocked'},
+      yaxis: {type: 'category', autorange: 'reversed', tickfont: {size: 10}}}),
     {responsive: true, displayModeBar: false});
 }
 function renderCurve() {
@@ -344,8 +358,8 @@ function renderCurve() {
     [{x: c.map(p => p[0]), y: c.map(p => p[1] * 100), type: 'scatter', mode: 'lines+markers',
       line: {color: '#81b29a', width: 3}, marker: {size: 7},
       hovertemplate: 'memorize %{x}: %{y:.0f}% derivable<extra></extra>', showlegend: false}],
-    Object.assign({margin: {l: 50, r: 20, t: 10, b: 40},
-      xaxis: {title: 'formulas memorized'}, yaxis: {title: '% of sheet derivable', range: [0, 105]}}, DARK),
+    dark({margin: {l: 50, r: 20, t: 10, b: 40},
+      xaxis: {title: 'formulas memorized'}, yaxis: {title: '% of sheet derivable', range: [0, 105]}}),
     {responsive: true, displayModeBar: false});
   document.getElementById('minset').innerHTML =
     d.stats.min_set.map(m => '<span class="pill">' + m.name + '</span>').join('');
