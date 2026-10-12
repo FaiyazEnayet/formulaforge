@@ -36,7 +36,7 @@ func TestLoadAllCounts(t *testing.T) {
 		"cse214": {"CSE 214", "Data Structures", ""},
 		"psy103": {"PSY 103", "Introduction to Psychology", ""},
 	}
-	counts := map[string]int{"ams151": 25, "ams161": 26, "ams210": 30, "ams261": 21, "phy131": 27, "cse113": 32, "cse213": 34, "cse214": 29, "psy103": 22}
+	counts := map[string]int{"ams151": 25, "ams161": 26, "ams210": 30, "ams261": 45, "phy131": 51, "cse113": 32, "cse213": 34, "cse214": 29, "psy103": 22}
 	total := 0
 	for name, s := range sheets {
 		if s.Course != want[name][0] {
@@ -50,8 +50,8 @@ func TestLoadAllCounts(t *testing.T) {
 		}
 		total += len(s.Formulas)
 	}
-	if total != 246 {
-		t.Errorf("total formulas = %d, want 246", total)
+	if total != 294 {
+		t.Errorf("total formulas = %d, want 294", total)
 	}
 }
 
@@ -81,7 +81,7 @@ func TestByID(t *testing.T) {
 func TestIDsInOrder(t *testing.T) {
 	s, _ := LoadSheetByName("ams261")
 	ids := s.IDs()
-	if len(ids) != 21 || ids[0] != s.Formulas[0].ID {
+	if len(ids) != 45 || ids[0] != s.Formulas[0].ID {
 		t.Error("IDs() should follow sheet order")
 	}
 }

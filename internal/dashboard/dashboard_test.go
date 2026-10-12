@@ -55,7 +55,7 @@ func TestPayloadForStats(t *testing.T) {
 }
 
 func TestPayloadMinSetSizes(t *testing.T) {
-	want := map[string]int{"ams261": 3, "phy131": 6, "cse113": 8, "cse213": 13, "psy103": 5}
+	want := map[string]int{"ams261": 5, "phy131": 9, "cse113": 8, "cse213": 13, "psy103": 5}
 	for name, n := range want {
 		p, err := payloadFor(mustLoad(t, name))
 		if err != nil {

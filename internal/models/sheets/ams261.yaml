@@ -1,6 +1,6 @@
 course: "AMS 261"
 title: "Calculus III"
-description: "Partial derivatives, multiple integrals, and vector calculus: gradient, divergence, curl, line and surface integrals, Green, Stokes, and the divergence theorem."
+description: "Sequences and series, vectors, partial derivatives, multiple integrals, and vector calculus: gradient, divergence, curl, line and surface integrals, Green, Stokes, and the divergence theorem."
 
 formulas:
   - id: partial-def
@@ -170,3 +170,195 @@ formulas:
     description: "Outward flux through a closed surface equals the triple integral of divergence inside."
     tags: [theorem]
     derives_from: [flux, divergence, triple]
+
+  - id: seq-limit
+    name: "Limit of a sequence"
+    topic: "Sequences and Series"
+    latex: '\lim_{n \to \infty} a_n = L \text{ means the terms get arbitrarily close to } L'
+    description: "Same idea as a function limit, but n marches through integers. If the terms settle down, the sequence converges."
+    tags: [definition, limit]
+    derives_from: []
+
+  - id: seq-squeeze
+    name: "Squeeze theorem (sequences)"
+    topic: "Sequences and Series"
+    latex: 'a_n \le b_n \le c_n \text{ and } \lim a_n = \lim c_n = L \Rightarrow \lim b_n = L'
+    description: "Pin a sequence between two that converge to the same limit and it has no choice but to join them."
+    tags: [theorem, limit]
+    derives_from: [seq-limit]
+
+  - id: series-def
+    name: "Series and partial sums"
+    topic: "Sequences and Series"
+    latex: 'S_N = \sum_{n=1}^{N} a_n, \quad \sum_{n=1}^{\infty} a_n = \lim_{N \to \infty} S_N'
+    description: "A series converges when its running total settles down. Terms going to zero is necessary but not enough."
+    tags: [definition]
+    derives_from: [seq-limit]
+
+  - id: geometric
+    name: "Geometric series"
+    topic: "Sequences and Series"
+    latex: '\sum_{n=0}^{\infty} ar^n = \frac{a}{1-r} \quad \text{for } |r| < 1; \text{ diverges for } |r| \ge 1'
+    description: "Each term multiplies by r. The classic convergent series and the template for power series."
+    tags: [series]
+    derives_from: [series-def]
+
+  - id: div-test
+    name: "Divergence test (nth-term test)"
+    topic: "Sequences and Series"
+    latex: '\text{If } \lim_{n \to \infty} a_n \ne 0, \text{ then } \sum a_n \text{ diverges}'
+    description: "One-way only: terms failing to vanish kills convergence, but terms vanishing proves nothing."
+    tags: [test]
+    derives_from: [series-def]
+
+  - id: integral-test
+    name: "Integral test"
+    topic: "Sequences and Series"
+    latex: '\sum a_n \text{ and } \int_1^{\infty} f(x) \, dx \text{ converge or diverge together, for positive decreasing } f'
+    description: "Trade the sum for an improper integral you can actually evaluate."
+    tags: [test, integral]
+    derives_from: [series-def]
+
+  - id: p-series
+    name: "p-series"
+    topic: "Sequences and Series"
+    latex: '\sum_{n=1}^{\infty} \frac{1}{n^p} \text{ converges iff } p > 1'
+    description: "The harmonic series (p = 1) diverges; everything with p > 1 converges. The benchmark for comparison tests."
+    tags: [series]
+    derives_from: [integral-test]
+
+  - id: comparison
+    name: "Direct comparison test"
+    topic: "Sequences and Series"
+    latex: '0 \le a_n \le b_n: \; \sum b_n \text{ converges } \Rightarrow \sum a_n \text{ converges}; \; \sum a_n \text{ diverges } \Rightarrow \sum b_n \text{ diverges}'
+    description: "Bound your series above by a convergent one or below by a divergent one. p-series is usually the comparison."
+    tags: [test]
+    derives_from: [series-def, p-series]
+
+  - id: limit-comparison
+    name: "Limit comparison test"
+    topic: "Sequences and Series"
+    latex: '\lim_{n \to \infty} \frac{a_n}{b_n} = c > 0 \Rightarrow \sum a_n \text{ and } \sum b_n \text{ share convergence}'
+    description: "Same verdict as comparison, but you only need the ratio of dominant terms. Great for rational functions."
+    tags: [test]
+    derives_from: [comparison]
+
+  - id: ratio-test
+    name: "Ratio test"
+    topic: "Sequences and Series"
+    latex: 'L = \lim_{n \to \infty} \left| \frac{a_{n+1}}{a_n} \right|; \; L < 1 \Rightarrow \text{converges}; \; L > 1 \Rightarrow \text{diverges}'
+    description: "The factorial killer. Inconclusive at L = 1, which happens annoyingly often with rational terms."
+    tags: [test]
+    derives_from: [series-def]
+
+  - id: root-test
+    name: "Root test"
+    topic: "Sequences and Series"
+    latex: 'L = \lim_{n \to \infty} \sqrt[n]{|a_n|}; \; L < 1 \Rightarrow \text{converges}; \; L > 1 \Rightarrow \text{diverges}'
+    description: "Reach for it when the nth power shows up. Same verdicts as the ratio test."
+    tags: [test]
+    derives_from: [ratio-test]
+
+  - id: alternating
+    name: "Alternating series test"
+    topic: "Sequences and Series"
+    latex: '\sum (-1)^n b_n \text{ converges if } b_n \downarrow 0 \text{ (positive, decreasing, limit zero)}'
+    description: "Oscillating terms that shrink to zero always converge. Bonus: the error is less than the first dropped term."
+    tags: [test]
+    derives_from: [series-def]
+
+  - id: abs-cond
+    name: "Absolute vs conditional convergence"
+    topic: "Sequences and Series"
+    latex: '\sum |a_n| \text{ converges } \Rightarrow \sum a_n \text{ converges (absolute)}; \text{ converse is false (conditional)}'
+    description: "Absolute convergence is the strong kind. Alternating harmonic converges conditionally: rearrange it and the sum changes."
+    tags: [theorem]
+    derives_from: [alternating, ratio-test]
+
+  - id: power-series
+    name: "Power series and radius of convergence"
+    topic: "Sequences and Series"
+    latex: '\sum_{n=0}^{\infty} c_n (x-a)^n \text{ converges for } |x-a| < R \text{ (radius } R \text{)}'
+    description: "A polynomial that never ends. Inside the radius it converges absolutely; outside it diverges."
+    tags: [series]
+    derives_from: [geometric, ratio-test]
+
+  - id: interval-conv
+    name: "Interval of convergence"
+    topic: "Sequences and Series"
+    latex: '|x - a| < R \text{ converges}; \; |x - a| > R \text{ diverges}; \; \text{check } x = a \pm R \text{ by hand}'
+    description: "The endpoints are decided case by case with the other tests, not by the ratio test."
+    tags: [series]
+    derives_from: [power-series]
+
+  - id: taylor
+    name: "Taylor series"
+    topic: "Sequences and Series"
+    latex: 'f(x) = \sum_{n=0}^{\infty} \frac{f^{(n)}(a)}{n!} (x-a)^n'
+    description: "Approximate any smooth function by its derivatives at one point. Converges where the remainder dies."
+    tags: [series, approximation]
+    derives_from: [power-series]
+
+  - id: maclaurin
+    name: "Standard Maclaurin expansions"
+    topic: "Sequences and Series"
+    latex: 'e^x = \sum \frac{x^n}{n!}, \; \sin x = \sum \frac{(-1)^n x^{2n+1}}{(2n+1)!}, \; \cos x = \sum \frac{(-1)^n x^{2n}}{(2n)!}, \; \frac{1}{1-x} = \sum x^n, \; \ln(1+x) = \sum \frac{(-1)^{n+1} x^n}{n}'
+    description: "The five expansions worth memorizing; everything else is substitution or differentiation of these."
+    tags: [series]
+    derives_from: [taylor]
+
+  - id: vec-ops
+    name: "Vector operations"
+    topic: "Vectors"
+    latex: '\mathbf{a} \pm \mathbf{b} = \langle a_1 \pm b_1, a_2 \pm b_2, a_3 \pm b_3 \rangle, \quad c\mathbf{a} = \langle ca_1, ca_2, ca_3 \rangle, \quad \lVert \mathbf{a} \rVert = \sqrt{a_1^2 + a_2^2 + a_3^2}'
+    description: "Add tip to tail, scale by stretching, magnitude by Pythagoras in 3D."
+    tags: [vector, definition]
+    derives_from: []
+
+  - id: dot-prod
+    name: "Dot product and angle"
+    topic: "Vectors"
+    latex: '\mathbf{a} \cdot \mathbf{b} = a_1 b_1 + a_2 b_2 + a_3 b_3 = \lVert \mathbf{a} \rVert \lVert \mathbf{b} \rVert \cos\theta'
+    description: "Measures alignment: positive means pointing together, zero means perpendicular."
+    tags: [vector]
+    derives_from: [vec-ops]
+
+  - id: projection
+    name: "Vector projection"
+    topic: "Vectors"
+    latex: '\text{proj}_{\mathbf{b}} \mathbf{a} = \frac{\mathbf{a} \cdot \mathbf{b}}{\lVert \mathbf{b} \rVert^2} \mathbf{b}, \quad \text{comp}_{\mathbf{b}} \mathbf{a} = \frac{\mathbf{a} \cdot \mathbf{b}}{\lVert \mathbf{b} \rVert}'
+    description: "The shadow of a onto b. The orthogonal component is a minus its projection."
+    tags: [vector]
+    derives_from: [dot-prod]
+
+  - id: cross-prod
+    name: "Cross product"
+    topic: "Vectors"
+    latex: '\lVert \mathbf{a} \times \mathbf{b} \rVert = \lVert \mathbf{a} \rVert \lVert \mathbf{b} \rVert \sin\theta, \text{ direction by the right-hand rule}'
+    description: "Magnitude is the parallelogram area; direction is perpendicular to both. Zero when vectors are parallel."
+    tags: [vector]
+    derives_from: [vec-ops]
+
+  - id: triple-prod
+    name: "Scalar triple product"
+    topic: "Vectors"
+    latex: '\mathbf{a} \cdot (\mathbf{b} \times \mathbf{c}) = \text{volume of the parallelepiped}'
+    description: "Volume of the box spanned by three vectors. Zero means they are coplanar."
+    tags: [vector]
+    derives_from: [cross-prod, dot-prod]
+
+  - id: line-3d
+    name: "Lines in 3D"
+    topic: "Vectors"
+    latex: '\mathbf{r}(t) = \mathbf{r}_0 + t\mathbf{v}; \quad \frac{x-x_0}{a} = \frac{y-y_0}{b} = \frac{z-z_0}{c}'
+    description: "Parametric and symmetric forms. A point plus a direction vector determines the line."
+    tags: [vector, geometry]
+    derives_from: [vec-ops]
+
+  - id: plane
+    name: "Planes in 3D"
+    topic: "Vectors"
+    latex: '\mathbf{n} \cdot (\mathbf{r} - \mathbf{r}_0) = 0, \quad ax + by + cz = d'
+    description: "A normal vector plus a point determines the plane. Distance from a point comes from plugging into the formula."
+    tags: [vector, geometry]
+    derives_from: [dot-prod, line-3d]

@@ -37,8 +37,8 @@ func TestTotalEdges(t *testing.T) {
 		}
 		total += st.Edges
 	}
-	if total != 244 {
-		t.Errorf("total edges = %d, want 244", total)
+	if total != 303 {
+		t.Errorf("total edges = %d, want 303", total)
 	}
 }
 
@@ -78,7 +78,7 @@ func TestTopoOrderDeterministic(t *testing.T) {
 }
 
 func TestWavesCoverAllNodes(t *testing.T) {
-	want := map[string]int{"ams151": 5, "ams161": 5, "ams210": 5, "ams261": 3, "phy131": 5, "cse113": 5, "cse213": 5, "cse214": 4, "psy103": 6}
+	want := map[string]int{"ams151": 5, "ams161": 5, "ams210": 5, "ams261": 6, "phy131": 7, "cse113": 5, "cse213": 5, "cse214": 4, "psy103": 6}
 	for _, name := range models.ListSheets() {
 		g := loadGraph(t, name)
 		waves, err := g.Waves()
@@ -123,7 +123,7 @@ func TestLeverageKnownValues(t *testing.T) {
 		id    string
 		want  int
 	}{
-		{"phy131", "newton2", 17},
+		{"phy131", "newton2", 35},
 		{"ams261", "partial-def", 11},
 		{"psy103", "mean", 17},
 		{"cse213", "add-rule", 5},
@@ -153,7 +153,7 @@ func TestLeverageRankingSorted(t *testing.T) {
 }
 
 func TestMinMemorizeSetSizes(t *testing.T) {
-	want := map[string]int{"ams151": 2, "ams161": 7, "ams210": 8, "ams261": 3, "phy131": 6, "cse113": 8, "cse213": 13, "cse214": 12, "psy103": 5}
+	want := map[string]int{"ams151": 2, "ams161": 7, "ams210": 8, "ams261": 5, "phy131": 9, "cse113": 8, "cse213": 13, "cse214": 12, "psy103": 5}
 	for _, name := range models.ListSheets() {
 		g := loadGraph(t, name)
 		ms := g.MinMemorizeSet()
@@ -214,8 +214,8 @@ func TestCoverageCurve(t *testing.T) {
 func TestDescendantsAncestors(t *testing.T) {
 	g := loadGraph(t, "phy131")
 	d := g.Descendants("newton2")
-	if len(d) != 17 {
-		t.Errorf("descendants(newton2) = %d, want 17", len(d))
+	if len(d) != 35 {
+		t.Errorf("descendants(newton2) = %d, want 35", len(d))
 	}
 	if d["newton2"] {
 		t.Error("descendants must not include the node itself")
@@ -242,7 +242,7 @@ func TestStats(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if st.Nodes != 27 || st.Edges != 34 || st.Waves != 5 || st.Depth != 4 {
+	if st.Nodes != 51 || st.Edges != 66 || st.Waves != 7 || st.Depth != 6 {
 		t.Errorf("unexpected stats: %+v", st)
 	}
 	if st.Roots+st.Leaves == 0 {
@@ -251,8 +251,8 @@ func TestStats(t *testing.T) {
 	if len(st.TopLeverage) != 5 {
 		t.Errorf("top leverage has %d entries, want 5", len(st.TopLeverage))
 	}
-	if len(st.MinMemorizeSet) != 6 {
-		t.Errorf("min set size %d, want 6", len(st.MinMemorizeSet))
+	if len(st.MinMemorizeSet) != 9 {
+		t.Errorf("min set size %d, want 9", len(st.MinMemorizeSet))
 	}
 }
 

@@ -1,6 +1,6 @@
 course: "PHY 131"
 title: "Classical Physics I"
-description: "Mechanics from the ground up: kinematics, Newton's laws, work and energy, momentum, rotation, oscillations, and gravitation."
+description: "The full classical physics arc: kinematics, Newton's laws, work and energy, momentum, rotation, statics, fluids, oscillations, waves, sound, thermodynamics, and gravitation."
 
 formulas:
   - id: vel-def
@@ -218,3 +218,195 @@ formulas:
     description: "Inverse-square attraction between any two masses."
     tags: [law, gravity]
     derives_from: []
+
+  - id: statics
+    name: "Static equilibrium"
+    topic: "Statics"
+    latex: '\sum \mathbf{F} = 0, \quad \sum \boldsymbol{\tau} = 0'
+    description: "No motion and no rotation: forces and torques both balance. Pick the pivot to kill an unknown."
+    tags: [equilibrium]
+    derives_from: [newton2, torque]
+
+  - id: density
+    name: "Density"
+    topic: "Fluids"
+    latex: '\rho = \frac{m}{V}, \quad \text{water: } 1000 \, \text{kg/m}^3'
+    description: "Mass per volume. Ice floats because it is less dense than liquid water."
+    tags: [definition]
+    derives_from: []
+
+  - id: pressure-depth
+    name: "Pressure vs depth"
+    topic: "Fluids"
+    latex: 'P = P_0 + \rho g h'
+    description: "Pressure grows with depth. Your ears feel it a few meters underwater."
+    tags: [fluid]
+    derives_from: [density, weight]
+
+  - id: pascal
+    name: "Pascal's principle"
+    topic: "Fluids"
+    latex: '\text{Pressure applied to an enclosed fluid is transmitted undiminished: } \frac{F_1}{A_1} = \frac{F_2}{A_2}'
+    description: "Hydraulics: a small force on a small piston becomes a big force on a big piston."
+    tags: [fluid, law]
+    derives_from: [pressure-depth]
+
+  - id: archimedes
+    name: "Archimedes' principle (buoyancy)"
+    topic: "Fluids"
+    latex: 'F_B = \rho_{\text{fluid}} V_{\text{submerged}} g'
+    description: "The upward push equals the weight of the displaced fluid. Float if your average density is lower."
+    tags: [fluid]
+    derives_from: [density, weight]
+
+  - id: continuity
+    name: "Continuity equation"
+    topic: "Fluids"
+    latex: 'A_1 v_1 = A_2 v_2 \quad \text{(incompressible flow)}'
+    description: "Narrow pipe, faster flow. What flows in must flow out."
+    tags: [fluid]
+    derives_from: []
+
+  - id: bernoulli
+    name: "Bernoulli's equation"
+    topic: "Fluids"
+    latex: 'P_1 + \tfrac{1}{2}\rho v_1^2 + \rho g y_1 = P_2 + \tfrac{1}{2}\rho v_2^2 + \rho g y_2'
+    description: "Energy conservation for flowing fluid: fast flow means low pressure. That is how wings lift."
+    tags: [fluid, conservation]
+    derives_from: [continuity, energy-cons, pressure-depth]
+
+  - id: shm-vel
+    name: "SHM velocity and acceleration"
+    topic: "Oscillations"
+    latex: 'v = -\omega A \sin(\omega t + \phi), \quad a = -\omega^2 x, \quad v_{\max} = \omega A'
+    description: "Speed peaks at equilibrium, acceleration peaks at the turning points. Acceleration always points back."
+    tags: [oscillation]
+    derives_from: [shm, vel-def]
+
+  - id: shm-energy
+    name: "Energy in SHM"
+    topic: "Oscillations"
+    latex: 'E = \tfrac{1}{2} k A^2 = \tfrac{1}{2} m v^2 + \tfrac{1}{2} k x^2'
+    description: "Total energy is fixed and set by the amplitude; it sloshes between kinetic and spring potential."
+    tags: [energy, oscillation]
+    derives_from: [shm, energy-cons]
+
+  - id: wave-speed
+    name: "Wave speed on a string"
+    topic: "Waves"
+    latex: 'v = \sqrt{\frac{F_T}{\mu}}, \quad v = \lambda f'
+    description: "Tighter or lighter strings carry waves faster. Frequency is set by the source; wavelength adapts."
+    tags: [wave]
+    derives_from: [newton2]
+
+  - id: traveling-wave
+    name: "Traveling wave"
+    topic: "Waves"
+    latex: 'y(x,t) = A \sin(kx - \omega t + \phi), \quad k = \frac{2\pi}{\lambda}, \; \omega = 2\pi f'
+    description: "The minus sign moves the wave toward +x. Every point executes SHM in time."
+    tags: [wave]
+    derives_from: [wave-speed, shm]
+
+  - id: standing-wave
+    name: "Standing waves"
+    topic: "Waves"
+    latex: 'y = 2A \sin(kx) \cos(\omega t); \quad \text{nodes where } \sin(kx) = 0'
+    description: "Two opposing traveling waves superpose into a pattern that does not travel. Nodes stay still."
+    tags: [wave, superposition]
+    derives_from: [traveling-wave]
+
+  - id: resonance
+    name: "Resonance on a string"
+    topic: "Waves"
+    latex: 'f_n = n \frac{v}{2L}, \quad n = 1, 2, 3, \dots'
+    description: "Only wavelengths that fit an integer number of half-waves survive. n = 1 is the fundamental."
+    tags: [wave]
+    derives_from: [standing-wave, wave-speed]
+
+  - id: intensity
+    name: "Sound intensity"
+    topic: "Sound"
+    latex: 'I = \frac{P}{A}, \quad I \propto \frac{1}{r^2} \text{ (spherical spreading)}'
+    description: "Power per area. Doubling distance quarters the intensity."
+    tags: [sound]
+    derives_from: [wave-speed, power]
+
+  - id: decibel
+    name: "Decibel scale"
+    topic: "Sound"
+    latex: '\beta = 10 \log_{10}\!\left(\frac{I}{I_0}\right), \quad I_0 = 10^{-12} \, \text{W/m}^2'
+    description: "Logarithmic because ears are. Every 10 dB is a factor of 10 in intensity."
+    tags: [sound]
+    derives_from: [intensity]
+
+  - id: doppler
+    name: "Doppler effect"
+    topic: "Sound"
+    latex: 'f'' = f \frac{v \pm v_o}{v \mp v_s} \quad \text{(top signs: observer toward source)}'
+    description: "Approaching motion squeezes wavelengths and raises pitch. Used in radar and astronomy."
+    tags: [sound, wave]
+    derives_from: [wave-speed]
+
+  - id: beats
+    name: "Beats"
+    topic: "Sound"
+    latex: 'f_{\text{beat}} = |f_1 - f_2|'
+    description: "Two close frequencies produce a slow pulsing loudness. Tuners listen for the beats to die out."
+    tags: [sound, superposition]
+    derives_from: [standing-wave]
+
+  - id: temp-scales
+    name: "Temperature scales"
+    topic: "Thermodynamics"
+    latex: 'T_F = \tfrac{9}{5} T_C + 32, \quad T_K = T_C + 273.15'
+    description: "Kelvin is the physics scale: zero is absolute zero, and the gas laws need it."
+    tags: [definition]
+    derives_from: []
+
+  - id: thermal-expansion
+    name: "Thermal expansion"
+    topic: "Thermodynamics"
+    latex: '\Delta L = \alpha L_0 \Delta T \quad \text{(linear)}'
+    description: "Things grow when heated. Bridges leave gaps for it."
+    tags: [thermo]
+    derives_from: [temp-scales]
+
+  - id: ideal-gas
+    name: "Ideal gas law"
+    topic: "Thermodynamics"
+    latex: 'PV = nRT, \quad R = 8.314 \, \text{J/(mol K)}'
+    description: "Pressure, volume, and temperature of an ideal gas in one relation. Use Kelvin."
+    tags: [thermo, law]
+    derives_from: [temp-scales]
+
+  - id: kinetic-theory
+    name: "Kinetic theory (rms speed)"
+    topic: "Thermodynamics"
+    latex: '\tfrac{1}{2} m \overline{v^2} = \tfrac{3}{2} k_B T, \quad v_{\text{rms}} = \sqrt{\frac{3k_B T}{m}}'
+    description: "Temperature is average molecular kinetic energy. Lighter molecules move faster at the same T."
+    tags: [thermo]
+    derives_from: [ideal-gas, ke]
+
+  - id: first-law
+    name: "First law of thermodynamics"
+    topic: "Thermodynamics"
+    latex: '\Delta U = Q - W \quad \text{(W = work done BY the system)}'
+    description: "Energy conservation with heat counted. Sign conventions vary by textbook; pick one and stay consistent."
+    tags: [thermo, law, conservation]
+    derives_from: [energy-cons]
+
+  - id: carnot
+    name: "Carnot efficiency"
+    topic: "Thermodynamics"
+    latex: 'e_{\max} = 1 - \frac{T_C}{T_H} \quad \text{(Kelvin)}'
+    description: "No heat engine can beat this. Real engines do worse; the gap is friction and irreversibility."
+    tags: [thermo]
+    derives_from: [first-law]
+
+  - id: entropy
+    name: "Entropy and the second law"
+    topic: "Thermodynamics"
+    latex: '\Delta S = \frac{Q_{\text{rev}}}{T}, \quad \Delta S_{\text{universe}} \ge 0'
+    description: "Disorder never decreases overall. Heat flows hot to cold because that is where the microstates are."
+    tags: [thermo, law]
+    derives_from: [first-law]

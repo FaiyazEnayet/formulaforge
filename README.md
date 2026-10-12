@@ -2,7 +2,7 @@
 
 [![tests](https://img.shields.io/badge/tests-64%20passing-brightgreen)](https://github.com/FaiyazEnayet/formulaforge)
 [![go](https://img.shields.io/badge/go-1.24%2B-blue)](go.mod)
-[![formulas](https://img.shields.io/badge/formulas-246-orange)](internal/models/sheets/)
+[![formulas](https://img.shields.io/badge/formulas-294-orange)](internal/models/sheets/)
 [![license](https://img.shields.io/badge/license-MIT-lightgrey)](LICENSE)
 
 Every STEM student builds a formula sheet before each exam. formulaforge is the tool that makes the sheet *smart*.
@@ -19,8 +19,8 @@ Write your sheet in YAML + LaTeX. formulaforge renders it to a beautiful printab
 
 - **Write sheets in YAML + LaTeX.** One file per course, embedded in the binary. Render to a clean printable page with KaTeX math.
 - **Dependency graph.** Declare what each formula builds on. formulaforge checks the graph is a DAG, then topologically sorts it into study waves: learn wave 1 first, derive the rest.
-- **Leverage ranking.** Counts how many formulas each formula transitively unlocks. Study the high-leverage ones first. Newton's second law unlocks 17 others in PHY 131.
-- **Minimum-memorize set.** Greedy set cover over the graph: the smallest set of formulas from which everything else can be derived. PHY 131 needs just 6 memorized out of 27.
+- **Leverage ranking.** Counts how many formulas each formula transitively unlocks. Study the high-leverage ones first. Newton's second law unlocks 35 others in PHY 131.
+- **Minimum-memorize set.** Greedy set cover over the graph: the smallest set of formulas from which everything else can be derived. PHY 131 needs just 9 memorized out of 51.
 - **Full-text search.** Search across all sheets by name, topic, tag, or description, with sensible ranking.
 - **Practice mode.** Quizzes you on derivations: name the prerequisites, order pairs of formulas, or self-test recall. Seeded, so quizzes are reproducible.
 - **Exports.** Printable HTML, compilable LaTeX (`.tex`), paginated PDF, and Anki-importable TSV with MathJax cards.
@@ -48,48 +48,52 @@ formulaforge demogif -o docs/demo.gif
 The dependency graph is the whole point. An edge A → B means "B derives from A, so learn A first." On top of that:
 
 - **Topological sort** (Kahn's algorithm) produces the study order, grouped into waves. No formula appears before its prerequisites. Ties break deterministically by id.
-- **Leverage** = number of transitive dependents. Newton's second law unlocks 17 other formulas in PHY 131. Partial derivatives unlock 11 in AMS 261. The mean unlocks 17 in PSY 103.
+- **Leverage** = number of transitive dependents. Newton's second law unlocks 35 other formulas in PHY 131. Partial derivatives unlock 11 in AMS 261. The mean unlocks 17 in PSY 103.
 - **Minimum-memorize set** = greedy set cover where each formula covers itself plus everything it unlocks. The dashboard shows the coverage curve: how much of the sheet each additional memorized formula buys you.
 
 Example output from `formulaforge graph phy131`:
 
 ```
 PHY 131 Classical Physics I
-  formulas:   27
-  derivations:34
-  study waves:5 (longest chain: 4)
-  roots: 6, leaves: 11
+  formulas:   51
+  derivations:66
+  study waves:7 (longest chain: 6)
+  roots: 9, leaves: 23
   highest leverage (unlocks the most):
-    Newton's second law: 17
-    Work (definition): 8
-    Velocity and acceleration (definitions): 7
-    ...
-  minimum memorize set (6):
+    Newton's second law: 35
+    Work (definition): 20
+    Kinetic energy: 10
+    Velocity and acceleration (definitions): 9
+    Spring potential energy and Hooke's law: 8
+  minimum memorize set (9):
     - Newton's second law
     - Velocity and acceleration (definitions)
+    - Temperature scales
     - Moment of inertia
     - Kinetic energy
     - Newton's law of gravitation
+    - Density
+    - Continuity equation
     - Center of mass
 ```
 
 ## Seeded sheets
 
-Nine complete, hand-checked sheets ship inside the binary. 246 formulas, 244 derivation edges, every one validated:
+Nine complete, hand-checked sheets ship inside the binary. 294 formulas, 303 derivation edges, every one validated:
 
 | Sheet | Course | Formulas | Min. memorize |
 |-------|--------|----------|---------------|
 | `ams151` | Applied Calculus I | 25 | 2 |
 | `ams161` | Applied Calculus II | 26 | 7 |
 | `ams210` | Applied Linear Algebra | 30 | 8 |
-| `ams261` | Calculus III | 21 | 3 |
-| `phy131` | Classical Physics I | 27 | 6 |
+| `ams261` | Calculus III | 45 | 5 |
+| `phy131` | Classical Physics I | 51 | 9 |
 | `cse113` | Foundations of Computer Science I | 32 | 8 |
 | `cse213` | Foundations of Computer Science II | 34 | 13 |
 | `cse214` | Data Structures | 29 | 12 |
 | `psy103` | Introduction to Psychology | 22 | 5 |
 
-AMS 151 runs from limits through the Fundamental Theorem. AMS 161 covers integration techniques, series convergence tests, and parametric and polar curves. AMS 210 is vectors, matrices, eigenvalues, and least squares. AMS 261 covers partial derivatives through Stokes' and the divergence theorem. PHY 131 runs from kinematics to angular momentum. CSE 113 is the logic toolkit: propositional and predicate logic, number theory and proof methods, induction, set theory, and functions, built from the actual homework sets. CSE 213 follows the actual course syllabus: counting and probability, graphs and trees, regular expressions and finite-state automata, on a small logic foundation. CSE 214 covers algorithm analysis, recurrences, linked structures, trees, heaps, hashing, sorting bounds, and graph algorithms. PSY 103 covers the quantitative core of intro psych: descriptive statistics, z-scores, correlation and regression, and inferential stats.
+AMS 151 runs from limits through the Fundamental Theorem. AMS 161 covers integration techniques, series convergence tests, and parametric and polar curves. AMS 210 is vectors, matrices, eigenvalues, and least squares. AMS 261 runs from sequences and series through vectors, partial derivatives, and Stokes' and the divergence theorem. PHY 131 covers the full classical arc: kinematics through statics, fluids, oscillations, waves, sound, and thermodynamics. CSE 113 is the logic toolkit: propositional and predicate logic, number theory and proof methods, induction, set theory, and functions, built from the actual homework sets. CSE 213 follows the actual course syllabus: counting and probability, graphs and trees, regular expressions and finite-state automata, on a small logic foundation. CSE 214 covers algorithm analysis, recurrences, linked structures, trees, heaps, hashing, sorting bounds, and graph algorithms. PSY 103 covers the quantitative core of intro psych: descriptive statistics, z-scores, correlation and regression, and inferential stats.
 
 ## Architecture
 
