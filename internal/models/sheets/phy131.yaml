@@ -1,0 +1,220 @@
+course: "PHY 131"
+title: "Classical Physics I"
+description: "Mechanics from the ground up: kinematics, Newton's laws, work and energy, momentum, rotation, oscillations, and gravitation."
+
+formulas:
+  - id: vel-def
+    name: "Velocity and acceleration (definitions)"
+    topic: "Kinematics"
+    latex: 'v = \frac{dx}{dt}, \quad a = \frac{dv}{dt} = \frac{d^2x}{dt^2}'
+    description: "Velocity is the rate of position change; acceleration the rate of velocity change."
+    tags: [definition, calculus]
+    derives_from: []
+
+  - id: kinematic
+    name: "Constant-acceleration kinematics"
+    topic: "Kinematics"
+    latex: 'v = v_0 + at, \quad x = x_0 + v_0 t + \tfrac{1}{2} a t^2, \quad v^2 = v_0^2 + 2a(x - x_0)'
+    description: "The three workhorses. Pick the one that skips the variable you don't know."
+    tags: [kinematics]
+    derives_from: [vel-def]
+
+  - id: projectile
+    name: "Projectile motion"
+    topic: "Kinematics"
+    latex: 'x = v_0 \cos\theta \, t, \quad y = v_0 \sin\theta \, t - \tfrac{1}{2} g t^2'
+    description: "Horizontal velocity is constant; vertical motion is free fall. Range is maximized at 45 degrees."
+    tags: [kinematics, projectile]
+    derives_from: [kinematic]
+
+  - id: newton2
+    name: "Newton's second law"
+    topic: "Newton's Laws"
+    latex: '\mathbf{F}_{\text{net}} = m \mathbf{a}'
+    description: "The hub of mechanics: net force causes acceleration, inversely scaled by mass."
+    tags: [law, force]
+    derives_from: []
+
+  - id: weight
+    name: "Weight"
+    topic: "Newton's Laws"
+    latex: 'W = mg, \quad g = 9.8 \, \text{m/s}^2'
+    description: "Gravitational force near Earth's surface. Mass is intrinsic; weight depends on g."
+    tags: [force, gravity]
+    derives_from: [newton2]
+
+  - id: friction
+    name: "Friction"
+    topic: "Newton's Laws"
+    latex: 'f_k = \mu_k N, \quad f_s \le \mu_s N'
+    description: "Kinetic friction is fixed; static friction adjusts up to its maximum to prevent slipping."
+    tags: [force]
+    derives_from: [newton2]
+
+  - id: centripetal
+    name: "Centripetal acceleration"
+    topic: "Newton's Laws"
+    latex: 'a_c = \frac{v^2}{r} \quad \text{toward the center}'
+    description: "Turning requires inward acceleration. Banked curves and orbits both come from here."
+    tags: [circular]
+    derives_from: [vel-def, newton2]
+
+  - id: work-def
+    name: "Work (definition)"
+    topic: "Work and Energy"
+    latex: 'W = \int \mathbf{F} \cdot d\mathbf{r} \quad \text{(constant force: } W = F d \cos\theta \text{)}'
+    description: "Only the force component along the displacement does work."
+    tags: [definition, work]
+    derives_from: [newton2]
+
+  - id: ke
+    name: "Kinetic energy"
+    topic: "Work and Energy"
+    latex: 'K = \tfrac{1}{2} m v^2'
+    description: "Energy of motion. Quadratic in speed: doubling speed quadruples energy."
+    tags: [energy]
+    derives_from: []
+
+  - id: work-energy
+    name: "Work-energy theorem"
+    topic: "Work and Energy"
+    latex: 'W_{\text{net}} = \Delta K'
+    description: "Net work changes kinetic energy. Often faster than kinematics for speed questions."
+    tags: [theorem, energy]
+    derives_from: [work-def, ke, newton2]
+
+  - id: pe-grav
+    name: "Gravitational potential energy"
+    topic: "Work and Energy"
+    latex: 'U_g = mgy'
+    description: "Stored energy of height. Only differences matter, so set y = 0 wherever convenient."
+    tags: [energy, potential]
+    derives_from: [work-def]
+
+  - id: pe-spring
+    name: "Spring potential energy and Hooke's law"
+    topic: "Work and Energy"
+    latex: 'U_s = \tfrac{1}{2} k x^2, \quad F_s = -kx'
+    description: "The minus sign means the spring pulls back toward equilibrium."
+    tags: [energy, spring]
+    derives_from: [work-def]
+
+  - id: energy-cons
+    name: "Conservation of mechanical energy"
+    topic: "Work and Energy"
+    latex: 'K_1 + U_1 = K_2 + U_2 \quad \text{(no nonconservative work)}'
+    description: "When only conservative forces act, total mechanical energy is fixed."
+    tags: [conservation, energy]
+    derives_from: [work-energy, pe-grav]
+
+  - id: power
+    name: "Power"
+    topic: "Work and Energy"
+    latex: 'P = \frac{dW}{dt} = \mathbf{F} \cdot \mathbf{v}'
+    description: "Rate of energy transfer. A car climbing fast needs more power than one cruising."
+    tags: [energy]
+    derives_from: [work-def]
+
+  - id: momentum
+    name: "Momentum"
+    topic: "Momentum"
+    latex: '\mathbf{p} = m \mathbf{v}'
+    description: "Quantity of motion. Conserved in isolated systems, which makes it powerful."
+    tags: [definition]
+    derives_from: [newton2]
+
+  - id: impulse
+    name: "Impulse-momentum theorem"
+    topic: "Momentum"
+    latex: '\mathbf{J} = \Delta \mathbf{p} = \int \mathbf{F} \, dt'
+    description: "A force acting over time changes momentum. Airbags work by stretching dt."
+    tags: [theorem]
+    derives_from: [momentum, newton2]
+
+  - id: momentum-cons
+    name: "Conservation of momentum"
+    topic: "Momentum"
+    latex: '\mathbf{p}_{\text{initial}} = \mathbf{p}_{\text{final}} \quad \text{(isolated system)}'
+    description: "Internal forces cancel in pairs, so total momentum cannot change."
+    tags: [conservation]
+    derives_from: [impulse]
+
+  - id: elastic
+    name: "Elastic collision (1D)"
+    topic: "Momentum"
+    latex: 'v_{1f} = \frac{m_1 - m_2}{m_1 + m_2} v_{1i} + \frac{2 m_2}{m_1 + m_2} v_{2i}'
+    description: "Both momentum and kinetic energy conserved. Equal masses: velocities swap."
+    tags: [collision]
+    derives_from: [momentum-cons, energy-cons]
+
+  - id: cm
+    name: "Center of mass"
+    topic: "Momentum"
+    latex: 'x_{\text{cm}} = \frac{\sum m_i x_i}{M}'
+    description: "The balance point; the system moves as if all mass were there."
+    tags: [definition]
+    derives_from: []
+
+  - id: rot-kin
+    name: "Rotational kinematics"
+    topic: "Rotation"
+    latex: '\omega = \frac{d\theta}{dt}, \quad \alpha = \frac{d\omega}{dt}, \quad \omega^2 = \omega_0^2 + 2\alpha \Delta\theta'
+    description: "Same structure as linear kinematics with theta, omega, alpha in place of x, v, a."
+    tags: [kinematics, rotation]
+    derives_from: [vel-def, kinematic]
+
+  - id: torque
+    name: "Torque and the rotational second law"
+    topic: "Rotation"
+    latex: '\boldsymbol{\tau} = \mathbf{r} \times \mathbf{F}, \quad \tau_{\text{net}} = I \alpha'
+    description: "Twisting effort; the rotational analog of F = ma."
+    tags: [rotation, law]
+    derives_from: [newton2, rot-kin]
+
+  - id: moment-inertia
+    name: "Moment of inertia"
+    topic: "Rotation"
+    latex: 'I = \sum m_i r_i^2 \;\; \text{hoop: } MR^2; \; \text{disk: } \tfrac{1}{2}MR^2; \; \text{sphere: } \tfrac{2}{5}MR^2; \; \text{rod (center): } \tfrac{1}{12}ML^2'
+    description: "Rotational mass: resistance to angular acceleration. Mass farther out counts more."
+    tags: [rotation]
+    derives_from: []
+
+  - id: rot-ke
+    name: "Rotational kinetic energy"
+    topic: "Rotation"
+    latex: 'K_{\text{rot}} = \tfrac{1}{2} I \omega^2, \quad v = \omega r'
+    description: "Rolling without slipping: total K is translational plus rotational."
+    tags: [energy, rotation]
+    derives_from: [ke, moment-inertia, rot-kin]
+
+  - id: ang-mom
+    name: "Angular momentum"
+    topic: "Rotation"
+    latex: '\mathbf{L} = \mathbf{r} \times \mathbf{p} = I \boldsymbol{\omega}, \quad \boldsymbol{\tau}_{\text{net}} = \frac{d\mathbf{L}}{dt}'
+    description: "Conserved without external torque: skaters spin faster pulling arms in."
+    tags: [conservation, rotation]
+    derives_from: [momentum, torque, moment-inertia]
+
+  - id: shm
+    name: "Simple harmonic motion"
+    topic: "Oscillations"
+    latex: 'x = A \cos(\omega t + \phi), \quad \omega = \sqrt{k/m}, \quad T = 2\pi \sqrt{m/k}'
+    description: "Mass on a spring. Frequency depends only on k and m, not amplitude."
+    tags: [oscillation]
+    derives_from: [newton2, pe-spring]
+
+  - id: pendulum
+    name: "Simple pendulum"
+    topic: "Oscillations"
+    latex: 'T = 2\pi \sqrt{L/g} \quad \text{(small angles)}'
+    description: "Period depends on length and gravity only, not mass or amplitude."
+    tags: [oscillation]
+    derives_from: [shm]
+
+  - id: gravitation
+    name: "Newton's law of gravitation"
+    topic: "Gravitation"
+    latex: 'F = \frac{G m_1 m_2}{r^2}'
+    description: "Inverse-square attraction between any two masses."
+    tags: [law, gravity]
+    derives_from: []
