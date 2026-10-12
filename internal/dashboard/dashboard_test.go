@@ -21,9 +21,9 @@ func TestBuildWritesSelfContainedHTML(t *testing.T) {
 		t.Errorf("dashboard too small (%d bytes) — plotly.js may not be inlined", len(page))
 	}
 	for _, want := range []string{
-		"plotly", "PSY 103", "Calculus III", "Classical Physics I", "Linear Algebra",
+		"plotly", "PSY 103", "Calculus III", "Classical Physics I", "Foundations of Computer Science I", "Foundations of Computer Science II",
 		"dependency graph explorer", "katex", "min_set", "Study order timeline",
-		"ams261", "phy131", "mat203", "psy103",
+		"ams261", "phy131", "cse113", "cse213", "psy103",
 	} {
 		if !strings.Contains(page, want) {
 			t.Errorf("dashboard missing %q", want)
@@ -55,7 +55,7 @@ func TestPayloadForStats(t *testing.T) {
 }
 
 func TestPayloadMinSetSizes(t *testing.T) {
-	want := map[string]int{"ams261": 3, "phy131": 6, "mat203": 8, "psy103": 5}
+	want := map[string]int{"ams261": 3, "phy131": 6, "cse113": 8, "cse213": 13, "psy103": 5}
 	for name, n := range want {
 		p, err := payloadFor(mustLoad(t, name))
 		if err != nil {

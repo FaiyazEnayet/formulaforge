@@ -6,7 +6,7 @@ import (
 
 func TestListSheets(t *testing.T) {
 	names := ListSheets()
-	want := []string{"ams151", "ams161", "ams210", "ams261", "cse213", "cse214", "phy131", "psy103"}
+	want := []string{"ams151", "ams161", "ams210", "ams261", "cse113", "cse213", "cse214", "phy131", "psy103"}
 	if len(names) != len(want) {
 		t.Fatalf("got %v, want %v", names, want)
 	}
@@ -22,8 +22,8 @@ func TestLoadAllCounts(t *testing.T) {
 	if err != nil {
 		t.Fatal(err)
 	}
-	if len(sheets) != 8 {
-		t.Fatalf("expected 8 sheets, got %d", len(sheets))
+	if len(sheets) != 9 {
+		t.Fatalf("expected 9 sheets, got %d", len(sheets))
 	}
 	want := map[string][3]string{
 		"ams151": {"AMS 151", "Applied Calculus I", ""},
@@ -31,11 +31,12 @@ func TestLoadAllCounts(t *testing.T) {
 		"ams210": {"AMS 210", "Applied Linear Algebra", ""},
 		"ams261": {"AMS 261", "Calculus III", ""},
 		"phy131": {"PHY 131", "Classical Physics I", ""},
+		"cse113": {"CSE 113", "Foundations of Computer Science I", ""},
 		"cse213": {"CSE 213", "Foundations of Computer Science II", ""},
 		"cse214": {"CSE 214", "Data Structures", ""},
 		"psy103": {"PSY 103", "Introduction to Psychology", ""},
 	}
-	counts := map[string]int{"ams151": 25, "ams161": 26, "ams210": 30, "ams261": 21, "phy131": 27, "cse213": 34, "cse214": 29, "psy103": 22}
+	counts := map[string]int{"ams151": 25, "ams161": 26, "ams210": 30, "ams261": 21, "phy131": 27, "cse113": 32, "cse213": 34, "cse214": 29, "psy103": 22}
 	total := 0
 	for name, s := range sheets {
 		if s.Course != want[name][0] {
@@ -49,8 +50,8 @@ func TestLoadAllCounts(t *testing.T) {
 		}
 		total += len(s.Formulas)
 	}
-	if total != 214 {
-		t.Errorf("total formulas = %d, want 214", total)
+	if total != 246 {
+		t.Errorf("total formulas = %d, want 246", total)
 	}
 }
 

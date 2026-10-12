@@ -1,0 +1,260 @@
+course: "CSE 113"
+title: "Foundations of Computer Science I"
+description: "The logic toolkit behind every proof and program: propositional and predicate logic, number theory, induction, set theory, and functions. Topics verified against the actual homework sets."
+
+formulas:
+  - id: truth-table
+    name: "Truth tables"
+    topic: "Propositional logic"
+    latex: '\\begin{array}{c|c|c} p & q & p \\land q \\\\ \\hline T & T & T \\\\ T & F & F \\\\ F & T & F \\\\ F & F & F \\end{array}'
+    description: "Enumerate every assignment of truth values. The ground truth for all logical equivalence."
+    tags: [logic, foundation]
+    derives_from: []
+
+  - id: log-equiv
+    name: "Logical equivalence"
+    topic: "Propositional logic"
+    latex: 'p \\equiv q \\iff p \\leftrightarrow q \\text{ is a tautology}'
+    description: "Two statement forms are equivalent when their truth tables match in every row."
+    tags: [logic]
+    derives_from: [truth-table]
+
+  - id: demorgan
+    name: "De Morgan's laws"
+    topic: "Propositional logic"
+    latex: '\\lnot (p \\land q) \\equiv \\lnot p \\lor \\lnot q, \\quad \\lnot (p \\lor q) \\equiv \\lnot p \\land \\lnot q'
+    description: "Push a negation through AND/OR by flipping the connective. Works for sets and quantifiers too."
+    tags: [logic]
+    derives_from: [log-equiv]
+
+  - id: tautology
+    name: "Tautology and contradiction"
+    topic: "Propositional logic"
+    latex: 'p \\lor \\lnot p \\text{ (tautology)}, \\quad p \\land \\lnot p \\text{ (contradiction)}'
+    description: "Always true versus always false. Proof by contradiction hunts for the second one."
+    tags: [logic]
+    derives_from: [truth-table]
+
+  - id: conditional
+    name: "Conditional statements"
+    topic: "Propositional logic"
+    latex: 'p \\to q \\equiv \\lnot p \\lor q'
+    description: "An implication is false in exactly one case: true hypothesis, false conclusion."
+    tags: [logic]
+    derives_from: [truth-table]
+
+  - id: contrapositive
+    name: "Contrapositive, converse, inverse"
+    topic: "Propositional logic"
+    latex: 'p \\to q \\equiv \\lnot q \\to \\lnot p, \\quad q \\to p \\text{ (converse)}, \\quad \\lnot p \\to \\lnot q \\text{ (inverse)}'
+    description: "Only the contrapositive is equivalent to the original. Converse and inverse are not."
+    tags: [logic]
+    derives_from: [conditional]
+
+  - id: modus-ponens
+    name: "Modus ponens and modus tollens"
+    topic: "Propositional logic"
+    latex: '((p \\to q) \\land p) \\to q, \\quad ((p \\to q) \\land \\lnot q) \\to \\lnot p'
+    description: "The two valid argument forms: affirm the hypothesis, or deny the conclusion."
+    tags: [logic, proof]
+    derives_from: [conditional]
+
+  - id: fallacies
+    name: "Converse and inverse errors"
+    topic: "Propositional logic"
+    latex: '((p \\to q) \\land q) \\not\\to p, \\quad ((p \\to q) \\land \\lnot p) \\not\\to \\lnot q'
+    description: "Affirming the conclusion or denying the hypothesis proves nothing. Classic invalid forms."
+    tags: [logic, proof]
+    derives_from: [modus-ponens]
+
+  - id: quantifiers
+    name: "Universal and existential quantifiers"
+    topic: "Predicate logic"
+    latex: '\\forall x \\in D,\\ P(x), \\quad \\exists x \\in D,\\ P(x)'
+    description: "For all versus there exists. The domain D decides what the quantifier ranges over."
+    tags: [logic]
+    derives_from: []
+
+  - id: quant-negation
+    name: "Negations of quantified statements"
+    topic: "Predicate logic"
+    latex: '\\lnot (\\forall x,\\ P(x)) \\equiv \\exists x,\\ \\lnot P(x), \\quad \\lnot (\\exists x,\\ P(x)) \\equiv \\forall x,\\ \\lnot P(x)'
+    description: "Negation flips the quantifier and negates the predicate. De Morgan's laws, quantified edition."
+    tags: [logic]
+    derives_from: [quantifiers, demorgan]
+
+  - id: nested-quant
+    name: "Statements with multiple quantifiers"
+    topic: "Predicate logic"
+    latex: '\\forall x \\exists y,\\ P(x,y) \\not\\equiv \\exists y \\forall x,\\ P(x,y)'
+    description: "Order matters. Everyone has a mother is not the same as someone is everyone's mother."
+    tags: [logic]
+    derives_from: [quantifiers]
+
+  - id: quant-args
+    name: "Arguments with quantified statements"
+    topic: "Predicate logic"
+    latex: '\\text{universal instantiation: } \\forall x\\,P(x) \\to P(c), \\quad \\text{universal modus ponens/tollens}'
+    description: "Drop the quantifier, apply the propositional rule, then re-generalize. Validity lifts from the propositional case."
+    tags: [logic, proof]
+    derives_from: [nested-quant, modus-ponens]
+
+  - id: rational
+    name: "Rational numbers"
+    topic: "Number theory & proof"
+    latex: 'r \\in \\mathbb{Q} \\iff r = \\frac{a}{b},\\ a, b \\in \\mathbb{Z},\\ b \\ne 0'
+    description: "A ratio of integers. The irrationals are everything real that is not this."
+    tags: [number-theory]
+    derives_from: []
+
+  - id: divisibility
+    name: "Divisibility"
+    topic: "Number theory & proof"
+    latex: 'd \\mid n \\iff \\exists k \\in \\mathbb{Z},\\ n = dk'
+    description: "d divides n when n is an integer multiple of d. Zero never divides."
+    tags: [number-theory]
+    derives_from: [rational]
+
+  - id: quotient-remainder
+    name: "Quotient-remainder theorem"
+    topic: "Number theory & proof"
+    latex: 'n = dq + r, \\quad 0 \\le r < d'
+    description: "Division with remainder always exists and is unique. The engine behind modular arithmetic."
+    tags: [number-theory]
+    derives_from: [divisibility]
+
+  - id: floor-ceil
+    name: "Floor and ceiling"
+    topic: "Number theory & proof"
+    latex: '\\lfloor x \\rfloor = \\text{greatest integer } \\le x, \\quad \\lceil x \\rceil = \\text{least integer } \\ge x'
+    description: "Round down, round up. Floor plus the fractional part recovers x."
+    tags: [number-theory]
+    derives_from: [quotient-remainder]
+
+  - id: contradiction
+    name: "Proof by contradiction"
+    topic: "Number theory & proof"
+    latex: '\\text{to prove } p: \\text{ assume } \\lnot p, \\text{ derive } q \\land \\lnot q'
+    description: "Assume the opposite and hunt for a contradiction. The classic: sqrt(2) is irrational."
+    tags: [proof]
+    derives_from: [tautology]
+
+  - id: contraposition
+    name: "Proof by contraposition"
+    topic: "Number theory & proof"
+    latex: '\\text{to prove } p \\to q: \\text{ prove } \\lnot q \\to \\lnot p'
+    description: "Prove the contrapositive instead. Same truth value, sometimes an easier argument."
+    tags: [proof]
+    derives_from: [contrapositive]
+
+  - id: cases
+    name: "Proof by division into cases"
+    topic: "Number theory & proof"
+    latex: '\\text{prove } p \\text{ under each of exhaustive cases } C_1, \\dots, C_n'
+    description: "Split the universe into cases that cover everything, then conquer each one. Parity arguments live here."
+    tags: [proof]
+    derives_from: []
+
+  - id: sequences
+    name: "Sequences"
+    topic: "Sequences & induction"
+    latex: 'a_n = f(n), \\quad n \\ge m_0'
+    description: "An ordered list defined by a formula in n. Explicit formulas beat recursion for closed forms."
+    tags: [sequences]
+    derives_from: []
+
+  - id: weak-induction
+    name: "Weak mathematical induction"
+    topic: "Sequences & induction"
+    latex: 'P(m_0) \\land (\\forall k \\ge m_0,\\ P(k) \\to P(k+1)) \\implies \\forall n \\ge m_0,\\ P(n)'
+    description: "Knock over the first domino, then show each domino topples the next. All fall."
+    tags: [induction, proof]
+    derives_from: [sequences]
+
+  - id: strong-induction
+    name: "Strong induction"
+    topic: "Sequences & induction"
+    latex: 'P(m_0) \\land (\\forall k \\ge m_0,\\ (\\forall i \\le k,\\ P(i)) \\to P(k+1)) \\implies \\forall n \\ge m_0,\\ P(n)'
+    description: "Assume everything up to k, not just k. Needed when P(k+1) depends on earlier terms, like recurrences."
+    tags: [induction, proof]
+    derives_from: [weak-induction]
+
+  - id: recurrence
+    name: "Recurrence relations"
+    topic: "Sequences & induction"
+    latex: 'a_k = F(a_{k-1}, \\dots, a_{k-d}), \\quad \\text{plus } d \\text{ initial conditions}'
+    description: "Define each term from previous ones. Prove closed forms with (strong) induction."
+    tags: [sequences, induction]
+    derives_from: [sequences, strong-induction]
+
+  - id: element-method
+    name: "Element method of proof"
+    topic: "Set theory"
+    latex: '\\text{to prove } A \\subseteq B: \\text{ take arbitrary } x \\in A, \\text{ show } x \\in B'
+    description: "The universal hammer for subset claims. Pick a generic element and chase definitions."
+    tags: [sets, proof]
+    derives_from: []
+
+  - id: set-identities
+    name: "Set properties and identities"
+    topic: "Set theory"
+    latex: 'A \\cup (B \\cap C) = (A \\cup B) \\cap (A \\cup C), \\quad \\overline{A \\cup B} = \\overline{A} \\cap \\overline{B}'
+    description: "Union, intersection, and complement obey the same algebra as AND, OR, and NOT."
+    tags: [sets]
+    derives_from: [element-method, demorgan]
+
+  - id: counterexample
+    name: "Disproofs and counterexamples"
+    topic: "Set theory"
+    latex: '\\text{to disprove } \\forall x,\\ P(x): \\text{ exhibit one } c \\text{ with } \\lnot P(c)'
+    description: "One counterexample kills a universal claim. The cheapest proof technique there is."
+    tags: [sets, proof]
+    derives_from: [element-method]
+
+  - id: algebraic-set-proof
+    name: "Algebraic proofs of set identities"
+    topic: "Set theory"
+    latex: '\\text{chain known identities: } A \\cup \\emptyset = A,\\ A \\cap U = A,\\ \\text{etc. to transform LHS into RHS}'
+    description: "Prove identities by rewriting with the algebra of sets instead of chasing elements."
+    tags: [sets, proof]
+    derives_from: [set-identities]
+
+  - id: one-to-one
+    name: "One-to-one functions"
+    topic: "Functions"
+    latex: 'f(a_1) = f(a_2) \\to a_1 = a_2'
+    description: "Distinct inputs give distinct outputs. No collisions allowed."
+    tags: [functions]
+    derives_from: []
+
+  - id: onto
+    name: "Onto functions"
+    topic: "Functions"
+    latex: '\\forall y \\in Y,\\ \\exists x \\in X,\\ f(x) = y'
+    description: "Every output gets hit by some input. The codomain is fully covered."
+    tags: [functions]
+    derives_from: []
+
+  - id: bijective
+    name: "Bijective functions"
+    topic: "Functions"
+    latex: 'f \\text{ bijective } \\iff f \\text{ is one-to-one and onto}'
+    description: "A perfect pairing between domain and codomain. Finite bijections preserve size."
+    tags: [functions]
+    derives_from: [one-to-one, onto]
+
+  - id: inverse-fn
+    name: "Inverse functions"
+    topic: "Functions"
+    latex: 'f^{-1}(y) = x \\iff f(x) = y, \\quad f^{-1} \\circ f = \\mathrm{id}'
+    description: "Undo the function. Exists exactly when the function is bijective."
+    tags: [functions]
+    derives_from: [bijective]
+
+  - id: composition
+    name: "Composition of functions"
+    topic: "Functions"
+    latex: '(g \\circ f)(x) = g(f(x))'
+    description: "Apply f, then g. Composition of one-to-one functions stays one-to-one; same for onto."
+    tags: [functions]
+    derives_from: [one-to-one, onto]

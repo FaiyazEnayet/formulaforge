@@ -37,8 +37,8 @@ func TestTotalEdges(t *testing.T) {
 		}
 		total += st.Edges
 	}
-	if total != 214 {
-		t.Errorf("total edges = %d, want 214", total)
+	if total != 244 {
+		t.Errorf("total edges = %d, want 244", total)
 	}
 }
 
@@ -78,7 +78,7 @@ func TestTopoOrderDeterministic(t *testing.T) {
 }
 
 func TestWavesCoverAllNodes(t *testing.T) {
-	want := map[string]int{"ams151": 5, "ams161": 5, "ams210": 5, "ams261": 3, "phy131": 5, "cse213": 5, "cse214": 4, "psy103": 6}
+	want := map[string]int{"ams151": 5, "ams161": 5, "ams210": 5, "ams261": 3, "phy131": 5, "cse113": 5, "cse213": 5, "cse214": 4, "psy103": 6}
 	for _, name := range models.ListSheets() {
 		g := loadGraph(t, name)
 		waves, err := g.Waves()
@@ -153,7 +153,7 @@ func TestLeverageRankingSorted(t *testing.T) {
 }
 
 func TestMinMemorizeSetSizes(t *testing.T) {
-	want := map[string]int{"ams151": 2, "ams161": 7, "ams210": 8, "ams261": 3, "phy131": 6, "cse213": 13, "cse214": 12, "psy103": 5}
+	want := map[string]int{"ams151": 2, "ams161": 7, "ams210": 8, "ams261": 3, "phy131": 6, "cse113": 8, "cse213": 13, "cse214": 12, "psy103": 5}
 	for _, name := range models.ListSheets() {
 		g := loadGraph(t, name)
 		ms := g.MinMemorizeSet()
