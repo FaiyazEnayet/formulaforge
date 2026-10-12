@@ -7,7 +7,7 @@
 
 Every STEM student builds a formula sheet before each exam. formulaforge is the tool that makes the sheet *smart*.
 
-Write your sheet in Markdown + LaTeX. formulaforge renders it to a beautiful printable page — and builds the **dependency graph** underneath: which formulas derive from which. That graph tells you the optimal study order, which formulas unlock the most others, and the smallest set you actually need to memorize.
+Write your sheet in Markdown + LaTeX. formulaforge renders it to a beautiful printable page. Underneath it builds the **dependency graph**: which formulas derive from which. That graph tells you the optimal study order, which formulas unlock the most others, and the smallest set you actually need to memorize.
 
 ## Live interactive demo
 
@@ -71,7 +71,7 @@ PHY 131 Classical Physics I
 
 ## Seeded sheets
 
-Four complete, hand-checked sheets ship with the tool — 99 formulas, 115 derivation edges, every one verified:
+Four complete, hand-checked sheets ship with the tool. 99 formulas, 115 derivation edges, every one verified:
 
 | Sheet | Course | Formulas | Min. memorize |
 |-------|--------|----------|---------------|
@@ -118,4 +118,4 @@ Run the tests: `pytest tests/`. Regenerate the artifacts: `python examples/make_
 - "Derives from" edges are pedagogical, not formal proofs. Two instructors might draw the graph slightly differently.
 - PDF math rendering uses matplotlib's mathtext, so a few LaTeX constructs are simplified there (e.g. matrices become bracket notation). The HTML export renders full LaTeX via KaTeX.
 - Anki cards rely on Anki's built-in MathJax; very old Anki versions may not render the math.
-- The seeded sheets cover four courses. Your course is probably not among them yet — but adding one is a single YAML file.
+- The seeded sheets cover four courses. Your course is probably not among them yet. Adding one is a single YAML file.
