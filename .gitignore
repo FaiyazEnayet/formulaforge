@@ -1,6 +1,25 @@
-__pycache__/
-*.py[cod]
-*.egg-info/
-.venv/
-.pytest_cache/
-*.apkg
+# binaries
+formulaforge
+formulaforge.exe
+*.exe
+*.dll
+*.so
+*.dylib
+
+# test artifacts
+*.test
+*.out
+coverage.txt
+
+# build cache is in GOCACHE, not here
+dist/
+
+# editor
+.vscode/
+.idea/
+*.swp
+*~
+
+# OS
+.DS_Store
+Thumbs.db
