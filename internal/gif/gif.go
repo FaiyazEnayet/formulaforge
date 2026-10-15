@@ -99,7 +99,7 @@ func Build(sheetName, out string) error {
 	py := func(y float64) float64 { return 70 + (0-y)/(depth+0.4)*(H-110) }
 
 	minSet := map[string]bool{}
-	for _, id := range g.MinMemorizeSet() {
+	for _, id := range g.MinMemorizeSet(nil) {
 		minSet[id] = true
 	}
 	type edge struct{ a, b string }

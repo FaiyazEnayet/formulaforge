@@ -1,6 +1,9 @@
 package graph
 
 import (
+	"fmt"
+	"math/rand"
+	"sort"
 	"testing"
 
 	"github.com/FaiyazEnayet/formulaforge/internal/models"
@@ -152,31 +155,71 @@ func TestLeverageRankingSorted(t *testing.T) {
 	}
 }
 
-func TestMinMemorizeSetSizes(t *testing.T) {
-	want := map[string]int{"ams151": 2, "ams161": 7, "ams210": 8, "ams261": 5, "phy131": 9, "cse113": 8, "cse213": 13, "cse214": 12, "psy103": 5}
+func TestMinMemorizeSetIsExactRoots(t *testing.T) {
 	for _, name := range models.ListSheets() {
 		g := loadGraph(t, name)
-		ms := g.MinMemorizeSet()
-		if len(ms) != want[name] {
-			t.Errorf("%s: min-memorize = %d, want %d", name, len(ms), want[name])
-		}
-		// coverage must be complete
-		covered := map[string]bool{}
-		for _, id := range ms {
-			for c := range g.CoverageOf(id) {
-				covered[c] = true
+		ms := g.MinMemorizeSet(nil)
+		// The exact minimum is the set of roots: anything without a
+		// derivation path must be memorized, and the roots derive the rest.
+		var roots []string
+		for _, n := range g.Nodes {
+			if len(g.Paths[n]) == 0 {
+				roots = append(roots, n)
 			}
 		}
-		if len(covered) != len(g.Nodes) {
-			t.Errorf("%s: min-memorize set covers %d of %d", name, len(covered), len(g.Nodes))
+		sort.Strings(roots)
+		if fmt.Sprint(ms) != fmt.Sprint(roots) {
+			t.Errorf("%s: min-memorize = %v, want roots %v", name, ms, roots)
 		}
+		// full coverage from the set
+		if got := g.Closure(toSet(ms)); len(got) != len(g.Nodes) {
+			t.Errorf("%s: min-memorize covers %d of %d", name, len(got), len(g.Nodes))
+		}
+		// minimal: dropping any single root breaks full coverage
+		for _, drop := range ms {
+			rest := make([]string, 0, len(ms)-1)
+			for _, m := range ms {
+				if m != drop {
+					rest = append(rest, m)
+				}
+			}
+			if got := g.Closure(toSet(rest)); len(got) == len(g.Nodes) {
+				t.Errorf("%s: set without %s still covers all: not minimal", name, drop)
+			}
+		}
+	}
+}
+
+func TestMinMemorizeSetPriorKnowledge(t *testing.T) {
+	g := loadGraph(t, "phy131")
+	var roots []string
+	for _, n := range g.Nodes {
+		if len(g.Paths[n]) == 0 {
+			roots = append(roots, n)
+		}
+	}
+	sort.Strings(roots)
+	prior := roots[:2]
+	ms := g.MinMemorizeSet(prior)
+	for _, p := range prior {
+		for _, m := range ms {
+			if m == p {
+				t.Errorf("already-known root %s must not be in the memorize set", p)
+			}
+		}
+	}
+	if len(ms) != len(roots)-2 {
+		t.Errorf("min-memorize with 2 known roots = %d, want %d", len(ms), len(roots)-2)
+	}
+	if got := g.Closure(toSet(append(append([]string{}, prior...), ms...))); len(got) != len(g.Nodes) {
+		t.Error("prior + memorize set does not cover the sheet")
 	}
 }
 
 func TestMinMemorizeSetDeterministic(t *testing.T) {
 	g := loadGraph(t, "psy103")
-	a := g.MinMemorizeSet()
-	b := g.MinMemorizeSet()
+	a := g.MinMemorizeSet(nil)
+	b := g.MinMemorizeSet(nil)
 	if len(a) != len(b) {
 		t.Fatal("length mismatch")
 	}
@@ -184,6 +227,221 @@ func TestMinMemorizeSetDeterministic(t *testing.T) {
 		if a[i] != b[i] {
 			t.Fatal("min-memorize set not deterministic")
 		}
+	}
+}
+
+// TestClosureIsConjunctive is the regression test for the coverage bug:
+// under the old reachability semantics, memorizing A alone counted C as
+// covered even when C derives from A and B. Conjunctive semantics must
+// require every prerequisite of a derivation path.
+func TestClosureIsConjunctive(t *testing.T) {
+	s := &models.Sheet{
+		Course: "T", Title: "Conjunctive",
+		Formulas: []models.Formula{
+			{ID: "a", Name: "A"},
+			{ID: "b", Name: "B"},
+			{ID: "c", Name: "C", DerivesFrom: []string{"a", "b"}},
+			{ID: "d", Name: "D", DerivesFrom: []string{"a"}, AltDerivesFrom: [][]string{{"b"}}},
+		},
+	}
+	g := New(s)
+	if got := g.Closure(toSet([]string{"a"})); got["c"] {
+		t.Error("C must not be derivable from A alone; it needs A and B")
+	}
+	if got := g.Closure(toSet([]string{"a", "b"})); !got["c"] {
+		t.Error("C must be derivable from A and B together")
+	}
+	if got := g.Closure(toSet([]string{"b"})); !got["d"] {
+		t.Error("D must be derivable from B alone via its alternative path")
+	}
+	if got := g.Closure(toSet([]string{})); len(got) != 0 {
+		t.Errorf("empty start must derive nothing, got %v", got)
+	}
+}
+
+func TestMinMemorizeFor(t *testing.T) {
+	s := &models.Sheet{
+		Course: "T", Title: "Targets",
+		Formulas: []models.Formula{
+			{ID: "a", Name: "A"},
+			{ID: "b", Name: "B"},
+			{ID: "c", Name: "C"},
+			{ID: "t1", Name: "T1", DerivesFrom: []string{"a", "b"}},
+			{ID: "t2", Name: "T2", DerivesFrom: []string{"b", "c"}},
+			{ID: "u", Name: "U", DerivesFrom: []string{"a"}, AltDerivesFrom: [][]string{{"c"}}},
+		},
+	}
+	g := New(s)
+	// Memorizing t1 and t2 directly (2) beats learning a, b, c (3).
+	ms, err := g.MinMemorizeFor([]string{"t1", "t2"}, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if fmt.Sprint(ms) != "[t1 t2]" {
+		t.Errorf("MinMemorizeFor(t1,t2) = %v, want [t1 t2]", ms)
+	}
+	// With B already known, covering t1 takes one memorization: either A
+	// or t1 itself. Deterministic search picks A.
+	ms, err = g.MinMemorizeFor([]string{"t1"}, []string{"b"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if fmt.Sprint(ms) != "[a]" {
+		t.Errorf("MinMemorizeFor(t1, prior=b) = %v, want [a]", ms)
+	}
+	// Alternative paths: u via [a] or [c]; search order settles on [a].
+	ms, err = g.MinMemorizeFor([]string{"u"}, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	if fmt.Sprint(ms) != "[a]" {
+		t.Errorf("MinMemorizeFor(u) = %v, want [a]", ms)
+	}
+	// Already-known targets need nothing.
+	ms, err = g.MinMemorizeFor([]string{"a"}, []string{"a"})
+	if err != nil {
+		t.Fatal(err)
+	}
+	if len(ms) != 0 {
+		t.Errorf("known target needs no memorization, got %v", ms)
+	}
+	// Unknown target ids are an error.
+	if _, err := g.MinMemorizeFor([]string{"nope"}, nil); err == nil {
+		t.Error("expected error for unknown target id")
+	}
+}
+
+// bruteMinFor is the exact reference: smallest subset (ties broken
+// lexicographically) whose closure covers the targets.
+func bruteMinFor(g *Graph, targets []string, prior []string) []string {
+	ids := append([]string{}, g.Nodes...)
+	sort.Strings(ids)
+	priorSet := toSet(prior)
+	var best []string
+	bestSize := len(ids) + 1
+	for mask := 0; mask < (1 << len(ids)); mask++ {
+		var mem []string
+		for i, id := range ids {
+			if mask&(1<<i) != 0 {
+				mem = append(mem, id)
+			}
+		}
+		if len(mem) > bestSize {
+			continue
+		}
+		km := make(map[string]bool, len(priorSet)+len(mem))
+		for k := range priorSet {
+			km[k] = true
+		}
+		for k := range toSet(mem) {
+			km[k] = true
+		}
+		known := g.Closure(km)
+		ok := true
+		for _, tg := range targets {
+			if !known[tg] {
+				ok = false
+				break
+			}
+		}
+		if !ok {
+			continue
+		}
+		if len(mem) < bestSize || (len(mem) == bestSize && fmt.Sprint(mem) < fmt.Sprint(best)) {
+			bestSize, best = len(mem), mem
+		}
+	}
+	return best
+}
+
+// randomANDORDAG builds a small DAG with occasional alternative
+// derivation paths, seeded for reproducibility.
+func randomANDORDAG(seed int64, n int) *Graph {
+	rng := rand.New(rand.NewSource(seed))
+	var fs []models.Formula
+	for i := 0; i < n; i++ {
+		id := fmt.Sprintf("f%02d", i)
+		f := models.Formula{ID: id, Name: id}
+		var prim []string
+		for j := 0; j < i; j++ {
+			if rng.Intn(3) == 0 {
+				prim = append(prim, fmt.Sprintf("f%02d", j))
+			}
+		}
+		f.DerivesFrom = prim
+		if i > 1 && rng.Intn(4) == 0 {
+			var alt []string
+			for j := 0; j < i; j++ {
+				if rng.Intn(4) == 0 {
+					alt = append(alt, fmt.Sprintf("f%02d", j))
+				}
+			}
+			if len(alt) > 0 && fmt.Sprint(alt) != fmt.Sprint(prim) {
+				f.AltDerivesFrom = [][]string{alt}
+			}
+		}
+		fs = append(fs, f)
+	}
+	return New(&models.Sheet{Course: "T", Title: "Random", Formulas: fs})
+}
+
+func TestMinMemorizeForMatchesBruteForce(t *testing.T) {
+	rng := rand.New(rand.NewSource(42))
+	for trial := 0; trial < 30; trial++ {
+		g := randomANDORDAG(int64(trial), 6+rng.Intn(5))
+		ids := append([]string{}, g.Nodes...)
+		sort.Strings(ids)
+		var targets []string
+		for _, id := range ids {
+			if rng.Intn(2) == 0 {
+				targets = append(targets, id)
+			}
+		}
+		if len(targets) == 0 {
+			targets = []string{ids[0]}
+		}
+		var prior []string
+		for _, id := range ids {
+			if rng.Intn(4) == 0 {
+				prior = append(prior, id)
+			}
+		}
+		got, err := g.MinMemorizeFor(targets, prior)
+		if err != nil {
+			t.Fatal(err)
+		}
+		if want := bruteMinFor(g, targets, prior); fmt.Sprint(got) != fmt.Sprint(want) {
+			t.Errorf("trial %d targets=%v prior=%v: got %v, brute force %v", trial, targets, prior, got, want)
+		}
+		// Full-sheet exactness too.
+		if got, want := g.MinMemorizeSet(prior), bruteMinFor(g, ids, prior); fmt.Sprint(got) != fmt.Sprint(want) {
+			t.Errorf("trial %d full cover prior=%v: got %v, brute force %v", trial, prior, got, want)
+		}
+	}
+}
+
+// TestMinMemorizeForRealSheet checks the solver terminates fast and
+// returns a valid set on a real sheet (exactness is covered by the
+// brute-force test on small graphs).
+func TestMinMemorizeForRealSheet(t *testing.T) {
+	g := loadGraph(t, "phy131")
+	targets := []string{"projectile", "newton2", "work-energy"}
+	ms, err := g.MinMemorizeFor(targets, nil)
+	if err != nil {
+		t.Fatal(err)
+	}
+	known := g.Closure(toSet(ms))
+	for _, tg := range targets {
+		if !known[tg] {
+			t.Errorf("target %s not derivable from %v", tg, ms)
+		}
+	}
+	if len(ms) > len(g.MinMemorizeSet(nil)) {
+		t.Errorf("target set larger than full-sheet set: %v", ms)
+	}
+	again, _ := g.MinMemorizeFor(targets, nil)
+	if fmt.Sprint(ms) != fmt.Sprint(again) {
+		t.Error("MinMemorizeFor not deterministic")
 	}
 }
 
@@ -205,9 +463,10 @@ func TestCoverageCurve(t *testing.T) {
 			t.Error("curve K must increment by 1")
 		}
 	}
-	// greedy set size matches MinMemorizeSet
-	if len(curve)-1 != len(g.MinMemorizeSet()) {
-		t.Error("curve length mismatch with min-memorize set")
+	// the curve is deterministic
+	again := g.CoverageCurve()
+	if fmt.Sprint(curve) != fmt.Sprint(again) {
+		t.Error("curve not deterministic")
 	}
 }
 
