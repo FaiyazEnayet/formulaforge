@@ -15,15 +15,18 @@ import (
 var sheetsFS embed.FS
 
 // Formula is a single named mathematical result with LaTeX source and
-// derivation links to other formulas.
+// derivation links to other formulas. DerivesFrom is the primary way to
+// derive it: every listed prerequisite is needed. Each AltDerivesFrom
+// entry is an alternative prerequisite set that also suffices on its own.
 type Formula struct {
-	ID          string   `yaml:"id"`
-	Name        string   `yaml:"name"`
-	Topic       string   `yaml:"topic"`
-	Latex       string   `yaml:"latex"`
-	Description string   `yaml:"description"`
-	Tags        []string `yaml:"tags"`
-	DerivesFrom []string `yaml:"derives_from"`
+	ID             string     `yaml:"id"`
+	Name           string     `yaml:"name"`
+	Topic          string     `yaml:"topic"`
+	Latex          string     `yaml:"latex"`
+	Description    string     `yaml:"description"`
+	Tags           []string   `yaml:"tags"`
+	DerivesFrom    []string   `yaml:"derives_from"`
+	AltDerivesFrom [][]string `yaml:"alt_derives_from"`
 }
 
 // Sheet is a course's full formula collection.
@@ -106,12 +109,28 @@ func Load(data []byte) (*Sheet, error) {
 	}
 	for i := range s.Formulas {
 		f := &s.Formulas[i]
-		for _, dep := range f.DerivesFrom {
+		checkDep := func(dep string) error {
 			if dep == f.ID {
-				return nil, fmt.Errorf("formula %s derives from itself", f.ID)
+				return fmt.Errorf("formula %s derives from itself", f.ID)
 			}
 			if _, ok := s.byID[dep]; !ok {
-				return nil, fmt.Errorf("formula %s references unknown id: %s", f.ID, dep)
+				return fmt.Errorf("formula %s references unknown id: %s", f.ID, dep)
+			}
+			return nil
+		}
+		for _, dep := range f.DerivesFrom {
+			if err := checkDep(dep); err != nil {
+				return nil, err
+			}
+		}
+		for _, alt := range f.AltDerivesFrom {
+			if len(alt) == 0 {
+				return nil, fmt.Errorf("formula %s has an empty alternative derivation path", f.ID)
+			}
+			for _, dep := range alt {
+				if err := checkDep(dep); err != nil {
+					return nil, err
+				}
 			}
 		}
 		// normalize tags

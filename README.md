@@ -1,13 +1,13 @@
 # formulaforge
 
-[![tests](https://img.shields.io/badge/tests-64%20passing-brightgreen)](https://github.com/FaiyazEnayet/formulaforge)
+[![tests](https://img.shields.io/badge/tests-69%20passing-brightgreen)](https://github.com/FaiyazEnayet/formulaforge)
 [![go](https://img.shields.io/badge/go-1.24%2B-blue)](go.mod)
 [![formulas](https://img.shields.io/badge/formulas-294-orange)](internal/models/sheets/)
 [![license](https://img.shields.io/badge/license-MIT-lightgrey)](LICENSE)
 
 Every STEM student builds a formula sheet before each exam. formulaforge is the tool that makes the sheet *smart*.
 
-Write your sheet in YAML + LaTeX. formulaforge renders it to a beautiful printable page. Underneath it builds the **dependency graph**: which formulas derive from which. That graph tells you the optimal study order, which formulas unlock the most others, and the smallest set you actually need to memorize. This is the Go rewrite: one static binary, no runtime to install.
+Write your sheet in YAML + LaTeX. formulaforge renders it to a beautiful printable page. Underneath it builds the **dependency graph**: which formulas derive from which. That graph tells you the optimal study order, which formulas the most others build on, and the smallest set you actually need to memorize. This is the Go rewrite: one static binary, no runtime to install.
 
 ## Live interactive demo
 
@@ -19,8 +19,8 @@ Write your sheet in YAML + LaTeX. formulaforge renders it to a beautiful printab
 
 - **Write sheets in YAML + LaTeX.** One file per course, embedded in the binary. Render to a clean printable page with KaTeX math.
 - **Dependency graph.** Declare what each formula builds on. formulaforge checks the graph is a DAG, then topologically sorts it into study waves: learn wave 1 first, derive the rest.
-- **Leverage ranking.** Counts how many formulas each formula transitively unlocks. Study the high-leverage ones first. Newton's second law unlocks 35 others in PHY 131.
-- **Minimum-memorize set.** Greedy set cover over the graph: the smallest set of formulas from which everything else can be derived. PHY 131 needs just 9 memorized out of 51.
+- **Leverage ranking.** Counts how many formulas list each formula as a (transitive) prerequisite. Study the high-leverage ones first. Newton's second law is a prerequisite for 35 others in PHY 131.
+- **Minimum-memorize set.** Exact: the root formulas you have not learned yet. Everything else derives from them, so no smaller set works. PHY 131 needs 9 memorized out of 51.
 - **Full-text search.** Search across all sheets by name, topic, tag, or description, with sensible ranking.
 - **Practice mode.** Quizzes you on derivations: name the prerequisites, order pairs of formulas, or self-test recall. Seeded, so quizzes are reproducible.
 - **Exports.** Printable HTML, compilable LaTeX (`.tex`), paginated PDF, and Anki-importable TSV with MathJax cards.
@@ -48,8 +48,8 @@ formulaforge demogif -o docs/demo.gif
 The dependency graph is the whole point. An edge A → B means "B derives from A, so learn A first." On top of that:
 
 - **Topological sort** (Kahn's algorithm) produces the study order, grouped into waves. No formula appears before its prerequisites. Ties break deterministically by id.
-- **Leverage** = number of transitive dependents. Newton's second law unlocks 35 other formulas in PHY 131. Partial derivatives unlock 11 in AMS 261. The mean unlocks 17 in PSY 103.
-- **Minimum-memorize set** = greedy set cover where each formula covers itself plus everything it unlocks. The dashboard shows the coverage curve: how much of the sheet each additional memorized formula buys you.
+- **Leverage** = number of transitive dependents. Newton's second law is a prerequisite for 35 other formulas in PHY 131. Partial derivatives for 11 in AMS 261. The mean for 17 in PSY 103.
+- **Minimum-memorize set** = every root formula you do not already know. A formula counts as known when you memorize it, already know it, or can derive it — and deriving takes *all* of one derivation path's prerequisites, not just one. Formulas may declare alternative derivation paths (`alt_derives_from`). For exam prep, `graph --target` finds the exact smallest set that derives just your target formulas. The dashboard coverage curve is a greedy heuristic: each step memorizes the formula that makes the most new formulas derivable.
 
 Example output from `formulaforge graph phy131`:
 
@@ -66,15 +66,15 @@ PHY 131 Classical Physics I
     Velocity and acceleration (definitions): 9
     Spring potential energy and Hooke's law: 8
   minimum memorize set (9):
-    - Newton's second law
-    - Velocity and acceleration (definitions)
-    - Temperature scales
-    - Moment of inertia
-    - Kinetic energy
-    - Newton's law of gravitation
-    - Density
-    - Continuity equation
     - Center of mass
+    - Continuity equation
+    - Density
+    - Newton's law of gravitation
+    - Kinetic energy
+    - Moment of inertia
+    - Newton's second law
+    - Temperature scales
+    - Velocity and acceleration (definitions)
 ```
 
 ## Seeded sheets
@@ -99,8 +99,8 @@ AMS 151 runs from limits through the Fundamental Theorem. AMS 161 covers integra
 
 ```mermaid
 graph TD
-    A[internal/models/sheets/*.yaml<br/>formulas + derives_from<br/>embedded via go:embed] --> B[models<br/>load & validate]
-    B --> C[graph<br/>DAG: topo sort, leverage,<br/>set cover]
+    A[internal/models/sheets/*.yaml<br/>formulas + derives_from<br/>+ alt_derives_from<br/>embedded via go:embed] --> B[models<br/>load & validate]
+    B --> C[graph<br/>DAG: topo sort, leverage,<br/>derivation closure,<br/>exact memorize sets]
     C --> D[cmd/formulaforge<br/>cobra CLI: build / graph /<br/>study-order / search /<br/>practice / export /<br/>dashboard / demogif]
     D --> E[render<br/>HTML + LaTeX + PDF]
     D --> F[anki<br/>TSV decks]
@@ -118,7 +118,7 @@ graph TD
 formulaforge/
   cmd/formulaforge/   cobra CLI
   internal/models/    sheets (embedded YAML), load & validate
-  internal/graph/     DAG: topo sort, leverage, set cover
+  internal/graph/     DAG: topo sort, leverage, derivation closure, exact memorize sets
   internal/search/    ranked full-text search
   internal/practice/  derivation quizzes
   internal/render/    HTML + LaTeX + PDF export
@@ -128,11 +128,11 @@ formulaforge/
   docs/               dashboard.html, demo.gif
 ```
 
-Run the tests: `go test ./...` (64 tests). Regenerate the artifacts: `formulaforge dashboard` and `formulaforge demogif`.
+Run the tests: `go test ./...` (69 tests). Regenerate the artifacts: `formulaforge dashboard` and `formulaforge demogif`.
 
 ## Limitations
 
-- The minimum-memorize set is greedy set cover, a classic ln(n)-approximation. It is small, not proven optimal.
+- The full-sheet minimum-memorize set is exact: it is the set of root formulas outside your prior knowledge. The target-set solver (`graph --target`) is exact via branch and bound, which is exponential in the worst case — very large target lists on dense graphs can be slow. The dashboard coverage curve is only a greedy heuristic.
 - The PDF export is a clean reading copy: math appears as LaTeX source in monospace because gofpdf has no TeX engine. For typeset math, use the `.tex` export and run `pdflatex`.
 - The Anki export is a TSV you import via File > Import, not a ready-made `.apkg`. Cards use `\[ \]` delimiters so Anki's built-in MathJax renders them.
 - The dashboard inlines plotly.js so it works offline, but formula detail rendering loads KaTeX from a CDN. No internet, no pretty math in the detail panel.

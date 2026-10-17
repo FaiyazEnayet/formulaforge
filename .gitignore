@@ -1,6 +1,6 @@
-# binaries
-formulaforge
-formulaforge.exe
+# binaries (root-level only; must not shadow cmd/formulaforge/)
+/formulaforge
+/formulaforge.exe
 *.exe
 *.dll
 *.so
