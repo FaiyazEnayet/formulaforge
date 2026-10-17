@@ -28,7 +28,7 @@ Sheets declare formulas and derivation paths in YAML. A path requires all its pr
 
 | Scope | Recorded result or contract |
 | :--- | :--- |
-| Dashboard scope | Eight sheets |
+| Dashboard scope | Eight classes |
 | Derivation semantics | AND within each path; OR across alternative paths |
 | Coverage curve | Greedy heuristic |
 | Target-set solver | Exact branch and bound; exponential worst-case complexity |
