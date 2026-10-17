@@ -35,7 +35,7 @@ Sheets declare formulas and derivation paths in YAML. A path requires all its pr
 
 ## Updating this project
 
-Dashboard source language: **Go**. Generator: `internal/dashboard/dashboard.go via the Go CLI`. To keep the interactive page, figures, data animation, and README consistent, follow [the coding-agent update guide](AGENT-DASHBOARD-GUIDE.md). The local interactive output is `docs/dashboard.html`.
+Dashboard source language: **Go**. Generator: `internal/dashboard/dashboard.go via the Go CLI`. The local interactive output is `docs/dashboard.html`.
 
 ## Run locally
 
