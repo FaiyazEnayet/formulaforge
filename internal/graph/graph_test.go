@@ -40,8 +40,8 @@ func TestTotalEdges(t *testing.T) {
 		}
 		total += st.Edges
 	}
-	if total != 303 {
-		t.Errorf("total edges = %d, want 303", total)
+	if total != 284 {
+		t.Errorf("total edges = %d, want 284", total)
 	}
 }
 
@@ -81,7 +81,7 @@ func TestTopoOrderDeterministic(t *testing.T) {
 }
 
 func TestWavesCoverAllNodes(t *testing.T) {
-	want := map[string]int{"ams151": 5, "ams161": 5, "ams210": 5, "ams261": 6, "phy131": 7, "cse113": 5, "cse213": 5, "cse214": 4, "psy103": 6}
+	want := map[string]int{"ams151": 5, "ams161": 5, "ams210": 5, "ams261": 6, "phy131": 7, "cse113": 5, "cse213": 5, "psy103": 6}
 	for _, name := range models.ListSheets() {
 		g := loadGraph(t, name)
 		waves, err := g.Waves()

@@ -90,10 +90,9 @@ Nine complete, hand-checked sheets ship inside the binary. 294 formulas, 303 der
 | `phy131` | Classical Physics I | 51 | 9 |
 | `cse113` | Foundations of Computer Science I | 32 | 8 |
 | `cse213` | Foundations of Computer Science II | 34 | 13 |
-| `cse214` | Data Structures | 29 | 12 |
 | `psy103` | Introduction to Psychology | 22 | 5 |
 
-AMS 151 runs from limits through the Fundamental Theorem. AMS 161 covers integration techniques, series convergence tests, and parametric and polar curves. AMS 210 is vectors, matrices, eigenvalues, and least squares. AMS 261 runs from sequences and series through vectors, partial derivatives, and Stokes' and the divergence theorem. PHY 131 covers the full classical arc: kinematics through statics, fluids, oscillations, waves, sound, and thermodynamics. CSE 113 is the logic toolkit: propositional and predicate logic, number theory and proof methods, induction, set theory, and functions, built from the actual homework sets. CSE 213 follows the actual course syllabus: counting and probability, graphs and trees, regular expressions and finite-state automata, on a small logic foundation. CSE 214 covers algorithm analysis, recurrences, linked structures, trees, heaps, hashing, sorting bounds, and graph algorithms. PSY 103 covers the quantitative core of intro psych: descriptive statistics, z-scores, correlation and regression, and inferential stats.
+AMS 151 runs from limits through the Fundamental Theorem. AMS 161 covers integration techniques, series convergence tests, and parametric and polar curves. AMS 210 is vectors, matrices, eigenvalues, and least squares. AMS 261 runs from sequences and series through vectors, partial derivatives, and Stokes' and the divergence theorem. PHY 131 covers the full classical arc: kinematics through statics, fluids, oscillations, waves, sound, and thermodynamics. CSE 113 is the logic toolkit: propositional and predicate logic, number theory and proof methods, induction, set theory, and functions, built from the actual homework sets. CSE 213 follows the actual course syllabus: counting and probability, graphs and trees, regular expressions and finite-state automata, on a small logic foundation. PSY 103 covers the quantitative core of intro psych: descriptive statistics, z-scores, correlation and regression, and inferential stats.
 
 ## Architecture
 
