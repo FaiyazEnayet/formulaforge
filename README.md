@@ -28,10 +28,14 @@ Sheets declare formulas and derivation paths in YAML. A path requires all its pr
 
 | Scope | Recorded result or contract |
 | :--- | :--- |
-| Dashboard scope | Eight classes |
+| Dashboard scope | Eight sheets; CSE 214 excluded from the redesigned dashboard |
 | Derivation semantics | AND within each path; OR across alternative paths |
 | Coverage curve | Greedy heuristic |
 | Target-set solver | Exact branch and bound; exponential worst-case complexity |
+
+## Updating this project
+
+Dashboard source language: **Go**. Generator: `internal/dashboard/dashboard.go via the Go CLI`. To keep the interactive page, figures, data animation, and README consistent, follow [the coding-agent update guide](AGENT-DASHBOARD-GUIDE.md). The local interactive output is `docs/dashboard.html`.
 
 ## Run locally
 
