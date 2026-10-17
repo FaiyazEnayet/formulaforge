@@ -1,17 +1,18 @@
-<p align="center"><img src="docs/readme-banner.svg" alt="FormulaForge: Mathematical dependencies, made inspectable" width="1200"></p>
+<p align="center"><img src="docs/readme-banner.svg?v=type-20261017b" alt="FormulaForge: Mathematical dependencies, made inspectable" width="1200"></p>
 
 [![Tests](https://github.com/FaiyazEnayet/formulaforge/actions/workflows/ci.yml/badge.svg)](https://github.com/FaiyazEnayet/formulaforge/actions/workflows/ci.yml) [![License: MIT](https://img.shields.io/badge/license-MIT-007EC6)](LICENSE) ![Go 1.24+](https://img.shields.io/badge/Go-1.24%2B-00ADD8) ![Built with Go + graph algorithms](https://img.shields.io/badge/built%20with-Go%20%2B%20graph%20algorithms-555555) [![Interactive demo](https://img.shields.io/badge/demo-interactive-4C9D39)](https://faiyazenayet.github.io/formulaforge/docs/dashboard.html)
 
-<p align="center"><a href="https://faiyazenayet.github.io/formulaforge/docs/dashboard.html"><b>Open interactive demo</b></a> · <a href="docs/dashboard.html">HTML file</a> · <a href="#method">Method</a> · <a href="#run-locally">Run locally</a> · <a href="#limitations">Limitations</a></p>
+<p align="center"><a href="https://faiyazenayet.github.io/formulaforge/docs/dashboard.html"><b>Open interactive demo</b></a> · <a href="#method">Method</a> · <a href="#run-locally">Run locally</a></p>
 
 # FormulaForge
 
 FormulaForge turns a formula sheet into a searchable dependency model. It shows which prerequisites support a result, what is already derivable and which concepts are useful to learn next.
 
-**Go · graph algorithms · YAML and LaTeX**
 
-[![FormulaForge demo](docs/demo.gif?v=data-20261017)](https://faiyazenayet.github.io/formulaforge/docs/dashboard.html)
+[![FormulaForge demo](docs/demo.gif?v=showcase-20261017b)](https://faiyazenayet.github.io/formulaforge/docs/dashboard.html)
 
+
+A dependency view is useful for planning revision only when its relationships are interpreted correctly. Selecting a formula reveals the concepts that support it, while search and topic filters keep a large sheet navigable. Structural reach, valid derivability and an optimal memorization strategy answer different questions and should be assessed separately.
 
 ## Explore
 
