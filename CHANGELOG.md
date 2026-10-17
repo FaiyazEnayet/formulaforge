@@ -1,5 +1,9 @@
 # Changelog
 
+## [v1.1.0] - 2026-10-16
+### Fixed
+- Minimum-memorize set now uses conjunctive derivation semantics (merged from PR #2).
+
 ## [0.1.1] - 2026-10-15
 ### Fixed
 - Minimum-memorize set now uses conjunctive derivation semantics. The old
