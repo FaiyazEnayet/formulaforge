@@ -69,7 +69,7 @@ func TestHTMLStatsPresent(t *testing.T) {
 }
 
 func TestLatexCompilableStructure(t *testing.T) {
-	s := loadSheet(t, "mat203")
+	s := loadSheet(t, "cse213")
 	doc, err := Latex(s)
 	if err != nil {
 		t.Fatal(err)

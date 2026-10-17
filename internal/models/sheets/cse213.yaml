@@ -1,0 +1,276 @@
+course: "CSE 213"
+title: "Foundations of Computer Science II"
+description: "Discrete structures that run the machines: counting and probability, graphs and trees, regular expressions and finite-state automata, on a small logic foundation."
+
+formulas:
+  - id: demorgan
+    name: "De Morgan's laws"
+    topic: "Foundations"
+    latex: '\lnot (p \land q) \equiv \lnot p \lor \lnot q, \quad \lnot (p \lor q) \equiv \lnot p \land \lnot q'
+    description: "Push a negation through AND/OR by flipping the connective."
+    tags: [logic]
+    derives_from: []
+
+  - id: implication
+    name: "Implication as disjunction"
+    topic: "Foundations"
+    latex: 'p \to q \equiv \lnot p \lor q'
+    description: "An implication is false only when p is true and q is false."
+    tags: [logic]
+    derives_from: []
+
+  - id: set-ops
+    name: "Set identities"
+    topic: "Foundations"
+    latex: '\overline{A \cup B} = \overline{A} \cap \overline{B}, \quad \overline{A \cap B} = \overline{A} \cup \overline{B}'
+    description: "De Morgan's laws, set edition. Union, intersection, and complement obey the same algebra as logic."
+    tags: [sets]
+    derives_from: [demorgan]
+
+  - id: injective
+    name: "Injective function"
+    topic: "Foundations"
+    latex: 'f(a_1) = f(a_2) \to a_1 = a_2'
+    description: "Distinct inputs give distinct outputs. No collisions."
+    tags: [functions]
+    derives_from: []
+
+  - id: bijective
+    name: "Bijective function"
+    topic: "Foundations"
+    latex: '\text{injective and surjective: a perfect pairing}'
+    description: "A perfect pairing between domain and codomain. Finite bijections preserve size."
+    tags: [functions]
+    derives_from: [injective]
+
+  - id: weak-induction
+    name: "Weak induction"
+    topic: "Foundations"
+    latex: 'P(1) \land (P(k) \to P(k+1)) \vdash \forall n\, P(n)'
+    description: "Knock over the first domino, then show each domino topples the next."
+    tags: [induction]
+    derives_from: []
+
+  - id: mult-rule
+    name: "Multiplication rule"
+    topic: "Counting"
+    latex: 'n_1 \cdot n_2 \cdots n_m'
+    description: "Possibility trees: multiply the number of choices at each level."
+    tags: [counting]
+    derives_from: []
+
+  - id: add-rule
+    name: "Addition rule"
+    topic: "Counting"
+    latex: '|A \cup B| = |A| + |B| \quad (A \cap B = \emptyset)'
+    description: "Counting disjoint sets: mutually exclusive cases add."
+    tags: [counting]
+    derives_from: []
+
+  - id: pigeonhole
+    name: "Pigeonhole principle"
+    topic: "Counting"
+    latex: '\text{n+1 items in n boxes } \Rightarrow \text{ a shared box}'
+    description: "More pigeons than holes means two share. Absurdly simple, surprisingly powerful."
+    tags: [counting]
+    derives_from: []
+
+  - id: permutations
+    name: "Permutations"
+    topic: "Counting"
+    latex: 'P(n, r) = \frac{n!}{(n-r)!}'
+    description: "Ordered selections: n choices, then n-1, down to n-r+1."
+    tags: [counting]
+    derives_from: [mult-rule]
+
+  - id: combinations
+    name: "Combinations"
+    topic: "Counting"
+    latex: 'C(n, r) = \frac{n!}{r!(n-r)!}'
+    description: "Unordered selections: divide out the r! orderings of each chosen set."
+    tags: [counting]
+    derives_from: [permutations]
+
+  - id: combos-repetition
+    name: "r-combinations with repetition"
+    topic: "Counting"
+    latex: 'C(n+r-1, r)'
+    description: "Stars and bars: choosing r items from n types with repeats allowed."
+    tags: [counting]
+    derives_from: [combinations]
+
+  - id: pascal
+    name: "Pascal's formula"
+    topic: "Counting"
+    latex: '\binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k}'
+    description: "Each entry is the sum of the two above it. The recurrence behind the triangle."
+    tags: [counting]
+    derives_from: [combinations]
+
+  - id: binomial
+    name: "Binomial theorem"
+    topic: "Counting"
+    latex: '(x + y)^n = \sum_{k=0}^{n} \binom{n}{k} x^{n-k} y^k'
+    description: "Each term counts the ways to pick k copies of y from n factors."
+    tags: [counting]
+    derives_from: [combinations, pascal]
+
+  - id: prob-axioms
+    name: "Probability axioms"
+    topic: "Probability"
+    latex: '0 \le P(A) \le 1, \quad P(S) = 1, \quad P(A \cup B) = P(A) + P(B) \text{ if disjoint}'
+    description: "Kolmogorov's rules: probabilities are non-negative, the sample space has probability 1, disjoint events add."
+    tags: [probability]
+    derives_from: [add-rule]
+
+  - id: expected-value
+    name: "Expected value"
+    topic: "Probability"
+    latex: 'E[X] = \sum_x x \cdot P(X = x)'
+    description: "The long-run average: each outcome weighted by its probability."
+    tags: [probability]
+    derives_from: [prob-axioms]
+
+  - id: cond-prob
+    name: "Conditional probability"
+    topic: "Probability"
+    latex: 'P(A \mid B) = \frac{P(A \cap B)}{P(B)}'
+    description: "Restrict the universe to B, then measure A inside it."
+    tags: [probability]
+    derives_from: [prob-axioms]
+
+  - id: bayes
+    name: "Bayes' formula"
+    topic: "Probability"
+    latex: 'P(B_i \mid A) = \frac{P(A \mid B_i)\, P(B_i)}{\sum_j P(A \mid B_j)\, P(B_j)}'
+    description: "Flip the conditioning. The denominator is the law of total probability."
+    tags: [probability]
+    derives_from: [cond-prob]
+
+  - id: independent
+    name: "Independent events"
+    topic: "Probability"
+    latex: 'P(A \cap B) = P(A)\, P(B)'
+    description: "Knowing B tells you nothing about A. Then conditioning changes nothing."
+    tags: [probability]
+    derives_from: [cond-prob]
+
+  - id: handshaking
+    name: "Handshaking lemma"
+    topic: "Graphs"
+    latex: '\sum_{v} \deg(v) = 2|E|'
+    description: "Every edge contributes two endpoints. The number of odd-degree vertices is even."
+    tags: [graphs]
+    derives_from: []
+
+  - id: euler-trail
+    name: "Euler trail condition"
+    topic: "Graphs"
+    latex: '\text{Euler circuit } \iff \text{ connected and every vertex has even degree}'
+    description: "Trails, paths, and circuits: you can return to the start exactly when no vertex is odd."
+    tags: [graphs]
+    derives_from: [handshaking]
+
+  - id: adj-matrix
+    name: "Adjacency matrix powers"
+    topic: "Graphs"
+    latex: '(A^k)_{ij} = \text{ walks of length } k \text{ from } i \text{ to } j'
+    description: "Matrix representations of graphs: powers of the adjacency matrix count walks."
+    tags: [graphs]
+    derives_from: []
+
+  - id: graph-iso
+    name: "Graph isomorphism"
+    topic: "Graphs"
+    latex: 'G \cong H \iff \text{ a bijection preserving adjacency}'
+    description: "Same structure, relabeled vertices. Invariants like degree sequences can disprove it, never prove it."
+    tags: [graphs]
+    derives_from: [bijective]
+
+  - id: planar
+    name: "Euler's formula (planar graphs)"
+    topic: "Graphs"
+    latex: 'v - e + f = 2'
+    description: "For a connected planar drawing: vertices minus edges plus faces always equals 2."
+    tags: [graphs]
+    derives_from: [handshaking]
+
+  - id: graph-coloring
+    name: "Greedy coloring bound"
+    topic: "Graphs"
+    latex: '\chi(G) \le \Delta(G) + 1'
+    description: "Color vertices one by one: max degree plus one colors always suffice."
+    tags: [graphs]
+    derives_from: []
+
+  - id: independent-set
+    name: "Independent set"
+    topic: "Graphs"
+    latex: '\alpha(G) = \text{ size of the largest independent set}'
+    description: "A set of mutually non-adjacent vertices. Scheduling without conflicts."
+    tags: [graphs]
+    derives_from: []
+
+  - id: tree-edges
+    name: "Tree edge count"
+    topic: "Trees"
+    latex: '|E| = |V| - 1'
+    description: "A tree is connected and acyclic, so n vertices always means n-1 edges."
+    tags: [trees]
+    derives_from: [handshaking]
+
+  - id: rooted-tree
+    name: "Full binary tree leaves"
+    topic: "Trees"
+    latex: '\text{leaves} = \text{internal vertices} + 1'
+    description: "In a rooted tree where every internal node has exactly two children, leaves outnumber them by one."
+    tags: [trees]
+    derives_from: [tree-edges]
+
+  - id: spanning-tree
+    name: "Spanning tree existence"
+    topic: "Trees"
+    latex: '\text{every connected graph has a spanning tree (BFS/DFS)}'
+    description: "Grow a breadth-first or depth-first search tree; it reaches every vertex with no cycles."
+    tags: [trees]
+    derives_from: [tree-edges]
+
+  - id: dijkstra
+    name: "Dijkstra's shortest path"
+    topic: "Trees"
+    latex: 'd[v] = \min_u\, (d[u] + w(u, v))'
+    description: "Settle vertices in order of distance. Correctness is an induction on the settled set."
+    tags: [algorithms]
+    derives_from: [weak-induction]
+
+  - id: regex-def
+    name: "Regular expressions"
+    topic: "Automata"
+    latex: '\emptyset,\ \varepsilon,\ \text{union } |,\ \text{ concatenation, star } *'
+    description: "Formal languages built from three operations: union, concatenation, and Kleene star."
+    tags: [languages]
+    derives_from: []
+
+  - id: fsa-def
+    name: "Finite-state automaton"
+    topic: "Automata"
+    latex: 'M = (Q, \Sigma, \delta, q_0, F)'
+    description: "States, alphabet, transition function, start state, accept states. The simplest machine that reads."
+    tags: [automata]
+    derives_from: []
+
+  - id: fsa-equiv
+    name: "NFA-DFA equivalence"
+    topic: "Automata"
+    latex: '\text{every NFA has an equivalent DFA (subset construction)}'
+    description: "Nondeterminism adds no power for finite automata: track the set of possible states instead."
+    tags: [automata]
+    derives_from: [fsa-def]
+
+  - id: cfg-def
+    name: "Context-free grammar"
+    topic: "Automata"
+    latex: 'A \to \alpha'
+    description: "Productions rewrite one nonterminal into a string of symbols. Strictly more powerful than regular expressions."
+    tags: [languages]
+    derives_from: [regex-def]
