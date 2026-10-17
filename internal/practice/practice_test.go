@@ -69,7 +69,7 @@ func TestGenDeriveMoreThanAvailable(t *testing.T) {
 }
 
 func TestGenOrderAnswerCorrect(t *testing.T) {
-	g := loadGraph(t, "mat203")
+	g := loadGraph(t, "cse213")
 	qs := GenOrderQuestions(g, 20, 7)
 	if len(qs) != 20 {
 		t.Fatalf("got %d", len(qs))
