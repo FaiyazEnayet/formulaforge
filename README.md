@@ -10,7 +10,7 @@ FormulaForge turns a formula sheet into a searchable dependency model. It shows 
 
 **Go · graph algorithms · YAML and LaTeX**
 
-[![FormulaForge demo](docs/demo.gif)](https://faiyazenayet.github.io/formulaforge/docs/dashboard.html)
+[![FormulaForge demo](docs/demo.gif?v=data-20261017)](https://faiyazenayet.github.io/formulaforge/docs/dashboard.html)
 
 
 ## Explore
