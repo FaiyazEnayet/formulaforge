@@ -1,8 +1,13 @@
 # Changelog
 
-## [v1.1.0] - 2026-10-16
+## [Unreleased]
 ### Fixed
-- Minimum-memorize set now uses conjunctive derivation semantics (merged from PR #2).
+- Branch-and-bound for target memorize sets now picks residuals in topological
+  order (prerequisites before dependents) instead of lexicographically. The old
+  order could re-pick a target instead of its newly added prerequisites,
+  missing the optimum when a shared intermediate (e.g. z for targets a,b,c)
+  covers multiple targets. The counterexample now returns cardinality 1.
+
 
 ## [0.1.1] - 2026-10-15
 ### Fixed
