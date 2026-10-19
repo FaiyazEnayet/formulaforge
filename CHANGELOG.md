@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [1.2.0]
 ### Fixed
 - Branch-and-bound for target memorize sets now picks residuals in topological
   order (prerequisites before dependents) instead of lexicographically. The old
