@@ -410,8 +410,63 @@ func (g *Graph) MinMemorizeFor(targets []string, prior []string) ([]string, erro
 	upper := g.MinMemorizeSet(prior)
 	best := &bbBest{set: upper, size: len(upper)}
 	memo := map[string]int{}
-	g.branch(need, map[string]bool{}, priorSet, best, memo)
+	// Topological rank guides the search: pick prerequisites before
+	// dependents, so shared intermediate nodes are considered for
+	// memorization before the targets that need them. Derived from
+	// Paths directly (not Prereqs/Children, which may be unset).
+	topoRank := g.topoRankFromPaths()
+	g.branch(need, map[string]bool{}, priorSet, best, memo, topoRank)
 	return best.set, nil
+}
+
+// topoRankFromPaths returns a topological rank (lower = closer to roots)
+// derived from the Paths derivation graph. Nodes with no paths are roots.
+func (g *Graph) topoRankFromPaths() map[string]int {
+	// indeg = number of distinct prerequisites across all paths
+	indeg := make(map[string]int, len(g.Nodes))
+	children := make(map[string][]string)
+	for _, n := range g.Nodes {
+		prereqs := map[string]bool{}
+		for _, path := range g.Paths[n] {
+			for _, p := range path {
+				prereqs[p] = true
+			}
+		}
+		indeg[n] = len(prereqs)
+		for p := range prereqs {
+			children[p] = append(children[p], n)
+		}
+	}
+	var queue []string
+	for _, n := range g.Nodes {
+		if indeg[n] == 0 {
+			queue = append(queue, n)
+		}
+	}
+	sort.Strings(queue)
+	rank := make(map[string]int, len(g.Nodes))
+	pos := 0
+	for len(queue) > 0 {
+		u := queue[0]
+		queue = queue[1:]
+		rank[u] = pos
+		pos++
+		for _, v := range children[u] {
+			indeg[v]--
+			if indeg[v] == 0 {
+				queue = append(queue, v)
+			}
+		}
+		sort.Strings(queue)
+	}
+	// Any nodes not reached (cycles) get a high rank; they sort last.
+	for _, n := range g.Nodes {
+		if _, ok := rank[n]; !ok {
+			rank[n] = pos
+			pos++
+		}
+	}
+	return rank
 }
 
 type bbBest struct {
@@ -420,8 +475,8 @@ type bbBest struct {
 }
 
 // branch searches memorize sets covering need. mem only grows, need only
-// grows, so the search terminates.
-func (g *Graph) branch(need, mem, prior map[string]bool, best *bbBest, memo map[string]int) {
+// grows, so the search terminates. topoRank orders residuals topologically.
+func (g *Graph) branch(need, mem, prior map[string]bool, best *bbBest, memo map[string]int, topoRank map[string]int) {
 	km := make(map[string]bool, len(prior)+len(mem))
 	for k := range prior {
 		km[k] = true
@@ -453,8 +508,16 @@ func (g *Graph) branch(need, mem, prior map[string]bool, best *bbBest, memo map[
 		return
 	}
 	memo[key] = len(mem)
-	sort.Strings(resid)
+	// Pick the topologically earliest residual: prerequisites before
+	// dependents. This ensures shared intermediate nodes are considered
+	// for memorization before the targets that depend on them, rather
+	// than the lexicographically first target being re-picked.
 	r := resid[0]
+	for _, c := range resid[1:] {
+		if topoRank[c] < topoRank[r] {
+			r = c
+		}
+	}
 	// Derive r through each of its paths: every path member must be known.
 	for _, path := range g.Paths[r] {
 		need2 := make(map[string]bool, len(need)+len(path))
@@ -469,7 +532,7 @@ func (g *Graph) branch(need, mem, prior map[string]bool, best *bbBest, memo map[
 			}
 		}
 		if grew {
-			g.branch(need2, mem, prior, best, memo)
+			g.branch(need2, mem, prior, best, memo, topoRank)
 		}
 	}
 	// Or memorize r outright.
@@ -478,7 +541,7 @@ func (g *Graph) branch(need, mem, prior map[string]bool, best *bbBest, memo map[
 		mem2[k] = true
 	}
 	mem2[r] = true
-	g.branch(need, mem2, prior, best, memo)
+	g.branch(need, mem2, prior, best, memo, topoRank)
 }
 
 func toSet(ids []string) map[string]bool {
