@@ -28,7 +28,7 @@ Sheets declare formulas and derivation paths in YAML. A path requires all its pr
 
 | Scope | Recorded result or contract |
 | :--- | :--- |
-| Dashboard scope | Eight sheets; CSE 214 excluded from the redesigned dashboard |
+| Dashboard scope | Eight sheets |
 | Derivation semantics | AND within each path; OR across alternative paths |
 | Coverage curve | Greedy heuristic |
 | Target-set solver | Exact branch and bound; exponential worst-case complexity |
@@ -66,7 +66,7 @@ Full-sheet and target-set questions are different. A full-sheet memorize set is 
 
 ![The eight dashboard source sheets](docs/results.png)
 
-The dashboard is an exploration tool for authored mathematical relationships. It does not infer new theorems or certify the completeness of a course syllabus. CSE 214 is excluded from the redesigned dashboard; the eight remaining source sheets retain their actual formulas and dependencies.
+The dashboard is an exploration tool for authored mathematical relationships. It does not infer new theorems or certify the completeness of a course syllabus. The eight source sheets retain their actual formulas and dependencies.
 
 ## Code and data
 
