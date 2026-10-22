@@ -82,6 +82,13 @@ type rawSheet struct {
 }
 
 // Load parses and validates sheet YAML data.
+//
+// Validation contract: malformed YAML is a parse error; a sheet with no
+// formulas is rejected ("sheet has no formulas"); every formula needs a
+// non-empty, unique id; every dependency id must exist on the sheet; a
+// formula may not derive from itself; alternative derivation paths must
+// be non-empty. Valid input produces a deterministic error or a usable
+// sheet, never a partial one.
 func Load(data []byte) (*Sheet, error) {
 	var raw rawSheet
 	if err := yaml.Unmarshal(data, &raw); err != nil {
@@ -93,6 +100,9 @@ func Load(data []byte) (*Sheet, error) {
 		Description: raw.Description,
 		Formulas:    raw.Formulas,
 		byID:        map[string]*Formula{},
+	}
+	if len(s.Formulas) == 0 {
+		return nil, fmt.Errorf("sheet has no formulas")
 	}
 	for i := range s.Formulas {
 		f := &s.Formulas[i]

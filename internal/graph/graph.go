@@ -317,13 +317,25 @@ func (g *Graph) FoundationRanking() []LeverageEntry {
 	return out
 }
 
-// Derivation semantics.
+// Derivation semantics: public contract.
 //
 // A formula is known when it is memorized, already known (prior
 // knowledge), or derivable: every member of at least one of its
 // derivation paths is known. Deriving C from A and B needs both A and
 // B; knowing A alone is not enough. A formula with no derivation paths
 // is a root: it can only be memorized or already known.
+//
+// Prior and known ids: MinMemorizeSet and MinMemorizeFor take prior
+// knowledge as a list of formula ids. MinMemorizeFor rejects unknown
+// prior ids with an error, exactly as it rejects unknown target ids.
+// MinMemorizeSet has no error return, so unknown prior ids are silently
+// ignored instead: they can contribute nothing to the closure. This is
+// the documented, stable behavior, not an accident.
+//
+// Bool maps: Closure takes the known set as a map. A formula counts as
+// known if and only if it maps to true. Ids mapped to false and ids
+// absent from the map are both not known; unknown ids in the map are
+// ignored. Presence alone does not count; only an explicit true does.
 //
 // Closure(known) is the fixed point of that rule: the starting set plus
 // everything derivable from it. MinMemorizeSet(prior) is the exact
@@ -334,10 +346,14 @@ func (g *Graph) FoundationRanking() []LeverageEntry {
 // with branch and bound.
 
 // Closure returns the starting set plus everything derivable from it.
+// Only ids mapped to true count as known; false or unknown ids are
+// ignored.
 func (g *Graph) Closure(known map[string]bool) map[string]bool {
 	out := make(map[string]bool, len(known))
 	for k := range known {
-		out[k] = true
+		if known[k] {
+			out[k] = true
+		}
 	}
 	for changed := true; changed; {
 		changed = false
@@ -366,6 +382,8 @@ func (g *Graph) Closure(known map[string]bool) map[string]bool {
 
 // MinMemorizeSet returns the exact smallest set of formulas to memorize
 // so that the whole sheet is derivable, given prior knowledge.
+// Unknown prior ids are ignored (they cannot contribute to the
+// closure); see the derivation semantics contract above.
 func (g *Graph) MinMemorizeSet(prior []string) []string {
 	known := g.Closure(toSet(prior))
 	var out []string
@@ -383,7 +401,7 @@ func (g *Graph) MinMemorizeSet(prior []string) []string {
 // is either memorized directly or derived through one of its derivation
 // paths; branch and bound tries both, pruning against the best solution
 // found so far. Exact, exponential in the worst case, fast on real
-// sheets. Unknown target ids are an error.
+// sheets. Unknown target ids are an error, as are unknown prior ids.
 func (g *Graph) MinMemorizeFor(targets []string, prior []string) ([]string, error) {
 	ids := make(map[string]bool, len(g.Nodes))
 	for _, n := range g.Nodes {
@@ -392,6 +410,11 @@ func (g *Graph) MinMemorizeFor(targets []string, prior []string) ([]string, erro
 	for _, t := range targets {
 		if !ids[t] {
 			return nil, fmt.Errorf("unknown formula id: %s", t)
+		}
+	}
+	for _, p := range prior {
+		if !ids[p] {
+			return nil, fmt.Errorf("unknown prior id: %s", p)
 		}
 	}
 	priorSet := toSet(prior)
@@ -583,7 +606,14 @@ type CoveragePoint struct {
 // derivable formulas under conjunctive closure, ties broken by id.
 // Greedy is a heuristic for the budgeted-coverage problem, not an exact
 // solution.
+//
+// Zero-node contract: an empty graph is vacuously fully covered, so the
+// curve is a single point (0, 1.0). Older code divided by the node count
+// here and produced NaN; every fraction is now finite and JSON-safe.
 func (g *Graph) CoverageCurve() []CoveragePoint {
+	if len(g.Nodes) == 0 {
+		return []CoveragePoint{{K: 0, Fraction: 1.0}}
+	}
 	mem := map[string]bool{}
 	known := g.Closure(mem)
 	total := float64(len(g.Nodes))
