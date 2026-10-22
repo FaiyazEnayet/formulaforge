@@ -1,5 +1,11 @@
 # Changelog
 
+## [Unreleased]
+### Removed
+- CSE 214 (Data Structures) formula sheet (29 formulas). The graph now
+  totals 265 formulas and 284 derivation edges across the eight
+  remaining sheets.
+
 ## [1.2.0]
 ### Fixed
 - Branch-and-bound for target memorize sets now picks residuals in topological
