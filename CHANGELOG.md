@@ -5,6 +5,15 @@
 - CSE 214 (Data Structures) formula sheet (29 formulas). The graph now
   totals 265 formulas and 284 derivation edges across the eight
   remaining sheets.
+### Fixed
+- Empty-sheet and invalid-query behavior (FO2). `models.Load` now rejects
+  sheets with no formulas instead of silently producing an empty sheet.
+  `CoverageCurve` no longer divides by the node count: a zero-node graph
+  returns a single finite point (0, 1.0), so JSON export can never contain
+  NaN from this path. `MinMemorizeFor` rejects unknown prior ids, and the
+  derivation semantics are now an explicit documented contract (only ids
+  mapped to true count as known in `Closure`). Regression test
+  `TestStage3Formulaforge2` added.
 
 ## [1.2.0]
 ### Fixed
