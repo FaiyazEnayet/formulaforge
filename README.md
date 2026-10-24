@@ -10,9 +10,9 @@
 </p>
 
 <p align="center">
-  <a href="https://faiyazenayet.github.io/formulaforge/docs/dashboard.html"><img src="https://img.shields.io/badge/Open-Dashboard-71551e?style=for-the-badge&labelColor=000000" alt="Open Dashboard"></a>
-  <a href="#method"><img src="https://img.shields.io/badge/Explore-Method-182d4d?style=for-the-badge&labelColor=000000" alt="Explore Method"></a>
-  <a href="#run-locally"><img src="https://img.shields.io/badge/Run-Locally-566175?style=for-the-badge&labelColor=000000" alt="Run Locally"></a>
+  <a href="https://faiyazenayet.github.io/formulaforge/docs/dashboard.html"><img src="https://img.shields.io/badge/Open-Dashboard-71551e?style=for-the-badge&labelColor=f4edda" alt="Open Dashboard"></a>
+  <a href="#method"><img src="https://img.shields.io/badge/Explore-Method-182d4d?style=for-the-badge&labelColor=f4edda" alt="Explore Method"></a>
+  <a href="#run-locally"><img src="https://img.shields.io/badge/Run-Locally-566175?style=for-the-badge&labelColor=f4edda" alt="Run Locally"></a>
 </p>
 
 FormulaForge turns a formula sheet into a searchable dependency model. It shows which prerequisites support a result, what is already derivable and which concepts are useful to learn next.
