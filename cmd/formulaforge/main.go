@@ -368,6 +368,29 @@ func main() {
 	dashCmd.Flags().StringP("output", "o", "", "output file")
 	root.AddCommand(dashCmd)
 
+	showcaseCmd := &cobra.Command{
+		Use:   "export-showcase",
+		Short: "Regenerate scripts/showcase-data.json from the engine",
+		Run: func(cmd *cobra.Command, args []string) {
+			sheet, _ := cmd.Flags().GetString("sheet")
+			out, _ := cmd.Flags().GetString("output")
+			if out == "" {
+				out = "scripts/showcase-data.json"
+			}
+			exp, err := dashboard.ExportShowcase(sheet)
+			if err != nil {
+				fatal(err)
+			}
+			if err := dashboard.WriteShowcase(out, out, exp); err != nil {
+				fatal(err)
+			}
+			fmt.Printf("showcase -> %s (sheet %s, source %s, curve %s)\n", out, exp.Provenance.SourceFile, exp.Provenance.SourceSHA256[:12], exp.Provenance.CurveSHA256[:12])
+		},
+	}
+	showcaseCmd.Flags().String("sheet", "phy131", "sheet to export")
+	showcaseCmd.Flags().StringP("output", "o", "", "output file")
+	root.AddCommand(showcaseCmd)
+
 	gifCmd := &cobra.Command{
 		Use:   "demogif",
 		Short: "Render the animated demo GIF",
