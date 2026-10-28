@@ -180,6 +180,20 @@ func LoadSheetByName(name string) (*Sheet, error) {
 	return nil, fmt.Errorf("no sheet named %q", name)
 }
 
+// SheetSource returns the embedded YAML bytes for a sheet and the embedded
+// path they were read from. Chart exporters hash these bytes so a
+// generated file records exactly which source revision it came from.
+func SheetSource(name string) ([]byte, string, error) {
+	for _, ext := range []string{".yaml", ".yml"} {
+		p := "sheets/" + name + ext
+		data, err := sheetsFS.ReadFile(p)
+		if err == nil {
+			return data, p, nil
+		}
+	}
+	return nil, "", fmt.Errorf("no sheet named %q", name)
+}
+
 // LoadAll loads every embedded sheet keyed by name.
 func LoadAll() (map[string]*Sheet, error) {
 	out := map[string]*Sheet{}

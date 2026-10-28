@@ -1,6 +1,15 @@
 # Changelog
 
 ## [Unreleased]
+### Added
+- Canonical showcase chart export (FF-00). `formulaforge export-showcase`
+  regenerates scripts/showcase-data.json from the graph engine with
+  deterministic ordering, a generator version, the source sheet hash, and
+  the curve hash recorded in a provenance block. A drift check
+  (`CheckShowcase`, covered by `TestStage3Formulaforge00`) fails on a
+  stale file, so hand-maintained chart numbers cannot drift from the
+  engine again. The demo GIF script reads the same file for design and
+  sheet nodes and is unaffected.
 ### Docs
 - Centered the README header: uniform dark badge labels and three action buttons in the dashboard palette (Open Dashboard, Explore Method, Run Locally) with a black label side so they stand out on the page.
 
@@ -9,6 +18,15 @@
   totals 265 formulas and 284 derivation edges across the eight
   remaining sheets.
 ### Fixed
+- PHY 131 showcase curve (FF-00). The committed curve overstated early
+  coverage against the canonical graph closure: K=1 claimed 36 of 51
+  formulas derivable where the engine gives 20, with smaller overstatements
+  through K=6 and exact values from K=7 on. The curve is now generated
+  from `CoverageCurve` by the new exporter, and the minimum-memorize set
+  is listed in the engine canonical order (same 9 formulas, sorted).
+  docs/dashboard.html still embeds the previous curve: it was audited by
+  extraction in `TestStage3Formulaforge00HTMLAudit` and needs a dashboard
+  regeneration to pick up the corrected numbers.
 - Empty-sheet and invalid-query behavior (FO2). `models.Load` now rejects
   sheets with no formulas instead of silently producing an empty sheet.
   `CoverageCurve` no longer divides by the node count: a zero-node graph
