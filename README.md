@@ -39,8 +39,10 @@ Sheets declare formulas and derivation paths in YAML. A path requires all its pr
 | :--- | :--- |
 | Dashboard scope | Eight sheets |
 | Derivation semantics | AND within each path; OR across alternative paths |
-| Coverage curve | Greedy heuristic |
+| Coverage curve | Engine-generated greedy heuristic; PHY 131 coverage at K=1 is 0.3922, and at K=6 is 0.9216 |
 | Target-set solver | Exact branch and bound; exponential worst-case complexity |
+
+The PHY 131 showcase in `scripts/showcase-data.json` is exported by the Go engine. The dashboard computes its sheet payload through the same derivation closure, so coverage reflects the conjunctive prerequisite rules rather than a manually maintained series.
 
 ## Updating this project
 
