@@ -10,6 +10,21 @@
   stale file, so hand-maintained chart numbers cannot drift from the
   engine again. The demo GIF script reads the same file for design and
   sheet nodes and is unaffected.
+- Published algorithm and schema contract (FO7). `docs/algorithm-contract.md`
+  documents the sheet schema and its stable validation errors, the
+  derivation semantics, and every graph algorithm with its input
+  assumptions, worst-case complexity, invariants and tie-breaking
+  rules, including the precise limits: union ancestors are not
+  derivability, the exact memorize search has no internal step cap,
+  greedy budget coverage is a heuristic (with a worked counterexample
+  where greedy reaches 6 of 11 formulas at budget 2 against an exact
+  optimum of 7), a cycle through a non-chosen alternative path is
+  rejected by the ordering algorithms even though closure still
+  derives the sheet, and topological order is readiness order rather
+  than the lexicographically smallest order. The CLI examples in the
+  contract are executable fixtures, and `go.mod` is tidied so direct
+  dependencies are no longer marked indirect (no version changes;
+  `go mod verify` passes). Covered by `TestStage3Formulaforge7`.
 ### Docs
 - Centered the README header: uniform dark badge labels and three action buttons in the dashboard palette (Open Dashboard, Explore Method, Run Locally) with a black label side so they stand out on the page.
 
