@@ -4,6 +4,28 @@
 // grouped into waves, transitive dependents (leverage), longest-chain
 // depth, derivation closure under conjunctive semantics, and exact
 // minimum-memorize sets.
+//
+// Algorithm contract (full text: docs/algorithm-contract.md, pinned
+// by TestStage3Formulaforge7):
+//
+//   - Two structures are kept distinct: Prereqs/Children are the
+//     UNION of all derivation paths and drive ordering, cycle
+//     detection, levels and leverage; derivability (Closure,
+//     MinMemorizeSet, MinMemorizeFor) is computed on the paths
+//     themselves under AND-within-a-path, OR-across-paths semantics.
+//     Union membership is not a derivability claim.
+//   - Cycles are union-graph cycles. A cycle that runs only through
+//     a non-chosen alternative path is still rejected by TopoOrder,
+//     Levels, Waves, Depth and Stats, even when Closure can derive
+//     the whole sheet; sheet authors must keep the union acyclic.
+//   - MinMemorizeFor is exact (branch and bound, no internal step
+//     cap; worst case exponential in unresolved targets and path
+//     choices). CoverageCurve is the budgeted alternative and is a
+//     greedy heuristic with no optimality guarantee.
+//   - Every output is deterministic for a fixed sheet. TopoOrder's
+//     tie-breaking is a sorted initial ready queue, then readiness
+//     (FIFO) order; it is not the lexicographically smallest
+//     topological order. Rankings break ties by id ascending.
 package graph
 
 import (
