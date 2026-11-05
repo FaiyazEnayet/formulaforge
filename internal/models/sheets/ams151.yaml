@@ -8,6 +8,8 @@ formulas:
     topic: "Limits"
     latex: '\lim_{x \to a} f(x) = L'
     description: "f(x) gets arbitrarily close to L as x approaches a. The foundation everything else stands on."
+    source: "OpenStax Calculus Volume 1, Section 2.2 (The Limit of a Function)"
+    conditions: "f is defined on an open interval around a, except possibly at a itself; the value f(a) plays no role in the limit"
     tags: [definition]
     derives_from: []
 
@@ -16,6 +18,8 @@ formulas:
     topic: "Limits"
     latex: '\lim (f \pm g) = \lim f \pm \lim g, \quad \lim (fg) = \lim f \cdot \lim g, \quad \lim \frac{f}{g} = \frac{\lim f}{\lim g}'
     description: "Limits pass through arithmetic. The quotient law needs a nonzero denominator limit."
+    source: "OpenStax Calculus Volume 1, Section 2.3 (The Limit Laws)"
+    conditions: "both individual limits exist and are finite; the quotient law additionally needs the limit of the denominator to be nonzero"
     tags: [rules]
     derives_from: [limit-def]
 
@@ -24,6 +28,8 @@ formulas:
     topic: "Limits"
     latex: 'g(x) \le f(x) \le h(x), \ \lim g = \lim h = L \ \Rightarrow \ \lim f = L'
     description: "Trap f between two functions converging to the same limit. Classic for trig limits."
+    source: "OpenStax Calculus Volume 1, Section 2.3 (The Limit Laws)"
+    conditions: "the inequality g(x) <= f(x) <= h(x) holds on an open interval around a (except possibly at a), and the outer functions share the same limit L"
     tags: [theorem]
     derives_from: [limit-laws]
 
@@ -32,6 +38,8 @@ formulas:
     topic: "Limits"
     latex: '\lim_{x \to a} f(x) = f(a)'
     description: "No jumps, no holes, no asymptotes at a. The limit equals the value."
+    source: "OpenStax Calculus Volume 1, Section 2.4 (Continuity)"
+    conditions: "f is defined at a, the limit as x approaches a exists, and the two agree; continuity at the endpoints of a closed interval uses one-sided limits"
     tags: [definition]
     derives_from: [limit-def]
 
@@ -40,6 +48,8 @@ formulas:
     topic: "Limits"
     latex: 'f \text{ continuous on } [a,b] \ \Rightarrow \ \forall y \text{ between } f(a), f(b) \ \exists c: f(c) = y'
     description: "A continuous function hits every value between its endpoints. Guarantees roots exist."
+    source: "OpenStax Calculus Volume 1, Section 2.4 (Continuity)"
+    conditions: "f is continuous on the closed interval [a, b]; the conclusion covers every value between f(a) and f(b)"
     tags: [theorem]
     derives_from: [continuity]
 
@@ -48,6 +58,8 @@ formulas:
     topic: "Derivatives"
     latex: "f'(x) = \\lim_{h \\to 0} \\frac{f(x+h) - f(x)}{h}"
     description: "Instantaneous rate of change as a limit of average rates. Slope of the tangent line."
+    source: "OpenStax Calculus Volume 1, Section 3.1 (Defining the Derivative)"
+    conditions: "f is defined on an open interval around x and the limit exists; where it does not exist, f is not differentiable at x"
     tags: [definition]
     derives_from: [limit-def]
 
@@ -56,6 +68,8 @@ formulas:
     topic: "Derivatives"
     latex: "\\frac{d}{dx} x^n = n x^{n-1}"
     description: "The workhorse. Bring the exponent down, subtract one."
+    source: "OpenStax Calculus Volume 1, Section 3.3 (Differentiation Rules)"
+    conditions: "n is a real constant and x is in the domain of the power function (x nonzero when n is negative or non-integer)"
     tags: [rules]
     derives_from: [deriv-def]
 
@@ -64,6 +78,8 @@ formulas:
     topic: "Derivatives"
     latex: "(fg)' = f'g + fg'"
     description: "Derivative of the first times the second, plus the first times derivative of the second."
+    source: "OpenStax Calculus Volume 1, Section 3.3 (Differentiation Rules)"
+    conditions: "f and g are both differentiable at x"
     tags: [rules]
     derives_from: [deriv-def]
 
@@ -72,6 +88,8 @@ formulas:
     topic: "Derivatives"
     latex: "\\left(\\frac{f}{g}\\right)' = \\frac{f'g - fg'}{g^2}"
     description: "Low d-high minus high d-low, over low-low. Denominator squared."
+    source: "OpenStax Calculus Volume 1, Section 3.3 (Differentiation Rules)"
+    conditions: "f and g are differentiable at x and g(x) is nonzero"
     tags: [rules]
     derives_from: [product-rule]
 
@@ -80,6 +98,8 @@ formulas:
     topic: "Derivatives"
     latex: "\\frac{dy}{dx} = \\frac{dy}{du} \\cdot \\frac{du}{dx}"
     description: "Differentiate the outside, leave the inside, then multiply by the derivative of the inside."
+    source: "OpenStax Calculus Volume 1, Section 3.6 (The Chain Rule)"
+    conditions: "g is differentiable at x and f is differentiable at g(x)"
     tags: [rules]
     derives_from: [deriv-def]
 
@@ -88,6 +108,8 @@ formulas:
     topic: "Derivatives"
     latex: "\\frac{d}{dx} \\sin x = \\cos x, \\quad \\frac{d}{dx} \\cos x = -\\sin x, \\quad \\frac{d}{dx} \\tan x = \\sec^2 x"
     description: "Memorize sine and cosine; tangent follows from the quotient rule."
+    source: "OpenStax Calculus Volume 1, Section 3.5 (Derivatives of Trigonometric Functions)"
+    conditions: "x is measured in radians; in degrees the formulas pick up a conversion factor"
     tags: [rules]
     derives_from: [deriv-def, quotient-rule]
 
@@ -96,6 +118,8 @@ formulas:
     topic: "Derivatives"
     latex: "\\frac{d}{dx} e^x = e^x, \\quad \\frac{d}{dx} a^x = a^x \\ln a"
     description: "e^x is its own derivative. Other bases pick up a ln a factor via the chain rule."
+    source: "OpenStax Calculus Volume 1, Section 3.9 (Derivatives of Exponential and Logarithmic Functions)"
+    conditions: "for a^x the base satisfies a > 0 and a != 1"
     tags: [rules]
     derives_from: [chain-rule]
 
@@ -104,6 +128,8 @@ formulas:
     topic: "Derivatives"
     latex: "\\frac{d}{dx} F(x, y) = 0 \\ \\Rightarrow \\ \\text{solve for } y'"
     description: "Differentiate both sides treating y as a function of x, then solve for y'. Chain rule in disguise."
+    source: "OpenStax Calculus Volume 1, Section 3.8 (Implicit Differentiation)"
+    conditions: "y is locally a differentiable function of x near the point; points where solving for y' would divide by zero are excluded"
     tags: [technique]
     derives_from: [chain-rule]
 
@@ -112,6 +138,8 @@ formulas:
     topic: "Applications"
     latex: "L(x) = f(a) + f'(a)(x - a)"
     description: "Zoom in close enough and every smooth curve looks like its tangent line."
+    source: "OpenStax Calculus Volume 1, Section 4.2 (Linear Approximations and Differentials)"
+    conditions: "f is differentiable at a and x is close to a; the approximation error grows as x moves away from a"
     tags: [approximation]
     derives_from: [deriv-def]
 
@@ -120,6 +148,8 @@ formulas:
     topic: "Applications"
     latex: "f'(c) = 0 \\ \\text{or} \\ f'(c) \\text{ undefined}"
     description: "Candidates for maxima and minima. Fermat's theorem: interior extrema happen here."
+    source: "OpenStax Calculus Volume 1, Section 4.3 (Maxima and Minima)"
+    conditions: "c lies in the domain of f; Fermat's theorem covers interior points, so domain endpoints are checked separately"
     tags: [optimization]
     derives_from: [deriv-def]
 
@@ -128,6 +158,8 @@ formulas:
     topic: "Applications"
     latex: "\\exists c \\in (a,b): \\ f'(c) = \\frac{f(b) - f(a)}{b - a}"
     description: "Somewhere the instantaneous rate equals the average rate. The theoretical backbone of curve analysis."
+    source: "OpenStax Calculus Volume 1, Section 4.4 (The Mean Value Theorem)"
+    conditions: "f is continuous on [a, b] and differentiable on (a, b)"
     tags: [theorem]
     derives_from: [deriv-def, crit-points]
 
@@ -136,6 +168,8 @@ formulas:
     topic: "Applications"
     latex: "f' \\text{ changes } + \\to - \\Rightarrow \\text{ local max}; \\ - \\to + \\Rightarrow \\text{ local min}"
     description: "Read maxima and minima off the sign chart of f'."
+    source: "OpenStax Calculus Volume 1, Section 4.5 (Derivatives and the Shape of a Graph)"
+    conditions: "f is continuous at the critical point c and differentiable around it, with f' keeping one sign on each side of c"
     tags: [curve-sketching]
     derives_from: [crit-points]
 
@@ -144,6 +178,8 @@ formulas:
     topic: "Applications"
     latex: "f''(c) > 0 \\Rightarrow \\text{ local min}; \\quad f''(c) < 0 \\Rightarrow \\text{ local max}"
     description: "Concave up at a critical point means a valley; concave down means a peak."
+    source: "OpenStax Calculus Volume 1, Section 4.5 (Derivatives and the Shape of a Graph)"
+    conditions: "f'(c) = 0 and f''(c) exists and is nonzero; if f''(c) = 0 the test is inconclusive"
     tags: [curve-sketching]
     derives_from: [crit-points]
 
@@ -152,6 +188,8 @@ formulas:
     topic: "Applications"
     latex: "\\frac{d}{dt} [\\text{relation}] \\ \\Rightarrow \\ \\text{equation in rates} \\ \\Rightarrow \\ \\text{substitute}"
     description: "Differentiate the relating equation with respect to time, then plug in the known values."
+    source: "OpenStax Calculus Volume 1, Section 4.1 (Related Rates)"
+    conditions: "all quantities are differentiable functions of time t and the relating equation holds throughout the motion"
     tags: [technique]
     derives_from: [implicit, chain-rule]
 
@@ -160,6 +198,8 @@ formulas:
     topic: "Applications"
     latex: "\\text{model} \\to \\text{single variable} \\to \\text{critical points} \\to \\text{test endpoints}"
     description: "Write the quantity as one variable, find critical points, check the domain endpoints too."
+    source: "OpenStax Calculus Volume 1, Section 4.7 (Applied Optimization Problems)"
+    conditions: "the model reduces the quantity to one variable on a stated domain; absolute extrema on a closed bounded domain are guaranteed by the extreme value theorem when the objective is continuous"
     tags: [optimization]
     derives_from: [crit-points, first-deriv-test]
 
@@ -168,6 +208,8 @@ formulas:
     topic: "Integrals"
     latex: "F' = f \\ \\Rightarrow \\ \\int f(x)\\,dx = F(x) + C"
     description: "Undo differentiation. The +C remembers the lost constant."
+    source: "OpenStax Calculus Volume 1, Section 4.10 (Antiderivatives)"
+    conditions: "F is differentiable on an interval with derivative f at every point of it; on an interval, any two antiderivatives differ by a constant"
     tags: [definition]
     derives_from: []
 
@@ -176,6 +218,8 @@ formulas:
     topic: "Integrals"
     latex: "\\frac{d}{dx} \\int_a^x f(t)\\,dt = f(x)"
     description: "Differentiation undoes integration. Accumulation functions differentiate back to the integrand."
+    source: "OpenStax Calculus Volume 1, Section 5.3 (The Fundamental Theorem of Calculus)"
+    conditions: "f is continuous on [a, b]; without continuity, the derivative of the accumulation function can fail at individual points"
     tags: [theorem]
     derives_from: [antiderivative, deriv-def]
 
@@ -184,6 +228,8 @@ formulas:
     topic: "Integrals"
     latex: "\\int_a^b f(x)\\,dx = F(b) - F(a)"
     description: "Definite integrals evaluate via antiderivatives. Area under the curve, computed exactly."
+    source: "OpenStax Calculus Volume 1, Section 5.3 (The Fundamental Theorem of Calculus)"
+    conditions: "f is continuous on [a, b] and F is any antiderivative of f there"
     tags: [theorem]
     derives_from: [ftc1]
 
@@ -192,6 +238,8 @@ formulas:
     topic: "Integrals"
     latex: "\\int f(g(x)) g'(x)\\,dx = \\int f(u)\\,du, \\quad u = g(x)"
     description: "The chain rule in reverse. Spot the inner function and its derivative."
+    source: "OpenStax Calculus Volume 1, Section 5.5 (Substitution)"
+    conditions: "g is continuously differentiable and f is continuous on the range of g; for definite integrals the limits must be converted to u-values"
     tags: [technique]
     derives_from: [chain-rule, antiderivative]
 
@@ -200,5 +248,7 @@ formulas:
     topic: "Integrals"
     latex: "A = \\int_a^b [\\text{top}(x) - \\text{bottom}(x)]\\,dx"
     description: "Integrate the vertical gap between the curves over the interval where they cross."
+    source: "OpenStax Calculus Volume 1, Section 6.1 (Areas between Curves)"
+    conditions: "both curves are continuous on [a, b] with top(x) >= bottom(x) throughout; if the curves cross inside the interval, split the integral at the crossing points"
     tags: [applications]
     derives_from: [ftc2]

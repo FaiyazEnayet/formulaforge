@@ -8,6 +8,9 @@ formulas:
     topic: "Kinematics"
     latex: 'v = \frac{dx}{dt}, \quad a = \frac{dv}{dt} = \frac{d^2x}{dt^2}'
     description: "Velocity is the rate of position change; acceleration the rate of velocity change."
+    source: "OpenStax University Physics Volume 1, Section 3.2 (Instantaneous Velocity and Speed)"
+    conditions: "x is the position along a straight line as a function of time, and the motion is smooth enough for the derivatives to exist (no instantaneous jumps in position or velocity)"
+    units: "m/s and m/s^2"
     tags: [definition, calculus]
     derives_from: []
 
@@ -16,6 +19,9 @@ formulas:
     topic: "Kinematics"
     latex: 'v = v_0 + at, \quad x = x_0 + v_0 t + \tfrac{1}{2} a t^2, \quad v^2 = v_0^2 + 2a(x - x_0)'
     description: "The three workhorses. Pick the one that skips the variable you don't know."
+    source: "OpenStax University Physics Volume 1, Section 3.4 (Motion with Constant Acceleration)"
+    conditions: "the acceleration is constant over the interval; v_0 and x_0 are the velocity and position at t = 0"
+    units: "m and m/s"
     tags: [kinematics]
     derives_from: [vel-def]
 
@@ -24,6 +30,10 @@ formulas:
     topic: "Kinematics"
     latex: 'x = v_0 \cos\theta \, t, \quad y = v_0 \sin\theta \, t - \tfrac{1}{2} g t^2'
     description: "Horizontal velocity is constant; vertical motion is free fall. Range is maximized at 45 degrees."
+    source: "OpenStax University Physics Volume 1, Section 4.3 (Projectile Motion)"
+    conditions: "the only acceleration is gravity, downward at g, with no air resistance; the range is maximized at 45 degrees only when launch and landing heights are equal"
+    notation: "theta is the launch angle above the horizontal and v_0 the launch speed"
+    units: "m"
     tags: [kinematics, projectile]
     derives_from: [kinematic]
 
@@ -32,6 +42,9 @@ formulas:
     topic: "Newton's Laws"
     latex: '\mathbf{F}_{\text{net}} = m \mathbf{a}'
     description: "The hub of mechanics: net force causes acceleration, inversely scaled by mass."
+    source: "OpenStax University Physics Volume 1, Section 5.3 (Newton's Second Law)"
+    conditions: "the frame of reference is inertial and the mass is constant; F_net is the vector sum of the external forces on the object"
+    units: "kg m/s^2"
     tags: [law, force]
     derives_from: []
 
@@ -40,6 +53,9 @@ formulas:
     topic: "Newton's Laws"
     latex: 'W = mg, \quad g = 9.8 \, \text{m/s}^2'
     description: "Gravitational force near Earth's surface. Mass is intrinsic; weight depends on g."
+    source: "OpenStax University Physics Volume 1, Section 5.4 (Mass and Weight)"
+    conditions: "near the surface of the Earth (or another celestial body), where g is effectively constant across the object"
+    units: "N"
     tags: [force, gravity]
     derives_from: [newton2]
 
@@ -48,6 +64,9 @@ formulas:
     topic: "Newton's Laws"
     latex: 'f_k = \mu_k N, \quad f_s \le \mu_s N'
     description: "Kinetic friction is fixed; static friction adjusts up to its maximum to prevent slipping."
+    source: "OpenStax University Physics Volume 1, Section 6.2 (Friction)"
+    conditions: "dry surfaces in contact; kinetic friction applies while sliding, and static friction adjusts up to its maximum mu_s N, reaching it only at impending slip"
+    units: "N"
     tags: [force]
     derives_from: [newton2]
 
@@ -56,6 +75,9 @@ formulas:
     topic: "Newton's Laws"
     latex: 'a_c = \frac{v^2}{r} \quad \text{toward the center}'
     description: "Turning requires inward acceleration. Banked curves and orbits both come from here."
+    source: "OpenStax University Physics Volume 1, Section 4.4 (Uniform Circular Motion)"
+    conditions: "constant speed along a circular path of radius r; if the speed also changes, there is an additional tangential acceleration component"
+    units: "m/s^2"
     tags: [circular]
     derives_from: [vel-def, newton2]
 
@@ -64,6 +86,9 @@ formulas:
     topic: "Work and Energy"
     latex: 'W = \int \mathbf{F} \cdot d\mathbf{r} \quad \text{(constant force: } W = F d \cos\theta \text{)}'
     description: "Only the force component along the displacement does work."
+    source: "OpenStax University Physics Volume 1, Section 7.1 (Work)"
+    conditions: "the closed form W = F d cos theta assumes a constant force and a straight-line displacement; the integral form covers varying forces and curved paths"
+    units: "J"
     tags: [definition, work]
     derives_from: [newton2]
 
@@ -72,6 +97,9 @@ formulas:
     topic: "Work and Energy"
     latex: 'K = \tfrac{1}{2} m v^2'
     description: "Energy of motion. Quadratic in speed: doubling speed quadruples energy."
+    source: "OpenStax University Physics Volume 1, Section 7.2 (Kinetic Energy)"
+    conditions: "the object is modeled as a point mass at nonrelativistic speeds; rotational and internal energies are counted separately"
+    units: "J"
     tags: [energy]
     derives_from: []
 
@@ -80,6 +108,9 @@ formulas:
     topic: "Work and Energy"
     latex: 'W_{\text{net}} = \Delta K'
     description: "Net work changes kinetic energy. Often faster than kinematics for speed questions."
+    source: "OpenStax University Physics Volume 1, Section 7.3 (Work-Energy Theorem)"
+    conditions: "W_net is the work done by the net force (all forces, conservative or not) and the object is modeled as a point mass"
+    units: "J"
     tags: [theorem, energy]
     derives_from: [work-def, ke, newton2]
 
@@ -88,6 +119,9 @@ formulas:
     topic: "Work and Energy"
     latex: 'U_g = mgy'
     description: "Stored energy of height. Only differences matter, so set y = 0 wherever convenient."
+    source: "OpenStax University Physics Volume 1, Section 8.1 (Potential Energy of a System)"
+    conditions: "near Earth's surface, where g is constant; only differences of U_g are physical, so the height y = 0 is chosen freely"
+    units: "J"
     tags: [energy, potential]
     derives_from: [work-def]
 
@@ -96,6 +130,9 @@ formulas:
     topic: "Work and Energy"
     latex: 'U_s = \tfrac{1}{2} k x^2, \quad F_s = -kx'
     description: "The minus sign means the spring pulls back toward equilibrium."
+    source: "OpenStax University Physics Volume 1, Section 8.1 (Potential Energy of a System)"
+    conditions: "an ideal massless spring obeying Hooke's law within its elastic range, with x measured from the unstretched equilibrium position"
+    units: "J and N"
     tags: [energy, spring]
     derives_from: [work-def]
 
@@ -104,6 +141,9 @@ formulas:
     topic: "Work and Energy"
     latex: 'K_1 + U_1 = K_2 + U_2 \quad \text{(no nonconservative work)}'
     description: "When only conservative forces act, total mechanical energy is fixed."
+    source: "OpenStax University Physics Volume 1, Section 8.3 (Conservation of Energy)"
+    conditions: "only conservative forces do work; if friction or another nonconservative force acts, its work must be included in the energy balance"
+    units: "J"
     tags: [conservation, energy]
     derives_from: [work-energy, pe-grav]
 
@@ -112,6 +152,9 @@ formulas:
     topic: "Work and Energy"
     latex: 'P = \frac{dW}{dt} = \mathbf{F} \cdot \mathbf{v}'
     description: "Rate of energy transfer. A car climbing fast needs more power than one cruising."
+    source: "OpenStax University Physics Volume 1, Section 7.4 (Power)"
+    conditions: "the product form F . v gives the instantaneous power of a force applied to a point moving with velocity v"
+    units: "W"
     tags: [energy]
     derives_from: [work-def]
 
@@ -120,6 +163,9 @@ formulas:
     topic: "Momentum"
     latex: '\mathbf{p} = m \mathbf{v}'
     description: "Quantity of motion. Conserved in isolated systems, which makes it powerful."
+    source: "OpenStax University Physics Volume 1, Section 9.1 (Linear Momentum)"
+    conditions: "nonrelativistic motion; for a system, the total momentum is the vector sum of the momenta of its parts"
+    units: "kg m/s"
     tags: [definition]
     derives_from: [newton2]
 
@@ -128,6 +174,9 @@ formulas:
     topic: "Momentum"
     latex: '\mathbf{J} = \Delta \mathbf{p} = \int \mathbf{F} \, dt'
     description: "A force acting over time changes momentum. Airbags work by stretching dt."
+    source: "OpenStax University Physics Volume 1, Section 9.2 (Impulse and Collisions)"
+    conditions: "F is the net external force; for a brief collision the impulse is often approximated as the average force times the contact time"
+    units: "N s"
     tags: [theorem]
     derives_from: [momentum, newton2]
 
@@ -136,6 +185,9 @@ formulas:
     topic: "Momentum"
     latex: '\mathbf{p}_{\text{initial}} = \mathbf{p}_{\text{final}} \quad \text{(isolated system)}'
     description: "Internal forces cancel in pairs, so total momentum cannot change."
+    source: "OpenStax University Physics Volume 1, Section 9.3 (Conservation of Linear Momentum)"
+    conditions: "the system is isolated: the net external impulse over the interaction is zero, or negligible next to the internal impulses"
+    units: "kg m/s"
     tags: [conservation]
     derives_from: [impulse]
 
@@ -144,6 +196,9 @@ formulas:
     topic: "Momentum"
     latex: 'v_{1f} = \frac{m_1 - m_2}{m_1 + m_2} v_{1i} + \frac{2 m_2}{m_1 + m_2} v_{2i}'
     description: "Both momentum and kinetic energy conserved. Equal masses: velocities swap."
+    source: "OpenStax University Physics Volume 1, Section 9.4 (Types of Collisions)"
+    conditions: "a one-dimensional, perfectly elastic collision, so momentum and kinetic energy are both conserved; no rotation and no significant external impulse during the brief contact"
+    units: "m/s"
     tags: [collision]
     derives_from: [momentum-cons, energy-cons]
 
@@ -152,6 +207,9 @@ formulas:
     topic: "Momentum"
     latex: 'x_{\text{cm}} = \frac{\sum m_i x_i}{M}'
     description: "The balance point; the system moves as if all mass were there."
+    source: "OpenStax University Physics Volume 1, Section 9.6 (Center of Mass)"
+    conditions: "the m_i are point masses at positions x_i and M is their total mass; in two and three dimensions the same weighted average is taken coordinate by coordinate"
+    units: "m"
     tags: [definition]
     derives_from: []
 
@@ -160,6 +218,10 @@ formulas:
     topic: "Rotation"
     latex: '\omega = \frac{d\theta}{dt}, \quad \alpha = \frac{d\omega}{dt}, \quad \omega^2 = \omega_0^2 + 2\alpha \Delta\theta'
     description: "Same structure as linear kinematics with theta, omega, alpha in place of x, v, a."
+    source: "OpenStax University Physics Volume 1, Section 10.2 (Rotation with Constant Angular Acceleration)"
+    conditions: "rotation about a fixed axis; the last relation assumes constant angular acceleration alpha"
+    notation: "theta is angular position, omega angular velocity, and alpha angular acceleration"
+    units: "rad/s and rad/s^2"
     tags: [kinematics, rotation]
     derives_from: [vel-def, kinematic]
 
@@ -168,6 +230,9 @@ formulas:
     topic: "Rotation"
     latex: '\boldsymbol{\tau} = \mathbf{r} \times \mathbf{F}, \quad \tau_{\text{net}} = I \alpha'
     description: "Twisting effort; the rotational analog of F = ma."
+    source: "OpenStax University Physics Volume 1, Section 10.7 (Newton's Second Law for Rotation)"
+    conditions: "rotation about a fixed axis, with I the moment of inertia about that axis and r measured from the axis to the point where F is applied"
+    units: "N m"
     tags: [rotation, law]
     derives_from: [newton2, rot-kin]
 
@@ -176,6 +241,10 @@ formulas:
     topic: "Rotation"
     latex: 'I = \sum m_i r_i^2 \;\; \text{hoop: } MR^2; \; \text{disk: } \tfrac{1}{2}MR^2; \; \text{sphere: } \tfrac{2}{5}MR^2; \; \text{rod (center): } \tfrac{1}{12}ML^2'
     description: "Rotational mass: resistance to angular acceleration. Mass farther out counts more."
+    source: "OpenStax University Physics Volume 1, Section 10.4 (Moment of Inertia and Rotational Kinetic Energy)"
+    conditions: "the closed forms assume uniform density and the conventional axes: hoop and disk about their central axis, sphere about a diameter, rod about its center"
+    notation: "M is the total mass, R the radius, and L the rod length"
+    units: "kg m^2"
     tags: [rotation]
     derives_from: []
 
@@ -184,6 +253,9 @@ formulas:
     topic: "Rotation"
     latex: 'K_{\text{rot}} = \tfrac{1}{2} I \omega^2, \quad v = \omega r'
     description: "Rolling without slipping: total K is translational plus rotational."
+    source: "OpenStax University Physics Volume 1, Section 10.4 (Moment of Inertia and Rotational Kinetic Energy)"
+    conditions: "rotation about a fixed axis; v = omega r is the tangential speed at radius r, and rolling without slipping means the center-of-mass speed is omega R"
+    units: "J"
     tags: [energy, rotation]
     derives_from: [ke, moment-inertia, rot-kin]
 
@@ -192,6 +264,9 @@ formulas:
     topic: "Rotation"
     latex: '\mathbf{L} = \mathbf{r} \times \mathbf{p} = I \boldsymbol{\omega}, \quad \boldsymbol{\tau}_{\text{net}} = \frac{d\mathbf{L}}{dt}'
     description: "Conserved without external torque: skaters spin faster pulling arms in."
+    source: "OpenStax University Physics Volume 1, Section 11.2 (Angular Momentum)"
+    conditions: "L = I omega holds for a rigid body rotating about a fixed axis; conservation of L requires zero net external torque about the same axis"
+    units: "kg m^2/s"
     tags: [conservation, rotation]
     derives_from: [momentum, torque, moment-inertia]
 
@@ -200,6 +275,10 @@ formulas:
     topic: "Oscillations"
     latex: 'x = A \cos(\omega t + \phi), \quad \omega = \sqrt{k/m}, \quad T = 2\pi \sqrt{m/k}'
     description: "Mass on a spring. Frequency depends only on k and m, not amplitude."
+    source: "OpenStax University Physics Volume 1, Section 15.1 (Simple Harmonic Motion)"
+    conditions: "the restoring force is proportional to the displacement (a spring obeying Hooke's law) and friction is neglected"
+    notation: "A is the amplitude, omega the angular frequency, and phi the phase constant"
+    units: "rad/s and s"
     tags: [oscillation]
     derives_from: [newton2, pe-spring]
 
@@ -208,6 +287,9 @@ formulas:
     topic: "Oscillations"
     latex: 'T = 2\pi \sqrt{L/g} \quad \text{(small angles)}'
     description: "Period depends on length and gravity only, not mass or amplitude."
+    source: "OpenStax University Physics Volume 1, Section 15.4 (Pendulums)"
+    conditions: "small oscillations only (sin theta is replaced by theta, accurate to a few percent below about 15 degrees), a massless string, and a point-mass bob"
+    units: "s"
     tags: [oscillation]
     derives_from: [shm]
 
@@ -216,6 +298,9 @@ formulas:
     topic: "Gravitation"
     latex: 'F = \frac{G m_1 m_2}{r^2}'
     description: "Inverse-square attraction between any two masses."
+    source: "OpenStax University Physics Volume 1, Section 13.1 (Newton's Law of Universal Gravitation)"
+    conditions: "the masses are point masses or spherically symmetric bodies, with r the center-to-center separation; each force points toward the other mass"
+    units: "N"
     tags: [law, gravity]
     derives_from: []
 
@@ -224,6 +309,9 @@ formulas:
     topic: "Statics"
     latex: '\sum \mathbf{F} = 0, \quad \sum \boldsymbol{\tau} = 0'
     description: "No motion and no rotation: forces and torques both balance. Pick the pivot to kill an unknown."
+    source: "OpenStax University Physics Volume 1, Section 12.1 (Conditions for Static Equilibrium)"
+    conditions: "the object is and remains at rest in an inertial frame; when the net force vanishes, the torque condition holds about every pivot"
+    units: "N and N m"
     tags: [equilibrium]
     derives_from: [newton2, torque]
 
@@ -232,6 +320,9 @@ formulas:
     topic: "Fluids"
     latex: '\rho = \frac{m}{V}, \quad \text{water: } 1000 \, \text{kg/m}^3'
     description: "Mass per volume. Ice floats because it is less dense than liquid water."
+    source: "OpenStax University Physics Volume 1, Section 14.1 (Fluids, Density, and Pressure)"
+    conditions: "rho is the average density over the volume V; for a nonuniform material it is the local limit as the volume shrinks around the point"
+    units: "kg/m^3"
     tags: [definition]
     derives_from: []
 
@@ -240,6 +331,9 @@ formulas:
     topic: "Fluids"
     latex: 'P = P_0 + \rho g h'
     description: "Pressure grows with depth. Your ears feel it a few meters underwater."
+    source: "OpenStax University Physics Volume 1, Section 14.1 (Fluids, Density, and Pressure)"
+    conditions: "a static, incompressible fluid (constant rho) in a uniform gravitational field; h is measured downward from the surface, where the pressure is P_0"
+    units: "Pa"
     tags: [fluid]
     derives_from: [density, weight]
 
@@ -248,6 +342,9 @@ formulas:
     topic: "Fluids"
     latex: '\text{Pressure applied to an enclosed fluid is transmitted undiminished: } \frac{F_1}{A_1} = \frac{F_2}{A_2}'
     description: "Hydraulics: a small force on a small piston becomes a big force on a big piston."
+    source: "OpenStax University Physics Volume 1, Section 14.3 (Pascal's Principle and Hydraulics)"
+    conditions: "the fluid is enclosed and effectively incompressible, and the pistons move slowly enough that the fluid stays in static equilibrium"
+    units: "Pa"
     tags: [fluid, law]
     derives_from: [pressure-depth]
 
@@ -256,6 +353,9 @@ formulas:
     topic: "Fluids"
     latex: 'F_B = \rho_{\text{fluid}} V_{\text{submerged}} g'
     description: "The upward push equals the weight of the displaced fluid. Float if your average density is lower."
+    source: "OpenStax University Physics Volume 1, Section 14.4 (Archimedes' Principle and Buoyancy)"
+    conditions: "the fluid is static; V_submerged is only the part of the object's volume below the fluid surface"
+    units: "N"
     tags: [fluid]
     derives_from: [density, weight]
 
@@ -264,6 +364,9 @@ formulas:
     topic: "Fluids"
     latex: 'A_1 v_1 = A_2 v_2 \quad \text{(incompressible flow)}'
     description: "Narrow pipe, faster flow. What flows in must flow out."
+    source: "OpenStax University Physics Volume 1, Section 14.5 (Fluid Dynamics)"
+    conditions: "steady flow of an incompressible fluid through a single pipe or stream tube, with no leaks or branches between the two cross-sections"
+    units: "m^3/s"
     tags: [fluid]
     derives_from: []
 
@@ -272,6 +375,9 @@ formulas:
     topic: "Fluids"
     latex: 'P_1 + \tfrac{1}{2}\rho v_1^2 + \rho g y_1 = P_2 + \tfrac{1}{2}\rho v_2^2 + \rho g y_2'
     description: "Energy conservation for flowing fluid: fast flow means low pressure. That is how wings lift."
+    source: "OpenStax University Physics Volume 1, Section 14.6 (Bernoulli's Equation)"
+    conditions: "steady flow of an incompressible, nonviscous fluid, with the two points on the same streamline"
+    units: "Pa"
     tags: [fluid, conservation]
     derives_from: [continuity, energy-cons, pressure-depth]
 
@@ -280,6 +386,9 @@ formulas:
     topic: "Oscillations"
     latex: 'v = -\omega A \sin(\omega t + \phi), \quad a = -\omega^2 x, \quad v_{\max} = \omega A'
     description: "Speed peaks at equilibrium, acceleration peaks at the turning points. Acceleration always points back."
+    source: "OpenStax University Physics Volume 1, Section 15.1 (Simple Harmonic Motion)"
+    conditions: "the same oscillator as the position equation, with the same omega and phi; the relation a = -omega^2 x characterizes every simple harmonic oscillator"
+    units: "m/s and m/s^2"
     tags: [oscillation]
     derives_from: [shm, vel-def]
 
@@ -288,6 +397,9 @@ formulas:
     topic: "Oscillations"
     latex: 'E = \tfrac{1}{2} k A^2 = \tfrac{1}{2} m v^2 + \tfrac{1}{2} k x^2'
     description: "Total energy is fixed and set by the amplitude; it sloshes between kinetic and spring potential."
+    source: "OpenStax University Physics Volume 1, Section 15.2 (Energy in Simple Harmonic Motion)"
+    conditions: "no friction or other nonconservative work, so the total mechanical energy stays fixed at (1/2) k A^2"
+    units: "J"
     tags: [energy, oscillation]
     derives_from: [shm, energy-cons]
 
@@ -296,6 +408,9 @@ formulas:
     topic: "Waves"
     latex: 'v = \sqrt{\frac{F_T}{\mu}}, \quad v = \lambda f'
     description: "Tighter or lighter strings carry waves faster. Frequency is set by the source; wavelength adapts."
+    source: "OpenStax University Physics Volume 1, Section 16.3 (Wave Speed on a Stretched String)"
+    conditions: "the string has uniform tension F_T and uniform linear density mu; the relation v = lambda f holds for any periodic wave"
+    units: "m/s"
     tags: [wave]
     derives_from: [newton2]
 
@@ -304,6 +419,10 @@ formulas:
     topic: "Waves"
     latex: 'y(x,t) = A \sin(kx - \omega t + \phi), \quad k = \frac{2\pi}{\lambda}, \; \omega = 2\pi f'
     description: "The minus sign moves the wave toward +x. Every point executes SHM in time."
+    source: "OpenStax University Physics Volume 1, Section 16.2 (Mathematics of Waves)"
+    conditions: "a sinusoidal wave traveling in the +x direction (the minus sign) at constant speed without changing shape; every point of the medium oscillates in simple harmonic motion"
+    notation: "k = 2 pi / lambda is the wave number and omega = 2 pi f the angular frequency"
+    units: "m"
     tags: [wave]
     derives_from: [wave-speed, shm]
 
@@ -312,6 +431,9 @@ formulas:
     topic: "Waves"
     latex: 'y = 2A \sin(kx) \cos(\omega t); \quad \text{nodes where } \sin(kx) = 0'
     description: "Two opposing traveling waves superpose into a pattern that does not travel. Nodes stay still."
+    source: "OpenStax University Physics Volume 1, Section 16.6 (Standing Waves and Resonance)"
+    conditions: "two identical sinusoidal waves travel in opposite directions through the same medium; the entry is their superposition"
+    units: "m"
     tags: [wave, superposition]
     derives_from: [traveling-wave]
 
@@ -320,6 +442,9 @@ formulas:
     topic: "Waves"
     latex: 'f_n = n \frac{v}{2L}, \quad n = 1, 2, 3, \dots'
     description: "Only wavelengths that fit an integer number of half-waves survive. n = 1 is the fundamental."
+    source: "OpenStax University Physics Volume 1, Section 16.6 (Standing Waves and Resonance)"
+    conditions: "the string is fixed at both ends, so both endpoints are nodes and an integer number of half-wavelengths fits in L"
+    units: "Hz"
     tags: [wave]
     derives_from: [standing-wave, wave-speed]
 
@@ -328,6 +453,9 @@ formulas:
     topic: "Sound"
     latex: 'I = \frac{P}{A}, \quad I \propto \frac{1}{r^2} \text{ (spherical spreading)}'
     description: "Power per area. Doubling distance quarters the intensity."
+    source: "OpenStax University Physics Volume 1, Section 17.3 (Sound Intensity)"
+    conditions: "the inverse-square form assumes a point source radiating uniformly into open space, with no reflections or absorption"
+    units: "W/m^2"
     tags: [sound]
     derives_from: [wave-speed, power]
 
@@ -336,6 +464,9 @@ formulas:
     topic: "Sound"
     latex: '\beta = 10 \log_{10}\!\left(\frac{I}{I_0}\right), \quad I_0 = 10^{-12} \, \text{W/m}^2'
     description: "Logarithmic because ears are. Every 10 dB is a factor of 10 in intensity."
+    source: "OpenStax University Physics Volume 1, Section 17.3 (Sound Intensity)"
+    conditions: "the reference intensity I_0 = 10^-12 W/m^2 is the nominal threshold of hearing at 1000 Hz; the decibel is a logarithmic ratio, not an absolute level"
+    units: "dB"
     tags: [sound]
     derives_from: [intensity]
 
@@ -344,6 +475,10 @@ formulas:
     topic: "Sound"
     latex: 'f'' = f \frac{v \pm v_o}{v \mp v_s} \quad \text{(top signs: observer toward source)}'
     description: "Approaching motion squeezes wavelengths and raises pitch. Used in radar and astronomy."
+    source: "OpenStax University Physics Volume 1, Section 17.7 (The Doppler Effect)"
+    conditions: "the air is still and the source and observer speeds are measured relative to it, well below the speed of sound v; the top signs are for the observer moving toward the source and the source toward the observer"
+    notation: "f' is the observed frequency, f the emitted frequency, v_o the observer speed, and v_s the source speed"
+    units: "Hz"
     tags: [sound, wave]
     derives_from: [wave-speed]
 
@@ -352,6 +487,9 @@ formulas:
     topic: "Sound"
     latex: 'f_{\text{beat}} = |f_1 - f_2|'
     description: "Two close frequencies produce a slow pulsing loudness. Tuners listen for the beats to die out."
+    source: "OpenStax University Physics Volume 1, Section 17.6 (Beats)"
+    conditions: "the two waves overlap in the same medium with similar frequencies and comparable amplitudes"
+    units: "Hz"
     tags: [sound, superposition]
     derives_from: [standing-wave]
 
@@ -360,6 +498,8 @@ formulas:
     topic: "Thermodynamics"
     latex: 'T_F = \tfrac{9}{5} T_C + 32, \quad T_K = T_C + 273.15'
     description: "Kelvin is the physics scale: zero is absolute zero, and the gas laws need it."
+    source: "OpenStax University Physics Volume 2, Section 1.2 (Thermometers and Temperature Scales)"
+    conditions: "the Celsius and Fahrenheit scales are anchored to the freezing and boiling points of water at atmospheric pressure; kelvin shares the Celsius increment, with zero at absolute zero"
     tags: [definition]
     derives_from: []
 
@@ -368,6 +508,10 @@ formulas:
     topic: "Thermodynamics"
     latex: '\Delta L = \alpha L_0 \Delta T \quad \text{(linear)}'
     description: "Things grow when heated. Bridges leave gaps for it."
+    source: "OpenStax University Physics Volume 2, Section 1.3 (Thermal Expansion)"
+    conditions: "the temperature change is small enough that the expansion coefficient alpha is effectively constant, and the material is unconstrained and isotropic"
+    notation: "alpha is the coefficient of linear expansion and L_0 the original length"
+    units: "m"
     tags: [thermo]
     derives_from: [temp-scales]
 
@@ -376,6 +520,9 @@ formulas:
     topic: "Thermodynamics"
     latex: 'PV = nRT, \quad R = 8.314 \, \text{J/(mol K)}'
     description: "Pressure, volume, and temperature of an ideal gas in one relation. Use Kelvin."
+    source: "OpenStax University Physics Volume 2, Section 2.1 (Molecular Model of an Ideal Gas)"
+    conditions: "the gas is dilute, so its molecules interact only through brief elastic collisions; T is in kelvin and n counts moles"
+    units: "J"
     tags: [thermo, law]
     derives_from: [temp-scales]
 
@@ -384,6 +531,9 @@ formulas:
     topic: "Thermodynamics"
     latex: '\tfrac{1}{2} m \overline{v^2} = \tfrac{3}{2} k_B T, \quad v_{\text{rms}} = \sqrt{\frac{3k_B T}{m}}'
     description: "Temperature is average molecular kinetic energy. Lighter molecules move faster at the same T."
+    source: "OpenStax University Physics Volume 2, Section 2.2 (Pressure, Temperature, and RMS Speed)"
+    conditions: "an ideal gas in thermal equilibrium; m is the mass of one molecule and T is in kelvin"
+    units: "J and m/s"
     tags: [thermo]
     derives_from: [ideal-gas, ke]
 
@@ -392,6 +542,9 @@ formulas:
     topic: "Thermodynamics"
     latex: '\Delta U = Q - W \quad \text{(W = work done BY the system)}'
     description: "Energy conservation with heat counted. Sign conventions vary by textbook; pick one and stay consistent."
+    source: "OpenStax University Physics Volume 2, Section 3.3 (First Law of Thermodynamics)"
+    conditions: "sign convention: Q is the heat added to the system and W is the work done by the system, as stated; some texts use the opposite convention for W"
+    units: "J"
     tags: [thermo, law, conservation]
     derives_from: [energy-cons]
 
@@ -400,6 +553,8 @@ formulas:
     topic: "Thermodynamics"
     latex: 'e_{\max} = 1 - \frac{T_C}{T_H} \quad \text{(Kelvin)}'
     description: "No heat engine can beat this. Real engines do worse; the gap is friction and irreversibility."
+    source: "OpenStax University Physics Volume 2, Section 4.4 (The Carnot Cycle)"
+    conditions: "the engine exchanges heat with two reservoirs at absolute temperatures T_H and T_C in kelvin; the bound is attained only by a reversible (Carnot) cycle"
     tags: [thermo]
     derives_from: [first-law]
 
@@ -408,5 +563,8 @@ formulas:
     topic: "Thermodynamics"
     latex: '\Delta S = \frac{Q_{\text{rev}}}{T}, \quad \Delta S_{\text{universe}} \ge 0'
     description: "Disorder never decreases overall. Heat flows hot to cold because that is where the microstates are."
+    source: "OpenStax University Physics Volume 2, Section 4.6 (Entropy)"
+    conditions: "the first relation defines the entropy change along a reversible path at absolute temperature T; the inequality applies to the universe (system plus surroundings) in any process"
+    units: "J/K"
     tags: [thermo, law]
     derives_from: [first-law]

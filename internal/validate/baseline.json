@@ -1,5 +1,5 @@
 {
-  "catalog_hash": "01bbce9b13cd2e308d42e38554f5dfbf1754d43405ceb033d59575f2e31e192a",
+  "catalog_hash": "aed46410e0ddcd8efc668fc80ce0d97d1b8861482ea89df4369a29758cea08c2",
   "total_formulas": 265,
   "total_edges": 284,
   "sheets": [
@@ -7,339 +7,50 @@
       "name": "ams151",
       "formulas": 25,
       "edges": 29,
-      "findings_by_class": {
-        "missing-conditions": 25,
-        "missing-provenance": 25
-      }
+      "findings_by_class": {}
     },
     {
       "name": "ams161",
       "formulas": 26,
       "edges": 21,
-      "findings_by_class": {
-        "missing-conditions": 26,
-        "missing-provenance": 26
-      }
+      "findings_by_class": {}
     },
     {
       "name": "ams210",
       "formulas": 30,
       "edges": 37,
-      "findings_by_class": {
-        "missing-conditions": 30,
-        "missing-provenance": 30
-      }
+      "findings_by_class": {}
     },
     {
       "name": "ams261",
       "formulas": 45,
       "edges": 53,
-      "findings_by_class": {
-        "missing-conditions": 45,
-        "missing-provenance": 45
-      }
+      "findings_by_class": {}
     },
     {
       "name": "cse113",
       "formulas": 32,
       "edges": 30,
-      "findings_by_class": {
-        "doubled-backslash": 32,
-        "invalid-latex": 12,
-        "missing-provenance": 32
-      }
+      "findings_by_class": {}
     },
     {
       "name": "cse213",
       "formulas": 34,
       "edges": 22,
-      "findings_by_class": {
-        "missing-provenance": 34
-      }
+      "findings_by_class": {}
     },
     {
       "name": "phy131",
       "formulas": 51,
       "edges": 66,
-      "findings_by_class": {
-        "missing-conditions": 51,
-        "missing-provenance": 51
-      }
+      "findings_by_class": {}
     },
     {
       "name": "psy103",
       "formulas": 22,
       "edges": 26,
-      "findings_by_class": {
-        "missing-conditions": 22,
-        "missing-provenance": 22
-      }
+      "findings_by_class": {}
     }
   ],
-  "defects": [
-    {
-      "sheet": "cse113",
-      "id": "algebraic-set-proof",
-      "class": "doubled-backslash",
-      "detail": "5 doubled-backslash commands, first: doubled backslash before command \\text"
-    },
-    {
-      "sheet": "cse113",
-      "id": "algebraic-set-proof",
-      "class": "invalid-latex",
-      "detail": "2 problems, first: line break \\\\ outside an environment"
-    },
-    {
-      "sheet": "cse113",
-      "id": "bijective",
-      "class": "doubled-backslash",
-      "detail": "3 doubled-backslash commands, first: doubled backslash before command \\text"
-    },
-    {
-      "sheet": "cse113",
-      "id": "cases",
-      "class": "doubled-backslash",
-      "detail": "3 doubled-backslash commands, first: doubled backslash before command \\text"
-    },
-    {
-      "sheet": "cse113",
-      "id": "composition",
-      "class": "doubled-backslash",
-      "detail": "1 doubled-backslash commands, first: doubled backslash before command \\circ"
-    },
-    {
-      "sheet": "cse113",
-      "id": "conditional",
-      "class": "doubled-backslash",
-      "detail": "4 doubled-backslash commands, first: doubled backslash before command \\to"
-    },
-    {
-      "sheet": "cse113",
-      "id": "contradiction",
-      "class": "doubled-backslash",
-      "detail": "6 doubled-backslash commands, first: doubled backslash before command \\text"
-    },
-    {
-      "sheet": "cse113",
-      "id": "contraposition",
-      "class": "doubled-backslash",
-      "detail": "6 doubled-backslash commands, first: doubled backslash before command \\text"
-    },
-    {
-      "sheet": "cse113",
-      "id": "contrapositive",
-      "class": "doubled-backslash",
-      "detail": "13 doubled-backslash commands, first: doubled backslash before command \\to"
-    },
-    {
-      "sheet": "cse113",
-      "id": "counterexample",
-      "class": "doubled-backslash",
-      "detail": "5 doubled-backslash commands, first: doubled backslash before command \\text"
-    },
-    {
-      "sheet": "cse113",
-      "id": "counterexample",
-      "class": "invalid-latex",
-      "detail": "1 problems, first: line break \\\\ outside an environment"
-    },
-    {
-      "sheet": "cse113",
-      "id": "demorgan",
-      "class": "doubled-backslash",
-      "detail": "13 doubled-backslash commands, first: doubled backslash before command \\lnot"
-    },
-    {
-      "sheet": "cse113",
-      "id": "divisibility",
-      "class": "doubled-backslash",
-      "detail": "5 doubled-backslash commands, first: doubled backslash before command \\mid"
-    },
-    {
-      "sheet": "cse113",
-      "id": "divisibility",
-      "class": "invalid-latex",
-      "detail": "1 problems, first: line break \\\\ outside an environment"
-    },
-    {
-      "sheet": "cse113",
-      "id": "element-method",
-      "class": "doubled-backslash",
-      "detail": "6 doubled-backslash commands, first: doubled backslash before command \\text"
-    },
-    {
-      "sheet": "cse113",
-      "id": "fallacies",
-      "class": "doubled-backslash",
-      "detail": "11 doubled-backslash commands, first: doubled backslash before command \\to"
-    },
-    {
-      "sheet": "cse113",
-      "id": "floor-ceil",
-      "class": "doubled-backslash",
-      "detail": "9 doubled-backslash commands, first: doubled backslash before command \\lfloor"
-    },
-    {
-      "sheet": "cse113",
-      "id": "inverse-fn",
-      "class": "doubled-backslash",
-      "detail": "4 doubled-backslash commands, first: doubled backslash before command \\iff"
-    },
-    {
-      "sheet": "cse113",
-      "id": "log-equiv",
-      "class": "doubled-backslash",
-      "detail": "4 doubled-backslash commands, first: doubled backslash before command \\equiv"
-    },
-    {
-      "sheet": "cse113",
-      "id": "modus-ponens",
-      "class": "doubled-backslash",
-      "detail": "9 doubled-backslash commands, first: doubled backslash before command \\to"
-    },
-    {
-      "sheet": "cse113",
-      "id": "nested-quant",
-      "class": "doubled-backslash",
-      "detail": "6 doubled-backslash commands, first: doubled backslash before command \\forall"
-    },
-    {
-      "sheet": "cse113",
-      "id": "nested-quant",
-      "class": "invalid-latex",
-      "detail": "2 problems, first: line break \\\\ outside an environment"
-    },
-    {
-      "sheet": "cse113",
-      "id": "one-to-one",
-      "class": "doubled-backslash",
-      "detail": "1 doubled-backslash commands, first: doubled backslash before command \\to"
-    },
-    {
-      "sheet": "cse113",
-      "id": "onto",
-      "class": "doubled-backslash",
-      "detail": "4 doubled-backslash commands, first: doubled backslash before command \\forall"
-    },
-    {
-      "sheet": "cse113",
-      "id": "onto",
-      "class": "invalid-latex",
-      "detail": "2 problems, first: line break \\\\ outside an environment"
-    },
-    {
-      "sheet": "cse113",
-      "id": "quant-args",
-      "class": "doubled-backslash",
-      "detail": "5 doubled-backslash commands, first: doubled backslash before command \\text"
-    },
-    {
-      "sheet": "cse113",
-      "id": "quant-args",
-      "class": "invalid-latex",
-      "detail": "1 problems, first: line break \\\\ outside an environment"
-    },
-    {
-      "sheet": "cse113",
-      "id": "quant-negation",
-      "class": "doubled-backslash",
-      "detail": "11 doubled-backslash commands, first: doubled backslash before command \\lnot"
-    },
-    {
-      "sheet": "cse113",
-      "id": "quant-negation",
-      "class": "invalid-latex",
-      "detail": "4 problems, first: line break \\\\ outside an environment"
-    },
-    {
-      "sheet": "cse113",
-      "id": "quantifiers",
-      "class": "doubled-backslash",
-      "detail": "5 doubled-backslash commands, first: doubled backslash before command \\forall"
-    },
-    {
-      "sheet": "cse113",
-      "id": "quantifiers",
-      "class": "invalid-latex",
-      "detail": "2 problems, first: line break \\\\ outside an environment"
-    },
-    {
-      "sheet": "cse113",
-      "id": "quotient-remainder",
-      "class": "doubled-backslash",
-      "detail": "2 doubled-backslash commands, first: doubled backslash before command \\quad"
-    },
-    {
-      "sheet": "cse113",
-      "id": "rational",
-      "class": "doubled-backslash",
-      "detail": "7 doubled-backslash commands, first: doubled backslash before command \\in"
-    },
-    {
-      "sheet": "cse113",
-      "id": "rational",
-      "class": "invalid-latex",
-      "detail": "2 problems, first: line break \\\\ outside an environment"
-    },
-    {
-      "sheet": "cse113",
-      "id": "recurrence",
-      "class": "doubled-backslash",
-      "detail": "4 doubled-backslash commands, first: doubled backslash before command \\dots"
-    },
-    {
-      "sheet": "cse113",
-      "id": "sequences",
-      "class": "doubled-backslash",
-      "detail": "2 doubled-backslash commands, first: doubled backslash before command \\quad"
-    },
-    {
-      "sheet": "cse113",
-      "id": "set-identities",
-      "class": "doubled-backslash",
-      "detail": "11 doubled-backslash commands, first: doubled backslash before command \\cup"
-    },
-    {
-      "sheet": "cse113",
-      "id": "strong-induction",
-      "class": "doubled-backslash",
-      "detail": "9 doubled-backslash commands, first: doubled backslash before command \\land"
-    },
-    {
-      "sheet": "cse113",
-      "id": "strong-induction",
-      "class": "invalid-latex",
-      "detail": "3 problems, first: line break \\\\ outside an environment"
-    },
-    {
-      "sheet": "cse113",
-      "id": "tautology",
-      "class": "doubled-backslash",
-      "detail": "7 doubled-backslash commands, first: doubled backslash before command \\lor"
-    },
-    {
-      "sheet": "cse113",
-      "id": "truth-table",
-      "class": "doubled-backslash",
-      "detail": "4 doubled-backslash commands, first: doubled backslash before command \\begin"
-    },
-    {
-      "sheet": "cse113",
-      "id": "truth-table",
-      "class": "invalid-latex",
-      "detail": "18 problems, first: alignment tab \u0026 outside an environment"
-    },
-    {
-      "sheet": "cse113",
-      "id": "weak-induction",
-      "class": "doubled-backslash",
-      "detail": "7 doubled-backslash commands, first: doubled backslash before command \\land"
-    },
-    {
-      "sheet": "cse113",
-      "id": "weak-induction",
-      "class": "invalid-latex",
-      "detail": "2 problems, first: line break \\\\ outside an environment"
-    }
-  ]
+  "defects": []
 }

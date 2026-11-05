@@ -8,6 +8,7 @@ formulas:
     topic: "Foundations"
     latex: '\lnot (p \land q) \equiv \lnot p \lor \lnot q, \quad \lnot (p \lor q) \equiv \lnot p \land \lnot q'
     description: "Push a negation through AND/OR by flipping the connective."
+    source: "Discrete Mathematics and Its Applications (Rosen), 8th edition, Section 1.3 (Propositional Equivalences)"
     tags: [logic]
     derives_from: []
 
@@ -16,6 +17,7 @@ formulas:
     topic: "Foundations"
     latex: 'p \to q \equiv \lnot p \lor q'
     description: "An implication is false only when p is true and q is false."
+    source: "Discrete Mathematics and Its Applications (Rosen), 8th edition, Section 1.3 (Propositional Equivalences)"
     tags: [logic]
     derives_from: []
 
@@ -24,6 +26,7 @@ formulas:
     topic: "Foundations"
     latex: '\overline{A \cup B} = \overline{A} \cap \overline{B}, \quad \overline{A \cap B} = \overline{A} \cup \overline{B}'
     description: "De Morgan's laws, set edition. Union, intersection, and complement obey the same algebra as logic."
+    source: "Discrete Mathematics and Its Applications (Rosen), 8th edition, Section 2.2 (Set Operations)"
     tags: [sets]
     derives_from: [demorgan]
 
@@ -32,6 +35,7 @@ formulas:
     topic: "Foundations"
     latex: 'f(a_1) = f(a_2) \to a_1 = a_2'
     description: "Distinct inputs give distinct outputs. No collisions."
+    source: "Discrete Mathematics and Its Applications (Rosen), 8th edition, Section 2.3 (Functions)"
     tags: [functions]
     derives_from: []
 
@@ -40,6 +44,7 @@ formulas:
     topic: "Foundations"
     latex: '\text{injective and surjective: a perfect pairing}'
     description: "A perfect pairing between domain and codomain. Finite bijections preserve size."
+    source: "Discrete Mathematics and Its Applications (Rosen), 8th edition, Section 2.3 (Functions)"
     tags: [functions]
     derives_from: [injective]
 
@@ -48,6 +53,7 @@ formulas:
     topic: "Foundations"
     latex: 'P(1) \land (P(k) \to P(k+1)) \vdash \forall n\, P(n)'
     description: "Knock over the first domino, then show each domino topples the next."
+    source: "Discrete Mathematics and Its Applications (Rosen), 8th edition, Section 5.1 (Mathematical Induction)"
     tags: [induction]
     derives_from: []
 
@@ -56,6 +62,7 @@ formulas:
     topic: "Counting"
     latex: 'n_1 \cdot n_2 \cdots n_m'
     description: "Possibility trees: multiply the number of choices at each level."
+    source: "Discrete Mathematics and Its Applications (Rosen), 8th edition, Section 6.1 (The Basics of Counting)"
     tags: [counting]
     derives_from: []
 
@@ -64,6 +71,7 @@ formulas:
     topic: "Counting"
     latex: '|A \cup B| = |A| + |B| \quad (A \cap B = \emptyset)'
     description: "Counting disjoint sets: mutually exclusive cases add."
+    source: "Discrete Mathematics and Its Applications (Rosen), 8th edition, Section 6.1 (The Basics of Counting)"
     tags: [counting]
     derives_from: []
 
@@ -72,6 +80,7 @@ formulas:
     topic: "Counting"
     latex: '\text{n+1 items in n boxes } \Rightarrow \text{ a shared box}'
     description: "More pigeons than holes means two share. Absurdly simple, surprisingly powerful."
+    source: "Discrete Mathematics and Its Applications (Rosen), 8th edition, Section 6.2 (The Pigeonhole Principle)"
     tags: [counting]
     derives_from: []
 
@@ -80,6 +89,7 @@ formulas:
     topic: "Counting"
     latex: 'P(n, r) = \frac{n!}{(n-r)!}'
     description: "Ordered selections: n choices, then n-1, down to n-r+1."
+    source: "Discrete Mathematics and Its Applications (Rosen), 8th edition, Section 6.3 (Permutations and Combinations)"
     tags: [counting]
     derives_from: [mult-rule]
 
@@ -88,6 +98,7 @@ formulas:
     topic: "Counting"
     latex: 'C(n, r) = \frac{n!}{r!(n-r)!}'
     description: "Unordered selections: divide out the r! orderings of each chosen set."
+    source: "Discrete Mathematics and Its Applications (Rosen), 8th edition, Section 6.3 (Permutations and Combinations)"
     tags: [counting]
     derives_from: [permutations]
 
@@ -96,6 +107,7 @@ formulas:
     topic: "Counting"
     latex: 'C(n+r-1, r)'
     description: "Stars and bars: choosing r items from n types with repeats allowed."
+    source: "Discrete Mathematics and Its Applications (Rosen), 8th edition, Section 6.5 (Generalized Permutations and Combinations)"
     tags: [counting]
     derives_from: [combinations]
 
@@ -104,6 +116,7 @@ formulas:
     topic: "Counting"
     latex: '\binom{n}{k} = \binom{n-1}{k-1} + \binom{n-1}{k}'
     description: "Each entry is the sum of the two above it. The recurrence behind the triangle."
+    source: "Discrete Mathematics and Its Applications (Rosen), 8th edition, Section 6.4 (Binomial Coefficients and Identities)"
     tags: [counting]
     derives_from: [combinations]
 
@@ -112,6 +125,7 @@ formulas:
     topic: "Counting"
     latex: '(x + y)^n = \sum_{k=0}^{n} \binom{n}{k} x^{n-k} y^k'
     description: "Each term counts the ways to pick k copies of y from n factors."
+    source: "Discrete Mathematics and Its Applications (Rosen), 8th edition, Section 6.4 (Binomial Coefficients and Identities)"
     tags: [counting]
     derives_from: [combinations, pascal]
 
@@ -120,6 +134,7 @@ formulas:
     topic: "Probability"
     latex: '0 \le P(A) \le 1, \quad P(S) = 1, \quad P(A \cup B) = P(A) + P(B) \text{ if disjoint}'
     description: "Kolmogorov's rules: probabilities are non-negative, the sample space has probability 1, disjoint events add."
+    source: "Discrete Mathematics and Its Applications (Rosen), 8th edition, Section 7.2 (Probability Theory)"
     tags: [probability]
     derives_from: [add-rule]
 
@@ -128,6 +143,7 @@ formulas:
     topic: "Probability"
     latex: 'E[X] = \sum_x x \cdot P(X = x)'
     description: "The long-run average: each outcome weighted by its probability."
+    source: "Discrete Mathematics and Its Applications (Rosen), 8th edition, Section 7.4 (Expected Value and Variance)"
     tags: [probability]
     derives_from: [prob-axioms]
 
@@ -136,6 +152,7 @@ formulas:
     topic: "Probability"
     latex: 'P(A \mid B) = \frac{P(A \cap B)}{P(B)}'
     description: "Restrict the universe to B, then measure A inside it."
+    source: "Discrete Mathematics and Its Applications (Rosen), 8th edition, Section 7.2 (Probability Theory)"
     tags: [probability]
     derives_from: [prob-axioms]
 
@@ -144,6 +161,7 @@ formulas:
     topic: "Probability"
     latex: 'P(B_i \mid A) = \frac{P(A \mid B_i)\, P(B_i)}{\sum_j P(A \mid B_j)\, P(B_j)}'
     description: "Flip the conditioning. The denominator is the law of total probability."
+    source: "Discrete Mathematics and Its Applications (Rosen), 8th edition, Section 7.3 (Bayes' Theorem)"
     tags: [probability]
     derives_from: [cond-prob]
 
@@ -152,6 +170,7 @@ formulas:
     topic: "Probability"
     latex: 'P(A \cap B) = P(A)\, P(B)'
     description: "Knowing B tells you nothing about A. Then conditioning changes nothing."
+    source: "Discrete Mathematics and Its Applications (Rosen), 8th edition, Section 7.2 (Probability Theory)"
     tags: [probability]
     derives_from: [cond-prob]
 
@@ -160,6 +179,7 @@ formulas:
     topic: "Graphs"
     latex: '\sum_{v} \deg(v) = 2|E|'
     description: "Every edge contributes two endpoints. The number of odd-degree vertices is even."
+    source: "Discrete Mathematics and Its Applications (Rosen), 8th edition, Section 10.2 (Graph Terminology and Special Types of Graphs)"
     tags: [graphs]
     derives_from: []
 
@@ -168,6 +188,7 @@ formulas:
     topic: "Graphs"
     latex: '\text{Euler circuit } \iff \text{ connected and every vertex has even degree}'
     description: "Trails, paths, and circuits: you can return to the start exactly when no vertex is odd."
+    source: "Discrete Mathematics and Its Applications (Rosen), 8th edition, Section 10.5 (Euler and Hamilton Paths)"
     tags: [graphs]
     derives_from: [handshaking]
 
@@ -176,6 +197,7 @@ formulas:
     topic: "Graphs"
     latex: '(A^k)_{ij} = \text{ walks of length } k \text{ from } i \text{ to } j'
     description: "Matrix representations of graphs: powers of the adjacency matrix count walks."
+    source: "Discrete Mathematics and Its Applications (Rosen), 8th edition, Section 10.3 (Representing Graphs and Graph Isomorphism)"
     tags: [graphs]
     derives_from: []
 
@@ -184,6 +206,7 @@ formulas:
     topic: "Graphs"
     latex: 'G \cong H \iff \text{ a bijection preserving adjacency}'
     description: "Same structure, relabeled vertices. Invariants like degree sequences can disprove it, never prove it."
+    source: "Discrete Mathematics and Its Applications (Rosen), 8th edition, Section 10.3 (Representing Graphs and Graph Isomorphism)"
     tags: [graphs]
     derives_from: [bijective]
 
@@ -192,6 +215,7 @@ formulas:
     topic: "Graphs"
     latex: 'v - e + f = 2'
     description: "For a connected planar drawing: vertices minus edges plus faces always equals 2."
+    source: "Discrete Mathematics and Its Applications (Rosen), 8th edition, Section 10.7 (Planar Graphs)"
     tags: [graphs]
     derives_from: [handshaking]
 
@@ -200,6 +224,7 @@ formulas:
     topic: "Graphs"
     latex: '\chi(G) \le \Delta(G) + 1'
     description: "Color vertices one by one: max degree plus one colors always suffice."
+    source: "Discrete Mathematics and Its Applications (Rosen), 8th edition, Section 10.8 (Graph Coloring)"
     tags: [graphs]
     derives_from: []
 
@@ -208,6 +233,7 @@ formulas:
     topic: "Graphs"
     latex: '\alpha(G) = \text{ size of the largest independent set}'
     description: "A set of mutually non-adjacent vertices. Scheduling without conflicts."
+    source: "Discrete Mathematics and Its Applications (Rosen), 8th edition, Section 10.8 (Graph Coloring)"
     tags: [graphs]
     derives_from: []
 
@@ -216,6 +242,7 @@ formulas:
     topic: "Trees"
     latex: '|E| = |V| - 1'
     description: "A tree is connected and acyclic, so n vertices always means n-1 edges."
+    source: "Discrete Mathematics and Its Applications (Rosen), 8th edition, Section 11.1 (Introduction to Trees)"
     tags: [trees]
     derives_from: [handshaking]
 
@@ -224,6 +251,7 @@ formulas:
     topic: "Trees"
     latex: '\text{leaves} = \text{internal vertices} + 1'
     description: "In a rooted tree where every internal node has exactly two children, leaves outnumber them by one."
+    source: "Discrete Mathematics and Its Applications (Rosen), 8th edition, Section 11.1 (Introduction to Trees)"
     tags: [trees]
     derives_from: [tree-edges]
 
@@ -232,6 +260,7 @@ formulas:
     topic: "Trees"
     latex: '\text{every connected graph has a spanning tree (BFS/DFS)}'
     description: "Grow a breadth-first or depth-first search tree; it reaches every vertex with no cycles."
+    source: "Discrete Mathematics and Its Applications (Rosen), 8th edition, Section 11.4 (Spanning Trees)"
     tags: [trees]
     derives_from: [tree-edges]
 
@@ -240,6 +269,7 @@ formulas:
     topic: "Trees"
     latex: 'd[v] = \min_u\, (d[u] + w(u, v))'
     description: "Settle vertices in order of distance. Correctness is an induction on the settled set."
+    source: "Discrete Mathematics and Its Applications (Rosen), 8th edition, Section 10.6 (Shortest-Path Problems)"
     tags: [algorithms]
     derives_from: [weak-induction]
 
@@ -248,6 +278,7 @@ formulas:
     topic: "Automata"
     latex: '\emptyset,\ \varepsilon,\ \text{union } |,\ \text{ concatenation, star } *'
     description: "Formal languages built from three operations: union, concatenation, and Kleene star."
+    source: "Discrete Mathematics and Its Applications (Rosen), 8th edition, Section 13.3 (Language Recognition)"
     tags: [languages]
     derives_from: []
 
@@ -256,6 +287,7 @@ formulas:
     topic: "Automata"
     latex: 'M = (Q, \Sigma, \delta, q_0, F)'
     description: "States, alphabet, transition function, start state, accept states. The simplest machine that reads."
+    source: "Discrete Mathematics and Its Applications (Rosen), 8th edition, Section 13.2 (Finite-State Machines with No Output)"
     tags: [automata]
     derives_from: []
 
@@ -264,6 +296,7 @@ formulas:
     topic: "Automata"
     latex: '\text{every NFA has an equivalent DFA (subset construction)}'
     description: "Nondeterminism adds no power for finite automata: track the set of possible states instead."
+    source: "Discrete Mathematics and Its Applications (Rosen), 8th edition, Section 13.3 (Language Recognition)"
     tags: [automata]
     derives_from: [fsa-def]
 
@@ -272,5 +305,6 @@ formulas:
     topic: "Automata"
     latex: 'A \to \alpha'
     description: "Productions rewrite one nonterminal into a string of symbols. Strictly more powerful than regular expressions."
+    source: "Discrete Mathematics and Its Applications (Rosen), 8th edition, Section 13.3 (Language Recognition)"
     tags: [languages]
     derives_from: [regex-def]
