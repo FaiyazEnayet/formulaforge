@@ -1,0 +1,73 @@
+# Independent oracle for the catalog audit (FF-01 part 1).
+#
+# Each case pins one representative quantitative catalog formula to a
+# known answer computed from first principles, with the authoritative
+# source a reviewer can check it against. The test recomputes the
+# answer from the inputs in plain Go; nothing here is derived from the
+# catalog's own rendering, which is what makes the oracle independent.
+# The conditions under which each answer holds are part of the case:
+# they are exactly what the provenance contract requires the catalog
+# entry itself to state.
+cases:
+  - sheet: phy131
+    id: kinematic
+    quantity: "displacement x = v0*t + (1/2)*a*t^2 for constant acceleration"
+    inputs: {v0: 0, a: 2, t: 3}
+    expected: 9
+    tolerance: 1.0e-9
+    conditions: "constant acceleration; v0 is the velocity at t = 0"
+    source: "OpenStax University Physics Volume 1, Section 3.4 (Motion with Constant Acceleration), https://openstax.org/details/books/university-physics-volume-1"
+
+  - sheet: phy131
+    id: projectile
+    quantity: "range R = v0^2 * sin(2*angle) / g"
+    inputs: {v0: 20, angle_deg: 30, g: 9.8}
+    expected: 35.35
+    tolerance: 0.01
+    conditions: "launch and landing at the same height; no air resistance; optimum at angle = 45 degrees under these conditions"
+    source: "OpenStax University Physics Volume 1, Section 4.3 (Projectile Motion), https://openstax.org/details/books/university-physics-volume-1"
+
+  - sheet: phy131
+    id: weight
+    quantity: "weight W = m*g near Earth's surface"
+    inputs: {m: 10, g: 9.8}
+    expected: 98
+    tolerance: 1.0e-9
+    conditions: "near Earth's surface with g = 9.8 m/s^2"
+    source: "OpenStax University Physics Volume 1, Section 5.4 (Mass and Weight), https://openstax.org/details/books/university-physics-volume-1"
+
+  - sheet: ams151
+    id: power-rule
+    quantity: "d/dx x^n at a point, n * x^(n-1)"
+    inputs: {n: 3, x: 2}
+    expected: 12
+    tolerance: 1.0e-9
+    conditions: "n a real constant; x in the domain of the power function"
+    source: "OpenStax Calculus Volume 1, Section 3.3 (Differentiation Rules), https://openstax.org/details/books/calculus-volume-1"
+
+  - sheet: ams151
+    id: ftc2
+    quantity: "integral of x^2 from a to b, (b^3 - a^3) / 3"
+    inputs: {a: 1, b: 2}
+    expected: 2.3333333333333335
+    tolerance: 1.0e-9
+    conditions: "integrand continuous on [a, b]"
+    source: "OpenStax Calculus Volume 1, Section 5.3 (The Fundamental Theorem of Calculus), https://openstax.org/details/books/calculus-volume-1"
+
+  - sheet: psy103
+    id: z-score
+    quantity: "z = (x - mean) / sd"
+    inputs: {x: 85, mean: 70, sd: 10}
+    expected: 1.5
+    tolerance: 1.0e-9
+    conditions: "sd > 0"
+    source: "OpenStax Introductory Statistics, Section 6.1 (The Standard Normal Distribution), https://openstax.org/details/books/introductory-statistics"
+
+  - sheet: psy103
+    id: mean
+    quantity: "arithmetic mean of the values"
+    values: [3, 7, 8, 10, 12]
+    expected: 8
+    tolerance: 1.0e-9
+    conditions: "at least one value"
+    source: "OpenStax Introductory Statistics, Section 2.3 (Measures of the Center of the Data), https://openstax.org/details/books/introductory-statistics"

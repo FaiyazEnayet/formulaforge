@@ -2,6 +2,20 @@
 
 ## [Unreleased]
 ### Added
+- Catalog audit contract and oracle (FF-01 part 1). Formulas gain
+  optional provenance fields (source, conditions, notation, units),
+  documented in `docs/catalog-audit-contract.md`, and a new
+  `internal/validate` package checks them together with structural
+  LaTeX validity: balanced braces, paired environments, no doubled
+  backslashes before commands, and a fixed command vocabulary. The
+  audit pins the catalog as found in `internal/validate/baseline.json`
+  (265 formulas, 284 edges): all 32 cse113 formulas carry the
+  doubled-backslash defect, and every formula lacks provenance.
+  An independent oracle (`internal/validate/testdata/oracle.yaml`)
+  recomputes known answers for representative quantitative formulas
+  from first principles against cited sources. Baseline drift fails
+  the test suite until deliberately re-pinned. Content fixes and
+  provenance population follow in part 2.
 - Canonical showcase chart export (FF-00). `formulaforge export-showcase`
   regenerates scripts/showcase-data.json from the graph engine with
   deterministic ordering, a generator version, the source sheet hash, and

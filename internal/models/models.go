@@ -18,6 +18,13 @@ var sheetsFS embed.FS
 // derivation links to other formulas. DerivesFrom is the primary way to
 // derive it: every listed prerequisite is needed. Each AltDerivesFrom
 // entry is an alternative prerequisite set that also suffices on its own.
+//
+// The provenance fields (Source, Conditions, Notation, Units) carry the
+// catalog audit contract defined in docs/catalog-audit-contract.md and
+// checked by internal/validate: where the result comes from, the
+// conditions it holds under, what its symbols mean, and its unit
+// signature where relevant. They are optional in the schema while the
+// audit rolls out; the audit reports every formula that lacks them.
 type Formula struct {
 	ID             string     `yaml:"id"`
 	Name           string     `yaml:"name"`
@@ -27,6 +34,10 @@ type Formula struct {
 	Tags           []string   `yaml:"tags"`
 	DerivesFrom    []string   `yaml:"derives_from"`
 	AltDerivesFrom [][]string `yaml:"alt_derives_from"`
+	Source         string     `yaml:"source,omitempty"`
+	Conditions     string     `yaml:"conditions,omitempty"`
+	Notation       string     `yaml:"notation,omitempty"`
+	Units          string     `yaml:"units,omitempty"`
 }
 
 // Sheet is a course's full formula collection.
