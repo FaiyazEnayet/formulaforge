@@ -16,6 +16,20 @@
   from first principles against cited sources. Baseline drift fails
   the test suite until deliberately re-pinned. Content fixes and
   provenance population follow in part 2.
+- Catalog audit content fix (FF-01 part 2). The cse113 sheet's
+  doubled-backslash escaping is corrected, so all 32 of its formulas
+  parse with single backslashes and pass LaTeX validation. Every one
+  of the 265 formulas now carries hand-written provenance under the
+  audit contract: a resolvable source with a section for each entry
+  (OpenStax Calculus and University Physics for the calculus and
+  physics sheets, Epp for cse113, Rosen for cse213, Lay for linear
+  algebra, OpenStax Introductory Statistics for the statistics
+  sheet), and stated conditions on the quantitative sheets,
+  including the projectile entry's equal-heights and
+  no-air-resistance assumptions behind its 45-degree optimum. The
+  audit baseline is re-pinned at the clean end state (265 formulas,
+  284 edges, zero defects, no provenance gaps), and new part-2 tests
+  fail the suite if any defect or gap returns.
 - Canonical showcase chart export (FF-00). `formulaforge export-showcase`
   regenerates scripts/showcase-data.json from the graph engine with
   deterministic ordering, a generator version, the source sheet hash, and

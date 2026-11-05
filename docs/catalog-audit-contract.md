@@ -93,9 +93,18 @@ structural checks in the test suite are the always-on gate.
 
 ## Rollout
 
-Part 1 (this contract) pins the baseline as found: all 32 cse113
-formulas carry the doubled-backslash defect (12 of them also produce
-invalid-LaTeX findings as a consequence), and all 265 formulas lack
-provenance (199 of them also lack required conditions). Part 2 fixes
-the content sheet by sheet, re-pinning the baseline as it goes, and
-ends with an empty defect list and no provenance gaps.
+Part 1 (this contract) pinned the baseline as found: all 32 cse113
+formulas carried the doubled-backslash defect (12 of them also
+produced invalid-LaTeX findings as a consequence), and all 265
+formulas lacked provenance (199 of them also lacked required
+conditions). Part 2 fixed the content sheet by sheet and re-pinned
+the baseline at the end state: the cse113 escaping is corrected, and
+every formula now carries a hand-written source plus the conditions
+its result needs on the quantitative sheets. The calculus and
+physics entries cite OpenStax (Calculus Volumes 1-3, University
+Physics Volumes 1-2), cse113 cites Epp's Discrete Mathematics with
+Applications (5th edition), cse213 cites Rosen's Discrete
+Mathematics and Its Applications (8th edition), ams210 cites Lay's
+Linear Algebra and Its Applications, and psy103 cites OpenStax
+Introductory Statistics. The part-2 tests hold the line: any new
+defect or provenance gap fails the suite.

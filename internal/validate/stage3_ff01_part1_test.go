@@ -1,11 +1,12 @@
 package validate_test
 
 // FF-01 part 1: source contract, baseline capture, fixtures and the
-// independent oracle. These tests pin the catalog exactly as it
-// stands at the part-1 baseline (265 formulas, 284 edges, the cse113
-// doubled-backslash defect inventory, and a full set of provenance
-// gaps). Part 2 fixes the content and re-pins the baseline; the
-// expectations marked PART 2 below are the ones it updates.
+// independent oracle. These tests originally pinned the catalog
+// exactly as it stood at the part-1 baseline (265 formulas, 284
+// edges, the cse113 doubled-backslash defect inventory, and a full
+// set of provenance gaps). Part 2 fixed the content and re-pinned
+// the baseline; the expectations marked PART 2 below are the ones it
+// updated, and they now assert the clean end state.
 
 import (
 	"encoding/json"
@@ -61,42 +62,29 @@ func TestStage3Formulaforge01Part1BaselineCapture(t *testing.T) {
 	}
 }
 
-// TestStage3Formulaforge01Part1CatalogAudit records the known-defect
-// inventory and provenance gaps at the part-1 baseline. PART 2: as
-// content is fixed, the defect expectations below shrink to zero and
-// the gap counts shrink to zero; update them in the same change that
-// fixes the content and re-pins the baseline.
+// TestStage3Formulaforge01Part1CatalogAudit recorded the
+// known-defect inventory and provenance gaps at the part-1 baseline
+// (44 cse113 defects, 265 missing sources, 199 missing conditions).
+// PART 2 (done): the content fixes landed in the same change that
+// re-pinned the baseline, and the expectations below now assert the
+// end state the contract requires: no findings of any class.
 func TestStage3Formulaforge01Part1CatalogAudit(t *testing.T) {
 	findings, err := validate.AuditCatalog()
 	if err != nil {
 		t.Fatalf("audit catalog: %v", err)
 	}
-	defects := validate.Defects(findings)
-	if len(defects) == 0 {
-		t.Fatal("expected the known cse113 defects at the part-1 baseline")
-	}
-	for _, d := range defects {
-		if d.Sheet != "cse113" {
-			t.Errorf("defect outside the known carrier sheet: %s/%s (%s)", d.Sheet, d.ID, d.Class)
-		}
-	}
-	doubled := map[string]bool{}
-	for _, f := range findings {
-		if f.Class == validate.ClassDoubledBackslash {
-			doubled[f.Sheet+"/"+f.ID] = true
-		}
-	}
-	if len(doubled) != 32 {
-		t.Errorf("doubled-backslash formulas: got %d, want 32 (all of cse113)", len(doubled))
+	if defects := validate.Defects(findings); len(defects) != 0 {
+		t.Errorf("defects remain after the part-2 fix: %v", defects)
 	}
 	counts := validate.ClassCounts(findings)
-	if counts[validate.ClassMissingProvenance] != 265 {
-		t.Errorf("missing-provenance findings: got %d, want 265 (no formula carries a source yet)",
-			counts[validate.ClassMissingProvenance])
-	}
-	if counts[validate.ClassMissingConditions] != 199 {
-		t.Errorf("missing-conditions findings: got %d, want 199 (quantitative sheets)",
-			counts[validate.ClassMissingConditions])
+	for _, class := range []string{
+		validate.ClassDoubledBackslash, validate.ClassInvalidLatex,
+		validate.ClassMissingProvenance, validate.ClassInvalidProvenance,
+		validate.ClassMissingConditions,
+	} {
+		if counts[class] != 0 {
+			t.Errorf("%s findings: got %d, want 0", class, counts[class])
+		}
 	}
 }
 

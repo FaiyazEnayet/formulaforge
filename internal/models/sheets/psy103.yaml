@@ -8,6 +8,8 @@ formulas:
     topic: "Descriptive statistics"
     latex: '\bar{X} = \frac{\sum X}{n}'
     description: "The arithmetic average. Sensitive to every score, including outliers."
+    source: "OpenStax Introductory Statistics, Section 2.3 (Measures of the Center of the Data)"
+    conditions: "computed over n scores with n at least 1; every score counts, so extreme values pull the mean toward them"
     tags: [definition, central-tendency]
     derives_from: []
 
@@ -16,6 +18,8 @@ formulas:
     topic: "Descriptive statistics"
     latex: '\text{middle value of the ordered scores}'
     description: "The 50th percentile. Resistant to skew — the better center for income-like data."
+    source: "OpenStax Introductory Statistics, Section 2.3 (Measures of the Center of the Data)"
+    conditions: "the scores must be ordered first; for an even number of scores, the median is the average of the two middle values"
     tags: [definition, central-tendency]
     derives_from: []
 
@@ -24,6 +28,8 @@ formulas:
     topic: "Descriptive statistics"
     latex: '\text{most frequently occurring score}'
     description: "The only center that works for nominal categories."
+    source: "OpenStax Introductory Statistics, Section 2.3 (Measures of the Center of the Data)"
+    conditions: "defined for any scale of measurement, including nominal categories; a data set can have no mode or several modes"
     tags: [definition, central-tendency]
     derives_from: []
 
@@ -32,6 +38,8 @@ formulas:
     topic: "Descriptive statistics"
     latex: '\text{Range} = X_{\max} - X_{\min}'
     description: "Quick spread estimate. Two extreme scores tell the whole story, for better or worse."
+    source: "OpenStax Introductory Statistics, Section 2.7 (Measures of the Spread of the Data)"
+    conditions: "uses only the two extreme scores, so a single outlier can inflate it"
     tags: [spread]
     derives_from: []
 
@@ -40,6 +48,8 @@ formulas:
     topic: "Descriptive statistics"
     latex: '\sigma^2 = \frac{\sum (X - \mu)^2}{N}'
     description: "Average squared distance from the mean. Squaring keeps deviations positive."
+    source: "OpenStax Introductory Statistics, Section 2.7 (Measures of the Spread of the Data)"
+    conditions: "mu and N describe the whole population of interest, not a sample drawn from it"
     tags: [spread]
     derives_from: [mean]
 
@@ -48,6 +58,8 @@ formulas:
     topic: "Descriptive statistics"
     latex: 's^2 = \frac{\sum (X - \bar{X})^2}{n - 1}'
     description: "Divide by n-1 (Bessel's correction) so the sample estimate is unbiased."
+    source: "OpenStax Introductory Statistics, Section 2.7 (Measures of the Spread of the Data)"
+    conditions: "the scores are a sample, the mean in the formula is the sample mean, and dividing by n - 1 (Bessel's correction) makes s^2 an unbiased estimator of the population variance"
     tags: [spread]
     derives_from: [mean]
 
@@ -56,6 +68,8 @@ formulas:
     topic: "Descriptive statistics"
     latex: '\sigma = \sqrt{\sigma^2}'
     description: "Back in original units. The workhorse measure of spread."
+    source: "OpenStax Introductory Statistics, Section 2.7 (Measures of the Spread of the Data)"
+    conditions: "sigma is in the same units as the original scores"
     tags: [spread]
     derives_from: [variance-pop]
 
@@ -64,6 +78,8 @@ formulas:
     topic: "Descriptive statistics"
     latex: 's = \sqrt{s^2}'
     description: "Sample version. Almost every psych paper reports this, not variance."
+    source: "OpenStax Introductory Statistics, Section 2.7 (Measures of the Spread of the Data)"
+    conditions: "s is in the same units as the original scores"
     tags: [spread]
     derives_from: [variance-sample]
 
@@ -72,6 +88,8 @@ formulas:
     topic: "Standard scores"
     latex: 'z = \frac{X - \mu}{\sigma}'
     description: "How many standard deviations a score sits from the mean. Puts any two tests on the same scale."
+    source: "OpenStax Introductory Statistics, Section 6.1 (The Standard Normal Distribution)"
+    conditions: "sigma > 0; mu and sigma are the mean and standard deviation of the reference distribution"
     tags: [standardization]
     derives_from: [mean, sd-pop]
 
@@ -80,6 +98,8 @@ formulas:
     topic: "Standard scores"
     latex: 'P(\mu - \sigma < X < \mu + \sigma) \approx 0.68, \quad P(\mu - 2\sigma < X < \mu + 2\sigma) \approx 0.95, \quad P(\mu - 3\sigma < X < \mu + 3\sigma) \approx 0.997'
     description: "For bell-shaped data, nearly everything lives within three standard deviations."
+    source: "OpenStax Introductory Statistics, Section 6.1 (The Standard Normal Distribution)"
+    conditions: "the distribution is normal (bell-shaped); the percentages are the familiar approximations of the exact normal areas 0.6827, 0.9545, and 0.9973"
     tags: [normal-curve]
     derives_from: [z-score, sd-pop]
 
@@ -88,6 +108,8 @@ formulas:
     topic: "Standard scores"
     latex: '\text{PR} = \frac{\text{number of scores below } X}{\text{total scores}} \times 100'
     description: "What percent of the group you beat. A z of 0 is the 50th percentile."
+    source: "OpenStax Introductory Statistics, Section 2.2 (Measures of the Location of the Data)"
+    conditions: "scores are ranked against a reference group; conventions differ on whether scores equal to X count as below it, so published percentile ranks can differ slightly by convention"
     tags: [standardization]
     derives_from: [z-score]
 
@@ -96,6 +118,8 @@ formulas:
     topic: "Correlation and regression"
     latex: '\text{Cov}(X, Y) = \frac{\sum (X - \bar{X})(Y - \bar{Y})}{n - 1}'
     description: "Do X and Y vary together? Unstandardized, so its size is hard to interpret alone."
+    source: "Statistics for the Behavioral Sciences (Gravetter & Wallnau), Chapter 15 (Introduction to Correlation)"
+    conditions: "computed on paired scores measured on the same n cases; the sign gives the direction of co-variation, but the size depends on the measurement units of X and Y"
     tags: [association]
     derives_from: [mean]
 
@@ -104,6 +128,8 @@ formulas:
     topic: "Correlation and regression"
     latex: 'r = \frac{\text{Cov}(X, Y)}{s_X s_Y}, \quad -1 \le r \le 1'
     description: "Standardized covariation: direction and strength of a linear relationship. Not causation."
+    source: "OpenStax Introductory Statistics, Section 12.3 (The Regression Equation)"
+    conditions: "both variables are interval or ratio scale and the relationship is linear; r measures linear association only and does not imply causation"
     tags: [association]
     derives_from: [covariance, sd-sample]
 
@@ -112,6 +138,8 @@ formulas:
     topic: "Correlation and regression"
     latex: 'r^2'
     description: "Proportion of variance in Y explained by X. An r of 0.5 explains only 25%."
+    source: "OpenStax Introductory Statistics, Section 12.3 (The Regression Equation)"
+    conditions: "in simple linear regression r^2 is the square of the Pearson correlation: the proportion of the total variation in Y accounted for by its regression on X"
     tags: [association]
     derives_from: [correlation]
 
@@ -120,6 +148,8 @@ formulas:
     topic: "Correlation and regression"
     latex: 'b = r \frac{s_Y}{s_X}'
     description: "Predicted change in Y per one-unit change in X. Steeper when the correlation is stronger."
+    source: "OpenStax Introductory Statistics, Section 12.3 (The Regression Equation)"
+    conditions: "the line is the least-squares regression of Y on X; the slope is measured in units of Y per unit of X"
     tags: [prediction]
     derives_from: [correlation, sd-sample]
 
@@ -128,6 +158,8 @@ formulas:
     topic: "Correlation and regression"
     latex: '\hat{Y} = a + bX, \quad a = \bar{Y} - b\bar{X}'
     description: "Best-fit line through the scatterplot. Always passes through the point of means."
+    source: "OpenStax Introductory Statistics, Section 12.3 (The Regression Equation)"
+    conditions: "the line is the least-squares fit and always passes through the point of means"
     tags: [prediction]
     derives_from: [regression-slope, mean]
 
@@ -136,6 +168,8 @@ formulas:
     topic: "Inferential statistics"
     latex: 'SE = \frac{s}{\sqrt{n}}'
     description: "How much sample means bounce around. Bigger samples, tighter estimates."
+    source: "OpenStax Introductory Statistics, Section 7.1 (The Central Limit Theorem for Sample Means)"
+    conditions: "the samples are random samples of size n from one population; s estimates the population sigma, and for large n the sampling distribution of the mean is approximately normal by the central limit theorem"
     tags: [sampling]
     derives_from: [sd-sample]
 
@@ -144,6 +178,8 @@ formulas:
     topic: "Inferential statistics"
     latex: '\bar{X} \pm z^* \cdot SE, \quad z^* \approx 1.96'
     description: "Plausible range for the population mean. Not the probability the mean is inside."
+    source: "OpenStax Introductory Statistics, Section 8.1 (A Single Population Mean Using the Normal Distribution)"
+    conditions: "random sampling with an approximately normal sampling distribution for the mean, and sigma known or the sample large; 95% is the long-run capture rate of the procedure, not the probability that this interval holds the mean"
     tags: [estimation]
     derives_from: [std-error, z-score]
 
@@ -152,6 +188,8 @@ formulas:
     topic: "Inferential statistics"
     latex: 't = \frac{\bar{X} - \mu_0}{SE}'
     description: "Signal over noise: how many standard errors the sample mean is from the null."
+    source: "OpenStax Introductory Statistics, Section 8.2 (A Single Population Mean Using the Student t-Distribution)"
+    conditions: "the population standard deviation is unknown and estimated by s; the scores are approximately normally distributed, which matters most for small samples"
     tags: [hypothesis-test]
     derives_from: [std-error, mean]
 
@@ -160,6 +198,8 @@ formulas:
     topic: "Inferential statistics"
     latex: 'p = P(\text{data this extreme} \mid H_0 \text{ true})'
     description: "Not the probability the hypothesis is true. Small p means surprising data under the null."
+    source: "OpenStax Introductory Statistics, Section 9.1 (Null and Alternative Hypotheses)"
+    conditions: "computed under the assumption that the null hypothesis is true, with 'this extreme' measured in the direction of the alternative hypothesis"
     tags: [hypothesis-test]
     derives_from: [t-stat, z-score]
 
@@ -168,6 +208,9 @@ formulas:
     topic: "Inferential statistics"
     latex: 'd = \frac{M_1 - M_2}{s_{\text{pooled}}}'
     description: "Effect size in standard-deviation units. 0.2 is small, 0.5 medium, 0.8 large."
+    source: "Statistical Power Analysis for the Behavioral Sciences (Cohen), Chapter 2 (The t Test for Means)"
+    conditions: "the denominator is the pooled within-group standard deviation; the 0.2, 0.5, and 0.8 benchmarks quoted for d are conventions, not derived thresholds"
+    notation: "M_1 and M_2 are the two group means"
     tags: [effect-size]
     derives_from: [mean, sd-sample]
 
@@ -176,5 +219,7 @@ formulas:
     topic: "Inferential statistics"
     latex: '\chi^2 = \sum \frac{(O - E)^2}{E}'
     description: "Tests association between categorical variables. Compares observed counts to expected ones."
+    source: "OpenStax Introductory Statistics, Section 11.3 (Test of Independence)"
+    conditions: "the data are counts in categories from independent observations, and the expected count in each cell should be at least about 5 for the chi-square approximation to be trusted"
     tags: [hypothesis-test]
     derives_from: []

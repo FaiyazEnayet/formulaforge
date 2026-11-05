@@ -8,6 +8,8 @@ formulas:
     topic: "Matrices"
     latex: '(A + B)_{ij} = A_{ij} + B_{ij}, \quad (cA)_{ij} = c A_{ij}'
     description: "Entrywise operations. Same shape required for addition."
+    source: "Linear Algebra and Its Applications (Lay), Section 2.1 (Matrix Operations)"
+    conditions: "A and B have the same size; addition is undefined for matrices of different shapes"
     tags: [definition]
     derives_from: []
 
@@ -16,6 +18,8 @@ formulas:
     topic: "Matrices"
     latex: '(AB)_{ij} = \sum_k A_{ik} B_{kj}'
     description: "Row i of A dot column j of B. Inner dimensions must match; AB != BA in general."
+    source: "Linear Algebra and Its Applications (Lay), Section 2.1 (Matrix Operations)"
+    conditions: "the number of columns of A equals the number of rows of B; in general AB and BA differ, and one product may exist without the other"
     tags: [definition]
     derives_from: []
 
@@ -24,6 +28,8 @@ formulas:
     topic: "Matrices"
     latex: '(A^T)_{ij} = A_{ji}'
     description: "Flip across the main diagonal. Symmetric means A^T = A."
+    source: "Linear Algebra and Its Applications (Lay), Section 2.1 (Matrix Operations)"
+    conditions: "defined for every matrix, of any size"
     tags: [definition]
     derives_from: []
 
@@ -32,6 +38,8 @@ formulas:
     topic: "Matrices"
     latex: '(AB)^T = B^T A^T, \quad (A^T)^T = A'
     description: "Order reverses under transpose, like socks and shoes."
+    source: "Linear Algebra and Its Applications (Lay), Section 2.1 (Matrix Operations)"
+    conditions: "the product AB must be defined for (AB)^T to make sense"
     tags: [property]
     derives_from: [matrix-mult, transpose]
 
@@ -40,6 +48,8 @@ formulas:
     topic: "Matrices"
     latex: 'AI = IA = A'
     description: "Ones on the diagonal, zeros elsewhere. The multiplicative unit."
+    source: "Linear Algebra and Its Applications (Lay), Section 2.1 (Matrix Operations)"
+    conditions: "I is the n x n identity; on each side of A the identity is sized to match A"
     tags: [definition]
     derives_from: [matrix-mult]
 
@@ -48,6 +58,8 @@ formulas:
     topic: "Determinants"
     latex: '\det \begin{pmatrix} a & b \\ c & d \end{pmatrix} = ad - bc'
     description: "Signed area scaling factor of the transformation."
+    source: "Linear Algebra and Its Applications (Lay), Section 3.1 (Introduction to Determinants)"
+    conditions: "the matrix is 2 x 2; the value is zero exactly when the rows are proportional"
     tags: [determinant]
     derives_from: []
 
@@ -56,6 +68,8 @@ formulas:
     topic: "Determinants"
     latex: '\det(A) = \sum_j (-1)^{i+j} a_{ij} M_{ij}'
     description: "Expand along any row or column; M_ij is the minor. Pick the row with most zeros."
+    source: "Linear Algebra and Its Applications (Lay), Section 3.1 (Introduction to Determinants)"
+    conditions: "A is square, n x n; the cofactor expansion gives the same value along every row and every column"
     tags: [determinant]
     derives_from: [det-2x2]
 
@@ -64,6 +78,8 @@ formulas:
     topic: "Determinants"
     latex: '\det(AB) = \det(A)\det(B), \quad \det(A^T) = \det(A)'
     description: "Multiplicative over products; unchanged by transpose."
+    source: "Linear Algebra and Its Applications (Lay), Section 3.2 (Properties of Determinants)"
+    conditions: "A and B are both n x n"
     tags: [determinant, property]
     derives_from: [det-nxn, matrix-mult]
 
@@ -72,6 +88,8 @@ formulas:
     topic: "Inverses"
     latex: 'AA^{-1} = A^{-1}A = I'
     description: "The matrix that undoes A. Not every matrix has one."
+    source: "Linear Algebra and Its Applications (Lay), Section 2.2 (The Inverse of a Matrix)"
+    conditions: "A is square; the inverse is unique when it exists, and many square matrices have none"
     tags: [definition]
     derives_from: [matrix-mult, identity]
 
@@ -80,6 +98,8 @@ formulas:
     topic: "Inverses"
     latex: '\begin{pmatrix} a & b \\ c & d \end{pmatrix}^{-1} = \frac{1}{ad-bc} \begin{pmatrix} d & -b \\ -c & a \end{pmatrix}'
     description: "Swap a and d, negate b and c, divide by the determinant."
+    source: "Linear Algebra and Its Applications (Lay), Section 2.2 (The Inverse of a Matrix)"
+    conditions: "ad - bc is nonzero; when ad - bc = 0 the matrix is not invertible"
     tags: [inverse]
     derives_from: [det-2x2, inverse-def]
 
@@ -88,6 +108,8 @@ formulas:
     topic: "Inverses"
     latex: 'A \text{ invertible } \iff \det(A) \ne 0'
     description: "Zero determinant means the transformation crushes volume to zero."
+    source: "Linear Algebra and Its Applications (Lay), Section 3.2 (Properties of Determinants)"
+    conditions: "A is square, n x n"
     tags: [theorem]
     derives_from: [det-nxn, inverse-def]
 
@@ -96,6 +118,8 @@ formulas:
     topic: "Inverses"
     latex: '\mathbf{x} = A^{-1} \mathbf{b} \quad \text{(A invertible)}'
     description: "Theory in one line; in practice use row reduction."
+    source: "Linear Algebra and Its Applications (Lay), Section 2.2 (The Inverse of a Matrix)"
+    conditions: "A is invertible; otherwise the system has no solution or infinitely many, and is handled by row reduction"
     tags: [system]
     derives_from: [inverse-def]
 
@@ -104,6 +128,8 @@ formulas:
     topic: "Systems"
     latex: '\text{leading 1 in each pivot column, zeros elsewhere in pivot columns}'
     description: "The algorithm that solves every linear system. Read solutions straight off."
+    source: "Linear Algebra and Its Applications (Lay), Section 1.2 (Row Reduction and Echelon Forms)"
+    conditions: "the reduced echelon form of a matrix is unique, whatever sequence of row operations produces it"
     tags: [method]
     derives_from: []
 
@@ -112,6 +138,8 @@ formulas:
     topic: "Systems"
     latex: '\text{rank}(A) = \#\text{pivots} = \dim(\text{col space}) = \dim(\text{row space})'
     description: "Number of independent directions the matrix actually reaches."
+    source: "Linear Algebra and Its Applications (Lay), Section 2.9 (Dimension and Rank)"
+    conditions: "rank counts the pivots in any echelon form of A; the equality of the column-space and row-space dimensions is the rank theorem"
     tags: [definition]
     derives_from: [rref]
 
@@ -120,6 +148,8 @@ formulas:
     topic: "Vector Spaces"
     latex: 'c_1 \mathbf{v}_1 + \cdots + c_k \mathbf{v}_k = \mathbf{0} \implies c_1 = \cdots = c_k = 0'
     description: "No vector is a combo of the others. The only trivial relation."
+    source: "Linear Algebra and Its Applications (Lay), Section 1.7 (Linear Independence)"
+    conditions: "the zero combination must be the only one; if any vector is a combination of the others, the set is dependent"
     tags: [definition]
     derives_from: []
 
@@ -128,6 +158,8 @@ formulas:
     topic: "Vector Spaces"
     latex: '\text{span}\{\mathbf{v}_1, \dots, \mathbf{v}_k\} = \left\{ \sum c_i \mathbf{v}_i \right\}'
     description: "Everything reachable by combining the vectors."
+    source: "Linear Algebra and Its Applications (Lay), Section 1.3 (Vector Equations)"
+    conditions: "the weights c_i range over all scalars; the span is the smallest subspace containing the vectors"
     tags: [definition]
     derives_from: []
 
@@ -136,6 +168,8 @@ formulas:
     topic: "Vector Spaces"
     latex: '\text{basis} = \text{independent} + \text{spanning}'
     description: "A minimal coordinate system for the space."
+    source: "Linear Algebra and Its Applications (Lay), Section 4.3 (Linearly Independent Sets; Bases)"
+    conditions: "the set lies in one subspace and must satisfy both properties there; only spanning or only independent is not enough"
     tags: [definition]
     derives_from: [lin-indep, span]
 
@@ -144,6 +178,8 @@ formulas:
     topic: "Vector Spaces"
     latex: '\text{every basis of } \mathbb{R}^n \text{ has exactly } n \text{ vectors}'
     description: "Dimension is well defined: all bases of a space have the same size."
+    source: "Linear Algebra and Its Applications (Lay), Section 4.5 (The Dimension of a Vector Space)"
+    conditions: "the space is finite-dimensional; stated for R^n, and the same result holds in any finite-dimensional vector space"
     tags: [theorem]
     derives_from: [basis]
 
@@ -152,6 +188,8 @@ formulas:
     topic: "Vector Spaces"
     latex: '\text{rank}(A) + \text{nullity}(A) = n \quad \text{(A is } m \times n \text{)}'
     description: "Columns are either pivots or free variables; nothing else."
+    source: "Linear Algebra and Its Applications (Lay), Section 4.6 (Rank)"
+    conditions: "A is m x n, so n counts the columns of A (the dimension of the domain)"
     tags: [theorem]
     derives_from: [rank, lin-indep]
 
@@ -160,6 +198,8 @@ formulas:
     topic: "Eigenvalues"
     latex: 'A \mathbf{v} = \lambda \mathbf{v}, \quad \mathbf{v} \ne \mathbf{0}'
     description: "Directions the matrix only stretches. The heart of the course's second half."
+    source: "Linear Algebra and Its Applications (Lay), Section 5.1 (Eigenvalues and Eigenvectors)"
+    conditions: "A is square and the eigenvector v is nonzero by definition; the eigenvalue lambda may be any scalar, including zero"
     tags: [definition]
     derives_from: [matrix-mult]
 
@@ -168,6 +208,8 @@ formulas:
     topic: "Eigenvalues"
     latex: '\det(A - \lambda I) = 0'
     description: "Its roots are the eigenvalues. Degree n for an n x n matrix."
+    source: "Linear Algebra and Its Applications (Lay), Section 5.2 (The Characteristic Equation)"
+    conditions: "A is n x n, so the characteristic polynomial has degree n; its roots are the eigenvalues, counting complex roots when real ones do not suffice"
     tags: [eigenvalue]
     derives_from: [eigen-def, det-nxn]
 
@@ -176,6 +218,8 @@ formulas:
     topic: "Eigenvalues"
     latex: 'E_\lambda = \text{null}(A - \lambda I)'
     description: "All eigenvectors for one eigenvalue, plus zero. Find via row reduction."
+    source: "Linear Algebra and Its Applications (Lay), Section 5.1 (Eigenvalues and Eigenvectors)"
+    conditions: "lambda is an eigenvalue of A; the eigenspace includes the zero vector, which is not itself an eigenvector"
     tags: [eigenvalue]
     derives_from: [eigen-def, rref]
 
@@ -184,6 +228,8 @@ formulas:
     topic: "Eigenvalues"
     latex: 'A = PDP^{-1} \iff A \text{ has } n \text{ independent eigenvectors}'
     description: "Powers become trivial: A^k = PD^kP^{-1}. The payoff of eigenvalues."
+    source: "Linear Algebra and Its Applications (Lay), Section 5.3 (Diagonalization)"
+    conditions: "A is n x n with n linearly independent eigenvectors; a repeated eigenvalue does not settle the question by itself, since the eigenspaces decide"
     tags: [theorem]
     derives_from: [eigen-def, inverse-def]
 
@@ -192,6 +238,8 @@ formulas:
     topic: "Orthogonality"
     latex: '\mathbf{u} \cdot \mathbf{v} = \sum_i u_i v_i'
     description: "Algebraic angle measure. Zero means perpendicular."
+    source: "Linear Algebra and Its Applications (Lay), Section 6.1 (Inner Product, Length, and Orthogonality)"
+    conditions: "u and v have the same number of entries"
     tags: [definition]
     derives_from: []
 
@@ -200,6 +248,8 @@ formulas:
     topic: "Orthogonality"
     latex: '\lVert \mathbf{v} \rVert = \sqrt{\mathbf{v} \cdot \mathbf{v}}'
     description: "Length from the dot product. Unit vector: v / ||v||."
+    source: "Linear Algebra and Its Applications (Lay), Section 6.1 (Inner Product, Length, and Orthogonality)"
+    conditions: "the norm is zero only for the zero vector"
     tags: [definition]
     derives_from: [dot]
 
@@ -208,6 +258,8 @@ formulas:
     topic: "Orthogonality"
     latex: '\mathbf{u} \cdot \mathbf{v} = 0 \iff \mathbf{u} \perp \mathbf{v}'
     description: "Perpendicular vectors. Orthogonal sets are automatically independent."
+    source: "Linear Algebra and Its Applications (Lay), Section 6.1 (Inner Product, Length, and Orthogonality)"
+    conditions: "u and v are nonzero for the geometric reading as perpendicular directions"
     tags: [definition]
     derives_from: [dot, lin-indep]
 
@@ -216,6 +268,8 @@ formulas:
     topic: "Orthogonality"
     latex: '\text{proj}_{\mathbf{u}}(\mathbf{v}) = \frac{\mathbf{v} \cdot \mathbf{u}}{\mathbf{u} \cdot \mathbf{u}} \, \mathbf{u}'
     description: "Shadow of v on u. The closest point on the line to v."
+    source: "Linear Algebra and Its Applications (Lay), Section 6.3 (Orthogonal Projections)"
+    conditions: "u is nonzero, since the formula divides by u . u"
     tags: [projection]
     derives_from: [dot, norm]
 
@@ -224,6 +278,8 @@ formulas:
     topic: "Orthogonality"
     latex: '\mathbf{w}_k = \mathbf{v}_k - \sum_{j<k} \text{proj}_{\mathbf{w}_j}(\mathbf{v}_k)'
     description: "Subtract all previous projections; what remains is orthogonal. Then normalize."
+    source: "Linear Algebra and Its Applications (Lay), Section 6.4 (The Gram-Schmidt Process)"
+    conditions: "the input vectors are linearly independent; applied to a dependent set, the process produces a zero vector at the dependent step"
     tags: [method]
     derives_from: [projection, lin-indep]
 
@@ -232,6 +288,8 @@ formulas:
     topic: "Orthogonality"
     latex: 'A^T A \hat{\mathbf{x}} = A^T \mathbf{b}'
     description: "Best approximate solution: project b onto the column space."
+    source: "Linear Algebra and Its Applications (Lay), Section 6.5 (Least-Squares Problems)"
+    conditions: "the normal equations are always consistent, even when Ax = b has no exact solution; the least-squares solution is unique when the columns of A are linearly independent"
     tags: [application]
     derives_from: [projection, transpose-props]
 
@@ -240,5 +298,7 @@ formulas:
     topic: "Eigenvalues"
     latex: 'A^T = A \implies \text{orthogonally diagonalizable, real eigenvalues}'
     description: "Symmetric matrices are the well-behaved ones: real spectrum, orthogonal eigenvectors."
+    source: "Linear Algebra and Its Applications (Lay), Section 7.1 (Diagonalization of Symmetric Matrices)"
+    conditions: "A is real and symmetric (A^T = A); the spectral theorem does not extend to general matrices"
     tags: [theorem]
     derives_from: [diagonalization, transpose]
