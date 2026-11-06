@@ -2,6 +2,20 @@
 
 ## [Unreleased]
 ### Added
+- Bounded exact target search (FO4). `Graph.MinMemorizeForBounded`
+  adds context cancellation and node and time budgets to the exact
+  branch-and-bound search, with memoized closure bitsets and
+  deterministic topological queue ordering for residual selection.
+  On budget exhaustion it returns the best feasible incumbent with
+  a lower and upper bound and a proof status, and never reports a
+  stopped search as exact; with a generous budget it matches the
+  unbounded solver and the exhaustive oracle. The `graph --target`
+  command gains `--search-nodes` and `--search-timeout` flags that
+  print the status, bounds, gap, and nodes visited. Benchmarks on
+  seeded relabeled DAGs (n = 12, 20, 28 across five families): at a
+  500-node budget all 15 cases finish exact with gap 0 in 3 to 18
+  nodes; at a 5-node budget 6 of 15 exhaust with honest gaps of 1
+  to 3. Regression test `TestStage3Formulaforge4` added.
 - Benchmark harness for solver semantics against independent oracles
   (FO6). Seeded relabeled DAGs across five families (sparse,
   AND-heavy, OR-heavy, bottleneck-heavy, dense mixed) with shared

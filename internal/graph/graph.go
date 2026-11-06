@@ -20,8 +20,12 @@
 //     the whole sheet; sheet authors must keep the union acyclic.
 //   - MinMemorizeFor is exact (branch and bound, no internal step
 //     cap; worst case exponential in unresolved targets and path
-//     choices). CoverageCurve is the budgeted alternative and is a
-//     greedy heuristic with no optimality guarantee.
+//     choices). MinMemorizeForBounded adds context cancellation and
+//     node/time budgets to the same search, returning a feasible
+//     incumbent with lower and upper bounds when the budget runs out;
+//     it never reports a stopped search as exact. CoverageCurve is
+//     the budgeted alternative and is a greedy heuristic with no
+//     optimality guarantee.
 //   - Every output is deterministic for a fixed sheet. TopoOrder's
 //     tie-breaking is a sorted initial ready queue, then readiness
 //     (FIFO) order; it is not the lexicographically smallest
@@ -29,9 +33,12 @@
 package graph
 
 import (
+	"context"
+	"encoding/binary"
 	"fmt"
+	"math/bits"
 	"sort"
-	"strings"
+	"time"
 
 	"github.com/FaiyazEnayet/formulaforge/internal/models"
 )
@@ -556,21 +563,99 @@ func (g *Graph) MinMemorizeSet(prior []string) []string {
 // paths; branch and bound tries both, pruning against the best solution
 // found so far. Exact, exponential in the worst case, fast on real
 // sheets. Unknown target ids are an error, as are unknown prior ids.
+//
+// It runs the bounded search (MinMemorizeForBounded) with no budget;
+// callers that need a node or time cap, or cancellation, use that
+// variant directly.
 func (g *Graph) MinMemorizeFor(targets []string, prior []string) ([]string, error) {
+	res, err := g.MinMemorizeForBounded(context.Background(), targets, prior, SearchBudget{})
+	if err != nil {
+		return nil, err
+	}
+	if !res.Exact {
+		return nil, fmt.Errorf("unbounded search ended without an exact result")
+	}
+	return res.Set, nil
+}
+
+// SearchBudget caps a bounded exact search. A zero MaxNodes means no
+// node cap and a zero MaxDuration means no time cap; negative values
+// are treated the same as zero.
+type SearchBudget struct {
+	MaxNodes    int
+	MaxDuration time.Duration
+}
+
+// BoundedSearchResult is the outcome of MinMemorizeForBounded.
+//
+// Set is always a feasible memorize set: Closure(prior + Set) derives
+// every target. When Exact is true the search ran to completion and
+// Set is an optimum, so LowerBound == UpperBound == len(Set). When the
+// search stopped early, Set is the best incumbent found so far,
+// Exact is false, and LowerBound <= optimum <= UpperBound with
+// Gap() = UpperBound - LowerBound. A stopped search is never reported
+// exact: check Exact (or Status()) rather than the gap.
+type BoundedSearchResult struct {
+	Set             []string
+	Exact           bool
+	LowerBound      int
+	UpperBound      int
+	NodesVisited    int
+	BudgetExhausted bool
+	Canceled        bool
+}
+
+// Gap returns UpperBound - LowerBound, the width of the honest
+// interval holding the optimum.
+func (r BoundedSearchResult) Gap() int {
+	return r.UpperBound - r.LowerBound
+}
+
+// Status reports the proof status of the result: "optimal" when the
+// search ran to completion, "budget-exhausted" when a node or time
+// budget stopped it, and "canceled" when the context was canceled.
+func (r BoundedSearchResult) Status() string {
+	if r.Exact {
+		return "optimal"
+	}
+	if r.Canceled {
+		return "canceled"
+	}
+	return "budget-exhausted"
+}
+
+// MinMemorizeForBounded is the bounded form of MinMemorizeFor: the
+// same exact branch-and-bound search, with context cancellation and
+// node and time budgets. Closures inside the search run on memoized
+// bitsets instead of fresh maps, and residuals are picked in
+// deterministic topological order (lowest rank, ties by id).
+//
+// On budget exhaustion it returns the best incumbent found so far
+// with an honest lower and upper bound, Exact false, and
+// BudgetExhausted true. On context cancellation it returns the
+// incumbent found so far, Canceled true, and the context error. The
+// incumbent is always feasible, and the bounds always bracket the
+// optimum. With no budget the search runs to completion and the
+// result is exact, identical to MinMemorizeFor.
+func (g *Graph) MinMemorizeForBounded(ctx context.Context, targets []string, prior []string, budget SearchBudget) (BoundedSearchResult, error) {
+	if ctx == nil {
+		ctx = context.Background()
+	}
 	ids := make(map[string]bool, len(g.Nodes))
 	for _, n := range g.Nodes {
 		ids[n] = true
 	}
 	for _, t := range targets {
 		if !ids[t] {
-			return nil, fmt.Errorf("unknown formula id: %s", t)
+			return BoundedSearchResult{}, fmt.Errorf("unknown formula id: %s", t)
 		}
 	}
 	for _, p := range prior {
 		if !ids[p] {
-			return nil, fmt.Errorf("unknown prior id: %s", p)
+			return BoundedSearchResult{}, fmt.Errorf("unknown prior id: %s", p)
 		}
 	}
+	s := g.newBoundedSearch(ctx, budget)
 	priorSet := toSet(prior)
 	base := g.Closure(priorSet)
 	need := map[string]bool{}
@@ -579,21 +664,32 @@ func (g *Graph) MinMemorizeFor(targets []string, prior []string) ([]string, erro
 			need[t] = true
 		}
 	}
-	if len(need) == 0 {
-		return []string{}, nil
-	}
 	// Memorizing every unknown root always derives everything, so it is
 	// a valid starting upper bound.
 	upper := g.MinMemorizeSet(prior)
-	best := &bbBest{set: upper, size: len(upper)}
-	memo := map[string]int{}
-	// Topological rank guides the search: pick prerequisites before
-	// dependents, so shared intermediate nodes are considered for
-	// memorization before the targets that need them. Derived from
-	// Paths directly (not Prereqs/Children, which may be unset).
-	topoRank := g.topoRankFromPaths()
-	g.branch(need, map[string]bool{}, priorSet, best, memo, topoRank)
-	return best.set, nil
+	s.best = &bbBest{set: upper, size: len(upper)}
+	if len(need) == 0 {
+		return BoundedSearchResult{Set: []string{}, Exact: true}, nil
+	}
+	s.branch(s.bitsOf(sortedKeys(need)), newBitSet(len(g.Nodes)), s.bitsOf(sortedKeys(priorSet)))
+	res := BoundedSearchResult{
+		Set:          s.best.set,
+		UpperBound:   s.best.size,
+		NodesVisited: s.nodes,
+		Canceled:     s.canceled,
+	}
+	if s.canceled {
+		res.LowerBound = s.lowerBound()
+		return res, ctx.Err()
+	}
+	if s.exhausted {
+		res.BudgetExhausted = true
+		res.LowerBound = s.lowerBound()
+		return res, nil
+	}
+	res.Exact = true
+	res.LowerBound = s.best.size
+	return res, nil
 }
 
 // topoRankFromPaths returns a topological rank (lower = closer to roots)
@@ -651,74 +747,312 @@ type bbBest struct {
 	size int
 }
 
-// branch searches memorize sets covering need. mem only grows, need only
-// grows, so the search terminates. topoRank orders residuals topologically.
-func (g *Graph) branch(need, mem, prior map[string]bool, best *bbBest, memo map[string]int, topoRank map[string]int) {
-	km := make(map[string]bool, len(prior)+len(mem))
-	for k := range prior {
-		km[k] = true
+// bitSet is a fixed-width set of node indices, used for memoized
+// closures inside the bounded search.
+type bitSet []uint64
+
+func newBitSet(n int) bitSet {
+	return make(bitSet, (n+63)/64)
+}
+
+func (b bitSet) clone() bitSet {
+	out := make(bitSet, len(b))
+	copy(out, b)
+	return out
+}
+
+func (b bitSet) has(i int) bool {
+	return b[i/64]&(1<<uint(i%64)) != 0
+}
+
+func (b bitSet) set(i int) {
+	b[i/64] |= 1 << uint(i%64)
+}
+
+func (b bitSet) count() int {
+	n := 0
+	for _, w := range b {
+		n += bits.OnesCount64(w)
 	}
-	for k := range mem {
-		km[k] = true
-	}
-	known := g.Closure(km)
-	var resid []string
-	for r := range need {
-		if !known[r] {
-			resid = append(resid, r)
+	return n
+}
+
+func (b bitSet) empty() bool {
+	for _, w := range b {
+		if w != 0 {
+			return false
 		}
 	}
-	if len(resid) == 0 {
-		if len(mem) < best.size {
-			best.size = len(mem)
-			best.set = sortedKeys(mem)
+	return true
+}
+
+// subsetOf reports whether every member of b is a member of other.
+func (b bitSet) subsetOf(other bitSet) bool {
+	for i, w := range b {
+		if w&^other[i] != 0 {
+			return false
+		}
+	}
+	return true
+}
+
+// key encodes the set as a string for memo maps.
+func (b bitSet) key() string {
+	buf := make([]byte, 0, len(b)*8)
+	var tmp [8]byte
+	for _, w := range b {
+		binary.LittleEndian.PutUint64(tmp[:], w)
+		buf = append(buf, tmp[:]...)
+	}
+	return string(buf)
+}
+
+func unionBitSets(a, b bitSet) bitSet {
+	out := a.clone()
+	for i, w := range b {
+		out[i] |= w
+	}
+	return out
+}
+
+// bbSearch is the mutable state of one bounded branch-and-bound run.
+// The graph itself is never mutated; all search state lives here.
+type bbSearch struct {
+	g           *Graph
+	ids         []string // index -> node id
+	idx         map[string]int
+	pathBits    [][]bitSet // per node index: one bitset per derivation path
+	hasPaths    []bool
+	topoRank    map[string]int
+	ctx         context.Context
+	budget      SearchBudget
+	start       time.Time
+	best        *bbBest
+	memo        map[string]int
+	closureMemo map[string]bitSet
+	closureRuns int
+	closureHits int
+	nodes       int
+	exhausted   bool
+	canceled    bool
+	frontierLB  int // minimum lower bound over budget-cut nodes; -1 when none recorded
+}
+
+// newBoundedSearch builds the search state for g, precomputing the
+// node index and the per-path bitsets the memoized closure runs on.
+func (g *Graph) newBoundedSearch(ctx context.Context, budget SearchBudget) *bbSearch {
+	s := &bbSearch{
+		g:           g,
+		ids:         append([]string{}, g.Nodes...),
+		idx:         make(map[string]int, len(g.Nodes)),
+		topoRank:    g.topoRankFromPaths(),
+		ctx:         ctx,
+		budget:      budget,
+		start:       time.Now(),
+		memo:        map[string]int{},
+		closureMemo: map[string]bitSet{},
+		frontierLB:  -1,
+	}
+	for i, n := range g.Nodes {
+		s.idx[n] = i
+	}
+	s.pathBits = make([][]bitSet, len(g.Nodes))
+	s.hasPaths = make([]bool, len(g.Nodes))
+	for i, n := range g.Nodes {
+		paths := g.Paths[n]
+		s.hasPaths[i] = len(paths) > 0
+		s.pathBits[i] = make([]bitSet, len(paths))
+		for j, p := range paths {
+			bs := newBitSet(len(g.Nodes))
+			for _, m := range p {
+				bs.set(s.idx[m])
+			}
+			s.pathBits[i][j] = bs
+		}
+	}
+	return s
+}
+
+// bitsOf converts an id list to its index bitset.
+func (s *bbSearch) bitsOf(ids []string) bitSet {
+	bs := newBitSet(len(s.ids))
+	for _, id := range ids {
+		if i, ok := s.idx[id]; ok {
+			bs.set(i)
+		}
+	}
+	return bs
+}
+
+// closureBits returns the derivation closure of known as a bitset,
+// memoized on the known set so repeated states share one fixpoint
+// run. The returned bitset is owned by the memo and must not be
+// mutated by callers.
+func (s *bbSearch) closureBits(known bitSet) bitSet {
+	key := known.key()
+	if c, ok := s.closureMemo[key]; ok {
+		s.closureHits++
+		return c
+	}
+	s.closureRuns++
+	out := known.clone()
+	for changed := true; changed; {
+		changed = false
+		for i := range s.ids {
+			if out.has(i) {
+				continue
+			}
+			for _, p := range s.pathBits[i] {
+				if p.subsetOf(out) {
+					out.set(i)
+					changed = true
+					break
+				}
+			}
+		}
+	}
+	s.closureMemo[key] = out
+	return out
+}
+
+// branch searches memorize sets covering need. mem only grows and
+// need only grows, so the search terminates. It mirrors the
+// unbounded search exactly: same seeding, same pruning, same
+// memo rule, same child order, so an unlimited budget returns the
+// same set as MinMemorizeFor.
+//
+// The node and time budgets and the context are checked at every
+// node. A cut node records a lower bound for its subtree instead of
+// expanding, and a node visited after the budget is spent records
+// its bound and returns without expanding, so the global lower
+// bound stays valid while the remaining work stays small.
+func (s *bbSearch) branch(need, mem, prior bitSet) {
+	if s.canceled {
+		return
+	}
+	known := s.closureBits(unionBitSets(prior, mem))
+	resid := need.clone()
+	for i, w := range known {
+		resid[i] &^= w
+	}
+	if resid.empty() {
+		if mem.count() < s.best.size {
+			s.best.size = mem.count()
+			s.best.set = s.idsOf(mem)
 		}
 		return
 	}
-	if len(mem) >= best.size {
+	if mem.count() >= s.best.size {
 		return
 	}
-	// Same residual need and known set reached with no more memorizations
-	// cannot lead to a better solution.
-	key := memoKey(resid, known)
-	if s, ok := memo[key]; ok && s <= len(mem) {
+	// Same residual need and known set reached with no more
+	// memorizations cannot lead to a better solution.
+	key := resid.key() + "|" + known.key()
+	if prev, ok := s.memo[key]; ok && prev <= mem.count() {
 		return
 	}
-	memo[key] = len(mem)
-	// Pick the topologically earliest residual: prerequisites before
-	// dependents. This ensures shared intermediate nodes are considered
-	// for memorization before the targets that depend on them, rather
-	// than the lexicographically first target being re-picked.
-	r := resid[0]
-	for _, c := range resid[1:] {
-		if topoRank[c] < topoRank[r] {
-			r = c
-		}
+	s.memo[key] = mem.count()
+	if s.exhausted {
+		s.recordFrontier(mem, resid)
+		return
 	}
+	if s.budget.MaxNodes > 0 && s.nodes >= s.budget.MaxNodes {
+		s.exhausted = true
+		s.recordFrontier(mem, resid)
+		return
+	}
+	if s.budget.MaxDuration > 0 && time.Since(s.start) >= s.budget.MaxDuration {
+		s.exhausted = true
+		s.recordFrontier(mem, resid)
+		return
+	}
+	if err := s.ctx.Err(); err != nil {
+		s.canceled = true
+		return
+	}
+	s.nodes++
+	r := s.pickResidual(resid)
 	// Derive r through each of its paths: every path member must be known.
-	for _, path := range g.Paths[r] {
-		need2 := make(map[string]bool, len(need)+len(path))
-		for k := range need {
-			need2[k] = true
-		}
+	for _, path := range s.g.Paths[s.ids[r]] {
+		need2 := need.clone()
 		grew := false
 		for _, p := range path {
-			if !need2[p] {
-				need2[p] = true
+			pi := s.idx[p]
+			if !need2.has(pi) {
+				need2.set(pi)
 				grew = true
 			}
 		}
 		if grew {
-			g.branch(need2, mem, prior, best, memo, topoRank)
+			s.branch(need2, mem, prior)
+			if s.canceled {
+				return
+			}
 		}
 	}
 	// Or memorize r outright.
-	mem2 := make(map[string]bool, len(mem)+1)
-	for k := range mem {
-		mem2[k] = true
+	mem2 := mem.clone()
+	mem2.set(r)
+	s.branch(need, mem2, prior)
+}
+
+// pickResidual returns the index of the topologically earliest
+// residual node, ties broken by id: the deterministic topological
+// queue order for the search.
+func (s *bbSearch) pickResidual(resid bitSet) int {
+	best := -1
+	for i := range s.ids {
+		if !resid.has(i) {
+			continue
+		}
+		if best < 0 || s.topoRank[s.ids[i]] < s.topoRank[s.ids[best]] ||
+			(s.topoRank[s.ids[i]] == s.topoRank[s.ids[best]] && s.ids[i] < s.ids[best]) {
+			best = i
+		}
 	}
-	mem2[r] = true
-	g.branch(need, mem2, prior, best, memo, topoRank)
+	return best
+}
+
+// recordFrontier records the lower bound of one budget-cut subtree:
+// the memorizations already made, plus one per residual root, since
+// a root has no derivation path and can only become known by being
+// memorized. The global lower bound is the minimum over all cut
+// subtrees, clamped to the incumbent upper bound.
+func (s *bbSearch) recordFrontier(mem, resid bitSet) {
+	lb := mem.count()
+	for i := range s.ids {
+		if resid.has(i) && !s.hasPaths[i] {
+			lb++
+		}
+	}
+	if s.frontierLB < 0 || lb < s.frontierLB {
+		s.frontierLB = lb
+	}
+}
+
+// lowerBound returns the global lower bound: the minimum frontier
+// bound, clamped to the incumbent upper bound, or 0 when no node
+// was ever cut.
+func (s *bbSearch) lowerBound() int {
+	if s.frontierLB < 0 {
+		return 0
+	}
+	if s.frontierLB > s.best.size {
+		return s.best.size
+	}
+	return s.frontierLB
+}
+
+// idsOf returns the sorted ids in a bitset.
+func (s *bbSearch) idsOf(bs bitSet) []string {
+	out := []string{}
+	for i := range s.ids {
+		if bs.has(i) {
+			out = append(out, s.ids[i])
+		}
+	}
+	sort.Strings(out)
+	return out
 }
 
 func toSet(ids []string) map[string]bool {
@@ -736,17 +1070,6 @@ func sortedKeys(set map[string]bool) []string {
 	}
 	sort.Strings(out)
 	return out
-}
-
-func memoKey(resid []string, known map[string]bool) string {
-	rs := append([]string{}, resid...)
-	sort.Strings(rs)
-	ks := make([]string, 0, len(known))
-	for k := range known {
-		ks = append(ks, k)
-	}
-	sort.Strings(ks)
-	return strings.Join(rs, ",") + "|" + strings.Join(ks, ",")
 }
 
 // CoveragePoint is one (formulas memorized, fraction of sheet derivable).

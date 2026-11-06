@@ -3,6 +3,7 @@ package main
 
 import (
 	"bufio"
+	"context"
 	"encoding/json"
 	"fmt"
 	"os"
@@ -120,7 +121,7 @@ func main() {
 					"stats": map[string]any{
 						"nodes": st.Nodes, "edges": st.Edges, "depth": st.Depth,
 						"waves": st.Waves, "roots": st.Roots, "leaves": st.Leaves,
-						"min_memorize_set": st.MinMemorizeSet,
+						"min_memorize_set":  st.MinMemorizeSet,
 						"min_memorize_size": len(st.MinMemorizeSet),
 					},
 					"top_leverage": top,
@@ -157,6 +158,24 @@ func main() {
 						targets = append(targets, t)
 					}
 				}
+				maxNodes, _ := cmd.Flags().GetInt("search-nodes")
+				maxDur, _ := cmd.Flags().GetDuration("search-timeout")
+				if maxNodes > 0 || maxDur > 0 {
+					res, err := g.MinMemorizeForBounded(context.Background(), targets, nil, graph.SearchBudget{MaxNodes: maxNodes, MaxDuration: maxDur})
+					if err != nil {
+						fatal(err)
+					}
+					fmt.Printf("  set covering targets (%d, %s):\n", len(res.Set), res.Status())
+					for _, id := range res.Set {
+						f, _ := sheet.ByID(id)
+						fmt.Printf("    - %s\n", f.Name)
+					}
+					fmt.Printf("  search: %s (lower bound %d, upper bound %d, gap %d, nodes visited %d)\n", res.Status(), res.LowerBound, res.UpperBound, res.Gap(), res.NodesVisited)
+					if !res.Exact {
+						fmt.Println("  note: the search stopped on its budget, so this set is feasible but not proven smallest")
+					}
+					return
+				}
 				ms, err := g.MinMemorizeFor(targets, nil)
 				if err != nil {
 					fatal(err)
@@ -171,6 +190,8 @@ func main() {
 	}
 	graphCmd.Flags().Bool("json", false, "emit JSON")
 	graphCmd.Flags().String("target", "", "comma-separated formula ids: print the smallest memorize set covering just those")
+	graphCmd.Flags().Int("search-nodes", 0, "with --target: stop the exact search after this many branch nodes (0 = no cap)")
+	graphCmd.Flags().Duration("search-timeout", 0, "with --target: stop the exact search after this long (0 = no cap)")
 	graphCmd.Flags().StringP("output", "o", "", "output file for --json")
 	root.AddCommand(graphCmd)
 

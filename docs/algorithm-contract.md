@@ -206,8 +206,29 @@ honest cost) with a practical consequence: `MinMemorizeFor` is
 intended for sheet-scale inputs (the eight shipped sheets have 22
 to 51 formulas and answer instantly), and callers pointing it at
 much larger or pathologically branching graphs own the wait. For
-budgeted questions on large inputs, `CoverageCurve` is the
-supported tool, with the heuristic caveat above.
+budgeted questions on large inputs, `MinMemorizeForBounded` is the
+supported exact tool (below) and `CoverageCurve` is the supported
+heuristic tool, with the caveat above.
+
+### MinMemorizeForBounded (exact with budgets, per target list)
+
+The same branch-and-bound search, with context cancellation and
+node and time budgets. Closures inside the search run on memoized
+bitsets instead of fresh maps, and residuals are picked in
+deterministic topological order (lowest rank, ties by id), so a
+fixed sheet and budget always give the same result. The result
+carries a proof status: `optimal` when the search ran to
+completion, `budget-exhausted` when a node or time budget stopped
+it, and `canceled` when the context was canceled. On a stopped
+search the returned set is the best feasible incumbent found so
+far, and the lower and upper bounds always bracket the optimum:
+the lower bound is the minimum over budget-cut subtrees of
+memorizations made plus one per residual root (a root has no
+derivation path and can only be memorized), clamped to the
+incumbent. A stopped search is never reported exact, even when
+the gap is zero. With no budget the result is exact and identical
+to `MinMemorizeFor`. The `graph --target` command exposes the
+budgets as `--search-nodes` and `--search-timeout`.
 
 ### CoverageCurve (heuristic)
 
@@ -291,6 +312,7 @@ not promised by this contract.
 | Closure | O(V * P) | yes (fixed point) |
 | MinMemorizeSet | O(V * P) | yes |
 | MinMemorizeFor | exponential in unresolved targets/paths | yes |
+| MinMemorizeForBounded | exponential in unresolved targets/paths, capped by budget | yes when complete, bounded otherwise |
 | CoverageCurve | O(V^3 * P) | no (greedy heuristic) |
 
 ## Dependency pins
