@@ -2,6 +2,22 @@
 
 ## [Unreleased]
 ### Added
+- Benchmark harness for solver semantics against independent oracles
+  (FO6). Seeded relabeled DAGs across five families (sparse,
+  AND-heavy, OR-heavy, bottleneck-heavy, dense mixed) with shared
+  internal bottlenecks, AND fan-in, and OR alternatives benchmark the
+  exact solvers and the greedy coverage curve against exhaustive
+  oracles written from subset enumeration. On 120 seeded small graphs
+  (480 exact cases) the exact solver matches the exhaustive optimum
+  to 0 tolerance. Greedy gaps are reported in full: 22 of 451
+  (graph, budget) points are nonzero, worst gap 9 formulas (seed 18,
+  bottleneck family, budget 2: greedy covers 2, optimum 11), and the
+  greedy curve is identifier-order sensitive (fractions differ under
+  relabeling on 6 of 120 graphs, max difference 0.636). The large
+  graph probe (n=20, 24, 26, 28) runs the exact solver in under
+  3 ms per case with 0 timeouts. No approximation guarantee is
+  claimed for the greedy curve. Regression test
+  `TestStage3Formulaforge6` added.
 - Derivation witnesses for dependency closure (FO3). `Graph.Witnesses`
   returns one satisfied prerequisite set per derived formula, so each
   result in a closure carries the derivation that justified it instead
