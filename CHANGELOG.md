@@ -2,6 +2,16 @@
 
 ## [Unreleased]
 ### Added
+- Derivation witnesses for dependency closure (FO3). `Graph.Witnesses`
+  returns one satisfied prerequisite set per derived formula, so each
+  result in a closure carries the derivation that justified it instead
+  of only the reachable set. The separate `Graph.CheckWitnesses`
+  checker validates a witness DAG: it rejects a witness that is not
+  exactly one whole derivation path (so a missing AND prerequisite or
+  an extra member fails), rejects a witness for an already known or
+  underivable formula, rejects a missing witness for any derived
+  formula, and rejects a cyclic witness DAG. Regression test
+  `TestStage3Formulaforge3` added.
 - Catalog audit contract and oracle (FF-01 part 1). Formulas gain
   optional provenance fields (source, conditions, notation, units),
   documented in `docs/catalog-audit-contract.md`, and a new

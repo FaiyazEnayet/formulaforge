@@ -2,8 +2,8 @@
 // sheet. The graph is a DAG: an edge A -> B means "B derives from A"
 // (learn A first). Algorithms: cycle detection, topological study order
 // grouped into waves, transitive dependents (leverage), longest-chain
-// depth, derivation closure under conjunctive semantics, and exact
-// minimum-memorize sets.
+// depth, derivation closure under conjunctive semantics, derivation
+// witnesses for the closure, and exact minimum-memorize sets.
 //
 // Algorithm contract (full text: docs/algorithm-contract.md, pinned
 // by TestStage3Formulaforge7):
@@ -400,6 +400,138 @@ func (g *Graph) Closure(known map[string]bool) map[string]bool {
 		}
 	}
 	return out
+}
+
+// Witnesses returns a derivation witness DAG: for every formula in
+// Closure(known) that is not already in the known set, one satisfied
+// prerequisite set (a whole derivation path). Roots and already known
+// formulas get no entry: they need no derivation. The chosen path is
+// the first satisfied path in the deterministic path order (shortest,
+// then lexicographic), so the result is deterministic for a fixed
+// sheet. A witness DAG explains which derivation justified each
+// result; a reachable set alone cannot.
+func (g *Graph) Witnesses(known map[string]bool) map[string][]string {
+	closed := g.Closure(known)
+	out := make(map[string][]string)
+	for _, n := range g.Nodes {
+		if !closed[n] || known[n] {
+			continue
+		}
+		for _, path := range g.Paths[n] {
+			ok := true
+			for _, p := range path {
+				if !closed[p] {
+					ok = false
+					break
+				}
+			}
+			if ok {
+				out[n] = append([]string{}, path...)
+				break
+			}
+		}
+	}
+	return out
+}
+
+// CheckWitnesses validates a derivation witness DAG against the known
+// set. It rejects a witness for a formula that is not derivable from
+// the known set, a witness for an already known formula, a witness
+// that is not exactly one whole derivation path (so a missing AND
+// prerequisite or an extra member is rejected), a witness citing a
+// prerequisite outside the closure, a missing witness for any derived
+// formula, and a cyclic witness DAG. A nil witness map is valid only
+// when nothing is derived.
+func (g *Graph) CheckWitnesses(known map[string]bool, witnesses map[string][]string) error {
+	closed := g.Closure(known)
+	for id, prereqs := range witnesses {
+		if !closed[id] {
+			return fmt.Errorf("witness for formula %s which is not derivable from the known set", id)
+		}
+		if known[id] {
+			return fmt.Errorf("witness for already known formula %s", id)
+		}
+		if len(g.Paths[id]) == 0 {
+			return fmt.Errorf("root formula %s cannot have a derivation witness", id)
+		}
+		if !matchesWholePath(prereqs, g.Paths[id]) {
+			return fmt.Errorf("witness for %s is not a whole derivation path: %v", id, prereqs)
+		}
+		for _, p := range prereqs {
+			if !closed[p] {
+				return fmt.Errorf("witness for %s cites prerequisite %s which is not known", id, p)
+			}
+		}
+	}
+	for _, n := range g.Nodes {
+		if closed[n] && !known[n] {
+			if _, ok := witnesses[n]; !ok {
+				return fmt.Errorf("missing witness for derived formula %s", n)
+			}
+		}
+	}
+	// Acyclicity: witness edges run from a derived formula to its
+	// witnessed prerequisites; a cycle means no derivation in it is
+	// grounded in the known set.
+	const (
+		white = 0
+		gray  = 1
+		black = 2
+	)
+	color := map[string]int{}
+	var visit func(u string) error
+	visit = func(u string) error {
+		color[u] = gray
+		for _, p := range witnesses[u] {
+			if _, ok := witnesses[p]; !ok {
+				continue
+			}
+			if color[p] == gray {
+				return fmt.Errorf("witness cycle: %s depends on %s", u, p)
+			}
+			if color[p] == white {
+				if err := visit(p); err != nil {
+					return err
+				}
+			}
+		}
+		color[u] = black
+		return nil
+	}
+	for id := range witnesses {
+		if color[id] == white {
+			if err := visit(id); err != nil {
+				return err
+			}
+		}
+	}
+	return nil
+}
+
+// matchesWholePath reports whether prereqs is exactly one of the
+// derivation paths: same members, no more and no fewer. Order does not
+// matter; paths are stored sorted.
+func matchesWholePath(prereqs []string, paths [][]string) bool {
+	for _, path := range paths {
+		if len(path) != len(prereqs) {
+			continue
+		}
+		set := make(map[string]bool, len(prereqs))
+		for _, p := range prereqs {
+			set[p] = true
+		}
+		ok := true
+		for _, p := range path {
+			if !set[p] {
+				ok = false
+				break
+			}
+		}
+		if ok {
+			return true
+		}
+	}
+	return false
 }
 
 // MinMemorizeSet returns the exact smallest set of formulas to memorize
