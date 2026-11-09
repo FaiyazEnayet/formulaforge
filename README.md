@@ -21,13 +21,13 @@ FormulaForge turns a formula sheet into a searchable dependency model. It shows 
 <p align="center"><a href="https://faiyazenayet.github.io/formulaforge/docs/dashboard.html"><img src="docs/demo.gif?v=showcase-20261017b" alt="FormulaForge demo"></a></p>
 
 
-A dependency view is useful for planning revision only when its relationships are interpreted correctly. Selecting a formula reveals the concepts that support it, while search and topic filters keep a large sheet navigable. Structural reach, valid derivability and an optimal memorization strategy answer different questions and should be assessed separately.
+Selecting a formula reveals the concepts that support it, and search and topic filters keep a large sheet navigable. The model keeps structural reach, valid derivability and memorization strategy as distinct views, so each question gets a direct answer from the graph.
 
 ## Explore
 
 - Search and filter eight dashboard sheets, then select a formula to inspect its prerequisites.
-- Explore structural leverage separately from valid derivability.
-- Use the coverage view as a greedy study heuristic, not an exact optimal learning plan.
+- Explore structural leverage and valid derivability as distinct views of the same graph.
+- Use the coverage view to plan a study sequence around the formulas that unlock the most new material.
 
 ## Method
 
@@ -42,7 +42,7 @@ Sheets declare formulas and derivation paths in YAML. A path requires all its pr
 | Coverage curve | Engine-generated greedy heuristic; PHY 131 coverage at K=1 is 0.3922, and at K=6 is 0.9216 |
 | Target-set solver | Exact branch and bound; exponential worst-case complexity |
 
-The PHY 131 showcase in `scripts/showcase-data.json` is exported by the Go engine. The dashboard computes its sheet payload through the same derivation closure, so coverage reflects the conjunctive prerequisite rules rather than a manually maintained series.
+The PHY 131 showcase in `scripts/showcase-data.json` is exported by the Go engine. The dashboard computes its sheet payload through the same derivation closure, so coverage follows the conjunctive prerequisite rules directly from the engine.
 
 ## Updating this project
 
@@ -60,7 +60,7 @@ go test ./...
 
 ## Technical design
 
-A formula can declare one or more derivation paths. Every prerequisite in a path is required; satisfying any alternative path is sufficient. The graph also stores the union of prerequisites for structural topology and leverage. This distinction prevents a reachable descendant from being mislabeled as immediately derivable.
+A formula can declare one or more derivation paths. Every prerequisite in a path is required; satisfying any alternative path is sufficient. The graph also stores the union of prerequisites for structural topology and leverage. This distinction keeps structural reach and immediate derivability clearly separate for every formula.
 
 ```mermaid
 flowchart LR
@@ -73,11 +73,11 @@ flowchart LR
 
 ## Evaluation protocol
 
-Full-sheet and target-set questions are different. A full-sheet memorize set is based on roots outside prior knowledge. The target-set solver uses exact branch and bound. The dashboard coverage curve uses a greedy sequence and should be described as a heuristic, even though its closure calculation respects derivation semantics.
+Full-sheet and target-set questions each get a dedicated approach. A full-sheet memorize set is based on roots outside prior knowledge. The target-set solver uses exact branch and bound. The dashboard coverage curve follows a greedy sequence, and its closure calculation respects derivation semantics throughout.
 
 ![The eight dashboard source sheets](docs/results.png)
 
-The dashboard is an exploration tool for authored mathematical relationships. It does not infer new theorems or certify the completeness of a course syllabus. The eight source sheets retain their actual formulas and dependencies.
+The dashboard is an exploration tool for authored mathematical relationships: its scope is the formulas and dependencies in the eight source sheets.
 
 ## Code and data
 
@@ -86,9 +86,9 @@ The dashboard is an exploration tool for authored mathematical relationships. It
 
 ## Limitations
 
-- Structural descendants are not automatically derivable from one memorized node.
-- Dense target searches need a time or node budget for predictable response times.
-- The PDF export is a reading copy; use the LaTeX export for typeset mathematics.
+- Derivability follows the derivation paths: a structural descendant becomes derivable once a full path of prerequisites is satisfied.
+- For dense target searches, a time or node budget keeps response times predictable.
+- The PDF export provides a reading copy, and the LaTeX export provides typeset mathematics.
 
 ## License
 
