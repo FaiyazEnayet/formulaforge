@@ -376,12 +376,12 @@ func (g *Graph) FoundationRanking() []LeverageEntry {
 
 // Closure returns the starting set plus everything derivable from it.
 // Only ids mapped to true count as known; false or unknown ids are
-// ignored.
+// ignored, and the returned set contains graph nodes only.
 func (g *Graph) Closure(known map[string]bool) map[string]bool {
 	out := make(map[string]bool, len(known))
-	for k := range known {
-		if known[k] {
-			out[k] = true
+	for _, n := range g.Nodes {
+		if known[n] {
+			out[n] = true
 		}
 	}
 	for changed := true; changed; {
