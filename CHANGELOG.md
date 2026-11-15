@@ -2,6 +2,23 @@
 
 ## [Unreleased]
 ### Added
+- Permutation and differential-test harness for the exact target
+  solver (FF-04). A new independent reference closure module
+  (`internal/graph/reference_closure.go`) reimplements the derivation
+  closure as reverse-incidence forward chaining and computes exact
+  optima by exhaustive subset enumeration through that closure only,
+  sharing no code with the production closure or solver. The new
+  property tests (`internal/graph/graph_property_test.go`,
+  `TestStage3Formulaforge04*`) check seeded metamorphic relabeling,
+  input shuffles, varied AND/OR density, disconnected components,
+  prior knowledge, ties, and negative and unknown IDs, and verify
+  every solver result against the independent oracle. Corrupted
+  solvers (union semantics, superset, dropped memorization, empty
+  set) are all rejected by the verifier. The differential check also
+  surfaced one genuine deviation: `Graph.Closure` echoed unknown ids
+  from its input map in its output, against its documented contract
+  that unknown ids are ignored; it now returns graph nodes only.
+  Existing tests in `minmemorize_ordering_test.go` are unmodified.
 - Bounded exact target search (FO4). `Graph.MinMemorizeForBounded`
   adds context cancellation and node and time budgets to the exact
   branch-and-bound search, with memoized closure bitsets and
