@@ -2,6 +2,24 @@
 
 ## [Unreleased]
 ### Added
+- Typed relationships for formula sheets (FF-02). Formulas can now
+  list `conceptual_prerequisites`: ideas worth learning first that
+  stay navigable but never grant derivability in closure, target
+  search, or the coverage curve. Each derivation path can carry a
+  derivation rule with a statement, a reference, and assumptions; a
+  path marked `unreviewed` stays out of closure and optimization,
+  and render and Anki output label it as under review instead of
+  presenting it as proven. Load rejects missing references,
+  conceptual cycles, invalid rule statuses, and rules with no
+  matching path. The migration report
+  (`internal/graph.MigrationReportFor`, documented in
+  `docs/migration-ff02.md`) enumerates every changed root, edge, and
+  coverage-curve point; across the eight shipped sheets it lists
+  zero changes, since no shipped formula uses the new fields. The
+  dashboard node payload carries the new fields, and
+  `scripts/showcase-data.json` is regenerated from the engine.
+  Regression tests `TestStage3Formulaforge02` and
+  `TestStage3Formulaforge02DashboardPayload` added.
 - Permutation and differential-test harness for the exact target
   solver (FF-04). A new independent reference closure module
   (`internal/graph/reference_closure.go`) reimplements the derivation

@@ -85,10 +85,6 @@ func HTML(sheet *models.Sheet) (string, error) {
 	fmt.Fprintf(&b, "<span class='stat'>memorize <b>%d</b>, derive the rest</span>\n", len(st.MinMemorizeSet))
 	b.WriteString("</div></header>\n")
 
-	nameOf := map[string]string{}
-	for i := range sheet.Formulas {
-		nameOf[sheet.Formulas[i].ID] = sheet.Formulas[i].Name
-	}
 	for _, topic := range sheet.Topics() {
 		b.WriteString("<h2 class='topic'>" + html.EscapeString(topic) + "</h2>\n")
 		for i := range sheet.Formulas {
@@ -103,14 +99,25 @@ func HTML(sheet *models.Sheet) (string, error) {
 				b.WriteString("<p class='desc'>" + html.EscapeString(f.Description) + "</p>\n")
 			}
 			b.WriteString("<div class='meta'>\n")
-			if len(f.DerivesFrom) > 0 {
+			// Only a certified path is presented as a derivation.
+			// An unreviewed path is labeled as under review, never
+			// as a proven "Builds on" claim.
+			cert, unrev := sheet.DerivationDisplay(f)
+			if len(cert) > 0 {
 				b.WriteString("Builds on: ")
-				for _, d := range f.DerivesFrom {
-					b.WriteString("<span class='chip'>" + html.EscapeString(nameOf[d]) + "</span>")
+				for _, n := range cert {
+					b.WriteString("<span class='chip'>" + html.EscapeString(n) + "</span>")
 				}
 				b.WriteString("\n")
-			} else {
+			} else if len(f.DerivesFrom) == 0 && len(f.AltDerivesFrom) == 0 {
 				b.WriteString("Foundation formula — learn first\n")
+			}
+			if len(unrev) > 0 {
+				b.WriteString("Derivation under review: ")
+				for _, n := range unrev {
+					b.WriteString("<span class='chip'>" + html.EscapeString(n) + "</span>")
+				}
+				b.WriteString("\n")
 			}
 			for _, t := range f.Tags {
 				b.WriteString("<span class='chip'>#" + html.EscapeString(t) + "</span>")
@@ -195,10 +202,6 @@ func Latex(sheet *models.Sheet) (string, error) {
 	if err != nil {
 		return "", err
 	}
-	nameOf := map[string]string{}
-	for i := range sheet.Formulas {
-		nameOf[sheet.Formulas[i].ID] = sheet.Formulas[i].Name
-	}
 	data := texData{
 		Course:      texEscape(sheet.Course),
 		Title:       texEscape(sheet.Title),
@@ -216,12 +219,24 @@ func Latex(sheet *models.Sheet) (string, error) {
 				continue
 			}
 			line := "Foundation formula."
-			if len(f.DerivesFrom) > 0 {
-				names := make([]string, 0, len(f.DerivesFrom))
-				for _, d := range f.DerivesFrom {
-					names = append(names, texEscape(nameOf[d]))
+			cert, unrev := sheet.DerivationDisplay(f)
+			if len(cert) > 0 {
+				names := make([]string, 0, len(cert))
+				for _, n := range cert {
+					names = append(names, texEscape(n))
 				}
 				line = "Builds on: " + strings.Join(names, ", ") + "."
+			}
+			if len(unrev) > 0 {
+				names := make([]string, 0, len(unrev))
+				for _, n := range unrev {
+					names = append(names, texEscape(n))
+				}
+				if line == "Foundation formula." {
+					line = "Derivation under review: " + strings.Join(names, ", ") + "."
+				} else {
+					line += " Derivation under review: " + strings.Join(names, ", ") + "."
+				}
 			}
 			tt.Formulas = append(tt.Formulas, texFormula{
 				Name:        texEscape(f.Name),
@@ -281,10 +296,6 @@ func PDF(sheet *models.Sheet, path string) (PDFInfo, error) {
 	pdf.CellFormat(0, 8, "Built with formulaforge", "", 0, "C", false, 0, "")
 
 	pages := 1
-	nameOf := map[string]string{}
-	for i := range sheet.Formulas {
-		nameOf[sheet.Formulas[i].ID] = sheet.Formulas[i].Name
-	}
 	for _, topic := range sheet.Topics() {
 		var chunk []*models.Formula
 		for i := range sheet.Formulas {
@@ -312,14 +323,14 @@ func PDF(sheet *models.Sheet, path string) (PDFInfo, error) {
 					pdf.SetTextColor(51, 51, 51)
 					pdf.MultiCell(0, 5, f.Description, "", "L", false)
 				}
-				if len(f.DerivesFrom) > 0 {
-					names := make([]string, 0, len(f.DerivesFrom))
-					for _, d := range f.DerivesFrom {
-						names = append(names, nameOf[d])
-					}
-					pdf.SetFont("Helvetica", "I", 8.5)
-					pdf.SetTextColor(74, 111, 165)
-					pdf.CellFormat(0, 6, "Builds on: "+strings.Join(names, ", "), "", 1, "L", false, 0, "")
+				cert, unrev := sheet.DerivationDisplay(f)
+				pdf.SetFont("Helvetica", "I", 8.5)
+				pdf.SetTextColor(74, 111, 165)
+				if len(cert) > 0 {
+					pdf.CellFormat(0, 6, "Builds on: "+strings.Join(cert, ", "), "", 1, "L", false, 0, "")
+				}
+				if len(unrev) > 0 {
+					pdf.CellFormat(0, 6, "Derivation under review: "+strings.Join(unrev, ", "), "", 1, "L", false, 0, "")
 				}
 				pdf.Ln(4)
 			}
