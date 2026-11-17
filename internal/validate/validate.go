@@ -426,19 +426,16 @@ type Baseline struct {
 	Defects       []Finding       `json:"defects"`
 }
 
-// sheetEdges counts derivation edges the way the graph engine does:
-// the size of each formula's union of prerequisites across its
-// primary and alternative derivation paths.
+// sheetEdges counts certified derivation edges the way the graph
+// engine does: the size of each formula's union of prerequisites
+// across its certified derivation paths. Conceptual prerequisites
+// and unreviewed paths are not derivation edges.
 func sheetEdges(s *models.Sheet) int {
 	edges := 0
 	for i := range s.Formulas {
-		f := &s.Formulas[i]
 		union := map[string]bool{}
-		for _, d := range f.DerivesFrom {
-			union[d] = true
-		}
-		for _, alt := range f.AltDerivesFrom {
-			for _, d := range alt {
+		for _, path := range s.Formulas[i].CertifiedPaths() {
+			for _, d := range path {
 				union[d] = true
 			}
 		}

@@ -14,6 +14,18 @@
 //     MinMemorizeSet, MinMemorizeFor) is computed on the paths
 //     themselves under AND-within-a-path, OR-across-paths semantics.
 //     Union membership is not a derivability claim.
+//   - A third structure, Conceptual/ConceptualChildren, holds the
+//     pedagogical links (conceptual_prerequisites): ideas worth
+//     learning first. Conceptual links are navigable
+//     (ConceptualAncestors, ConceptualDescendants) but never enter
+//     Paths, Prereqs, or Children, so they can never grant
+//     derivability.
+//   - Only certified derivation rules enter the graph: Paths holds
+//     the certified paths (see models.Formula.CertifiedPaths). A path
+//     whose rule status is "unreviewed" is not a proof claim, so its
+//     formula behaves as a root for derivability and optimization
+//     until the rule is reviewed. Sheets written before typed
+//     relationships have no rules and keep their existing semantics.
 //   - Cycles are union-graph cycles. A cycle that runs only through
 //     a non-chosen alternative path is still rejected by TopoOrder,
 //     Levels, Waves, Depth and Stats, even when Closure can derive
@@ -45,33 +57,50 @@ import (
 
 // Graph is the dependency DAG of a sheet.
 type Graph struct {
-	Sheet    *models.Sheet
-	Nodes    []string
-	Prereqs  map[string][]string   // node -> direct prerequisites (union over paths)
-	Children map[string][]string   // node -> direct dependents
-	Paths    map[string][][]string // node -> derivation paths; empty means root
+	Sheet              *models.Sheet
+	Nodes              []string
+	Prereqs            map[string][]string   // node -> direct prerequisites (union over certified paths)
+	Children           map[string][]string   // node -> direct dependents
+	Paths              map[string][][]string // node -> certified derivation paths; empty means root
+	Conceptual         map[string][]string   // node -> conceptual prerequisites (sorted, never derivability)
+	ConceptualChildren map[string][]string   // node -> formulas listing it as a conceptual prerequisite
 }
 
-// New builds the graph for a sheet.
+// New builds the graph for a sheet. Only certified derivation paths
+// enter Paths, Prereqs, and Children; conceptual prerequisites are
+// kept in Conceptual and ConceptualChildren.
 func New(sheet *models.Sheet) *Graph {
+	return newGraph(sheet, true)
+}
+
+// newGraph builds the graph for a sheet. With certifiedOnly set, only
+// certified derivation paths enter Paths, Prereqs, and Children; with
+// it clear, every path is treated as certified, which reproduces the
+// graph the engine built before typed relationships. The migration
+// report uses the two builds to enumerate exactly what the typing
+// changed. Conceptual links are identical in both builds.
+func newGraph(sheet *models.Sheet, certifiedOnly bool) *Graph {
 	g := &Graph{
-		Sheet:    sheet,
-		Prereqs:  map[string][]string{},
-		Children: map[string][]string{},
-		Paths:    map[string][][]string{},
+		Sheet:              sheet,
+		Prereqs:            map[string][]string{},
+		Children:           map[string][]string{},
+		Paths:              map[string][][]string{},
+		Conceptual:         map[string][]string{},
+		ConceptualChildren: map[string][]string{},
 	}
 	for _, f := range sheet.Formulas {
 		g.Nodes = append(g.Nodes, f.ID)
+		var rawPaths [][]string
+		if certifiedOnly {
+			rawPaths = f.CertifiedPaths()
+		} else {
+			rawPaths = f.AllPaths()
+		}
 		var paths [][]string
-		if len(f.DerivesFrom) > 0 {
-			d := append([]string{}, f.DerivesFrom...)
+		for _, p := range rawPaths {
+			d := append([]string{}, p...)
 			sort.Strings(d)
 			paths = append(paths, d)
-		}
-		for _, alt := range f.AltDerivesFrom {
-			a := append([]string{}, alt...)
-			sort.Strings(a)
-			paths = append(paths, a)
 		}
 		sort.Slice(paths, func(i, j int) bool {
 			if len(paths[i]) != len(paths[j]) {
@@ -102,16 +131,82 @@ func New(sheet *models.Sheet) *Graph {
 		if _, ok := g.Children[f.ID]; !ok {
 			g.Children[f.ID] = []string{}
 		}
+		// Conceptual links are pedagogical only: sorted and
+		// deduplicated, kept out of Paths, Prereqs, and Children.
+		seen := map[string]bool{}
+		var conceptual []string
+		for _, c := range f.ConceptualPrerequisites {
+			if !seen[c] {
+				seen[c] = true
+				conceptual = append(conceptual, c)
+			}
+		}
+		sort.Strings(conceptual)
+		g.Conceptual[f.ID] = conceptual
+		if _, ok := g.ConceptualChildren[f.ID]; !ok {
+			g.ConceptualChildren[f.ID] = []string{}
+		}
 	}
 	for _, n := range g.Nodes {
 		for _, p := range g.Prereqs[n] {
 			g.Children[p] = append(g.Children[p], n)
 		}
+		for _, c := range g.Conceptual[n] {
+			g.ConceptualChildren[c] = append(g.ConceptualChildren[c], n)
+		}
 	}
 	for n := range g.Children {
 		sort.Strings(g.Children[n])
 	}
+	for n := range g.ConceptualChildren {
+		sort.Strings(g.ConceptualChildren[n])
+	}
 	return g
+}
+
+// ConceptualPrereqs returns the conceptual prerequisites of a node:
+// ideas worth learning first, never a derivability claim. The
+// returned list is a copy.
+func (g *Graph) ConceptualPrereqs(node string) []string {
+	return append([]string{}, g.Conceptual[node]...)
+}
+
+// ConceptualAncestors returns every formula node transitively linked
+// as a conceptual prerequisite of node. Conceptual links only; a
+// derivation prerequisite reached through a conceptually linked node
+// is not included.
+func (g *Graph) ConceptualAncestors(node string) map[string]bool {
+	seen := map[string]bool{}
+	stack := []string{node}
+	for len(stack) > 0 {
+		u := stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+		for _, p := range g.Conceptual[u] {
+			if p != node && !seen[p] {
+				seen[p] = true
+				stack = append(stack, p)
+			}
+		}
+	}
+	return seen
+}
+
+// ConceptualDescendants returns every formula that transitively lists
+// node as a conceptual prerequisite.
+func (g *Graph) ConceptualDescendants(node string) map[string]bool {
+	seen := map[string]bool{}
+	stack := []string{node}
+	for len(stack) > 0 {
+		u := stack[len(stack)-1]
+		stack = stack[:len(stack)-1]
+		for _, v := range g.ConceptualChildren[u] {
+			if v != node && !seen[v] {
+				seen[v] = true
+				stack = append(stack, v)
+			}
+		}
+	}
+	return seen
 }
 
 // FindCycle returns node ids forming a cycle, or nil if the graph is acyclic.
@@ -350,9 +445,13 @@ func (g *Graph) FoundationRanking() []LeverageEntry {
 //
 // A formula is known when it is memorized, already known (prior
 // knowledge), or derivable: every member of at least one of its
-// derivation paths is known. Deriving C from A and B needs both A and
-// B; knowing A alone is not enough. A formula with no derivation paths
-// is a root: it can only be memorized or already known.
+// certified derivation paths is known. Deriving C from A and B needs
+// both A and B; knowing A alone is not enough. A formula with no
+// certified derivation paths is a root: it can only be memorized or
+// already known. Conceptual prerequisites never make a formula known:
+// they are pedagogical links, not derivation paths, and an
+// unreviewed derivation path is not a proof claim, so it does not
+// count here either.
 //
 // Prior and known ids: MinMemorizeSet and MinMemorizeFor take prior
 // knowledge as a list of formula ids. MinMemorizeFor rejects unknown
@@ -1126,14 +1225,15 @@ func (g *Graph) CoverageCurve() []CoveragePoint {
 
 // Stats bundles the headline numbers for a sheet.
 type Stats struct {
-	Nodes          int
-	Edges          int
-	Depth          int
-	Waves          int
-	Roots          int
-	Leaves         int
-	TopLeverage    []LeverageEntry
-	MinMemorizeSet []string
+	Nodes           int
+	Edges           int
+	ConceptualEdges int
+	Depth           int
+	Waves           int
+	Roots           int
+	Leaves          int
+	TopLeverage     []LeverageEntry
+	MinMemorizeSet  []string
 }
 
 // Stats computes headline numbers for the sheet graph.
@@ -1150,9 +1250,11 @@ func (g *Graph) Stats() (*Stats, error) {
 		return nil, err
 	}
 	edges := 0
+	conceptualEdges := 0
 	roots := 0
 	for _, n := range g.Nodes {
 		edges += len(g.Prereqs[n])
+		conceptualEdges += len(g.Conceptual[n])
 		if len(g.Prereqs[n]) == 0 {
 			roots++
 		}
@@ -1169,13 +1271,14 @@ func (g *Graph) Stats() (*Stats, error) {
 		top = top[:5]
 	}
 	return &Stats{
-		Nodes:          len(g.Nodes),
-		Edges:          edges,
-		Depth:          depth,
-		Waves:          len(waves),
-		Roots:          roots,
-		Leaves:         leaves,
-		TopLeverage:    top,
-		MinMemorizeSet: g.MinMemorizeSet(nil),
+		Nodes:           len(g.Nodes),
+		Edges:           edges,
+		ConceptualEdges: conceptualEdges,
+		Depth:           depth,
+		Waves:           len(waves),
+		Roots:           roots,
+		Leaves:          leaves,
+		TopLeverage:     top,
+		MinMemorizeSet:  g.MinMemorizeSet(nil),
 	}, nil
 }

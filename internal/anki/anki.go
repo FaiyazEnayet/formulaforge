@@ -34,20 +34,16 @@ func ExportTSV(sheet *models.Sheet, path string) (int, error) {
 	if err := w.Write([]string{"Front", "Back", "Topic"}); err != nil {
 		return 0, err
 	}
-	nameOf := map[string]string{}
-	for i := range sheet.Formulas {
-		nameOf[sheet.Formulas[i].ID] = sheet.Formulas[i].Name
-	}
 	rows := 0
 	for i := range sheet.Formulas {
 		f := &sheet.Formulas[i]
 		prereq := ""
-		if len(f.DerivesFrom) > 0 {
-			names := make([]string, 0, len(f.DerivesFrom))
-			for _, d := range f.DerivesFrom {
-				names = append(names, nameOf[d])
-			}
-			prereq = " (Builds on: " + join(names, ", ") + ")"
+		cert, unrev := sheet.DerivationDisplay(f)
+		if len(cert) > 0 {
+			prereq = " (Builds on: " + join(cert, ", ") + ")"
+		}
+		if len(unrev) > 0 {
+			prereq += " (Derivation under review: " + join(unrev, ", ") + ")"
 		}
 		front := f.Name + prereq
 		if f.Description != "" {

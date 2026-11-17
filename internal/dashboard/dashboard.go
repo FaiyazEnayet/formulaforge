@@ -29,19 +29,21 @@ var palette = []string{
 }
 
 type nodePayload struct {
-	Name     string   `json:"name"`
-	Topic    string   `json:"topic"`
-	Color    string   `json:"color"`
-	X        float64  `json:"x"`
-	Y        float64  `json:"y"`
-	Level    int      `json:"level"`
-	Leverage int      `json:"leverage"`
-	NPrereq  int      `json:"n_prereq"`
-	Latex    string   `json:"latex"`
-	Desc     string   `json:"desc"`
-	Prereqs  []string `json:"prereqs"`
-	Children []string `json:"children"`
-	Order    int      `json:"order"`
+	Name              string   `json:"name"`
+	Topic             string   `json:"topic"`
+	Color             string   `json:"color"`
+	X                 float64  `json:"x"`
+	Y                 float64  `json:"y"`
+	Level             int      `json:"level"`
+	Leverage          int      `json:"leverage"`
+	NPrereq           int      `json:"n_prereq"`
+	Latex             string   `json:"latex"`
+	Desc              string   `json:"desc"`
+	Prereqs           []string `json:"prereqs"`
+	Children          []string `json:"children"`
+	ConceptualPrereqs []string `json:"conceptual_prereqs"`
+	Unreviewed        bool     `json:"unreviewed"`
+	Order             int      `json:"order"`
 }
 
 type edgePayload struct {
@@ -146,6 +148,8 @@ func payloadFor(sheet *models.Sheet) (*sheetPayload, error) {
 			Leverage: g.Leverage(f.ID), NPrereq: len(g.Prereqs[f.ID]),
 			Latex: f.Latex, Desc: f.Description,
 			Prereqs: pre, Children: ch, Order: pos[f.ID],
+			ConceptualPrereqs: append([]string{}, g.Conceptual[f.ID]...),
+			Unreviewed: f.HasUnreviewedDerivation(),
 		}
 	}
 	var edges []edgePayload

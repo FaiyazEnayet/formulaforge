@@ -31,7 +31,7 @@ Selecting a formula reveals the concepts that support it, and search and topic f
 
 ## Method
 
-Sheets declare formulas and derivation paths in YAML. A path requires all its prerequisites; alternative paths are OR choices. The graph supports structural leverage, derivation closure, study order and target-set search.
+Sheets declare formulas and derivation paths in YAML. A path requires all its prerequisites; alternative paths are OR choices. A formula can also list conceptual prerequisites: ideas worth learning first that never count as a derivation. Each derivation path can carry a rule statement with a reference and assumptions, and a path marked unreviewed stays out of closure and optimization until it is reviewed. The graph supports structural leverage, derivation closure, study order and target-set search.
 
 ## Evidence at a glance
 
@@ -60,7 +60,7 @@ go test ./...
 
 ## Technical design
 
-A formula can declare one or more derivation paths. Every prerequisite in a path is required; satisfying any alternative path is sufficient. The graph also stores the union of prerequisites for structural topology and leverage. This distinction keeps structural reach and immediate derivability clearly separate for every formula.
+A formula can declare one or more derivation paths. Every prerequisite in a path is required; satisfying any alternative path is sufficient. The graph also stores the union of prerequisites for structural topology and leverage. This distinction keeps structural reach and immediate derivability clearly separate for every formula. Conceptual prerequisites are stored separately from derivation paths, so a helpful study hint never grants derivability on its own.
 
 ```mermaid
 flowchart LR

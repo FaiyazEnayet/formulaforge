@@ -27,7 +27,11 @@ A sheet is a YAML document:
 Each formula has: `id` (unique, non-empty), `name`, `topic` (empty
 means `General`), `latex`, `description`, `tags` (trimmed on load),
 `derives_from` (the primary derivation path), and `alt_derives_from`
-(a list of alternative derivation paths).
+(a list of alternative derivation paths). It may also carry
+`conceptual_prerequisites` (pedagogical links: ideas worth learning
+first, never derivation paths) and `derivation_rules` (one certified
+statement per derivation path, in path order). See "Typed
+relationships" below.
 
 Validation is fail-fast and total: a sheet either loads completely or
 returns one stable error, never a partial sheet. The error strings are
@@ -40,6 +44,10 @@ part of the contract:
 - a formula listing itself as a prerequisite: `formula <id> derives from itself`
 - a prerequisite that is not on the sheet: `formula <id> references unknown id: <dep>`
 - an empty alternative path: `formula <id> has an empty alternative derivation path`
+- a formula listing itself as a conceptual prerequisite: `formula <id> lists itself as a conceptual prerequisite`
+- a cycle among the conceptual links: `conceptual prerequisite cycle: <ids>`
+- a derivation rule with no matching derivation path: `formula <id> has derivation rule <n> with no matching derivation path`
+- a derivation rule with an unknown status: `formula <id> has invalid derivation rule status: "<status>"`
 
 Sheets are embedded in the binary and addressed by name (`sheets`,
 `graph <sheet>`, and the other CLI commands below). An unknown sheet
@@ -76,6 +84,49 @@ Concretely (fixture `fo7OrSheet` in the FO7 test): `t` derives from
 knowing only `r` derives `t`, and knowing only `a` does not (the AND
 path also needs `b`). `Ancestors(t)` reporting `a` and `b` does not
 mean either is required.
+
+## Typed relationships
+
+Derivation paths and pedagogical links are different claims, and
+the schema keeps them separate:
+
+- **Conceptual prerequisites** (`conceptual_prerequisites`): ideas
+  worth learning first. They are navigable
+  (`Graph.Conceptual`, `ConceptualAncestors`,
+  `ConceptualDescendants`, and the dashboard node payload) but they
+  never enter `Paths`, `Prereqs`, or `Children`, so a conceptual
+  edge alone never triggers `Closure`, never counts in
+  `MinMemorizeSet` or `MinMemorizeFor`, and never appears in the
+  coverage curve. A formula with only conceptual links is a root
+  for derivability: it can only be memorized or already known.
+- **Derivation rules** (`derivation_rules`): one rule per
+  derivation path, in path order (rule 0 covers `derives_from`,
+  rule 1 the first `alt_derives_from` entry, and so on). A rule
+  states the derivation, cites a reference, and records its
+  assumptions. Only a certified rule (status `reviewed`, or empty,
+  which means reviewed) puts its path in the graph. A rule with
+  status `unreviewed` is not a proof claim: its path is excluded
+  from `Closure` and optimization, and render and Anki output label
+  it as under review instead of presenting it as proven. A path
+  with no rule is certified by default, so sheets written before
+  typed relationships keep their existing semantics exactly.
+
+Counterexample (fixture in the FF-02 test): `t1` derives from
+`[a, b]` and lists `c` as a conceptual prerequisite. Knowing `c`
+alone derives nothing; knowing `a` and `c` still does not derive
+`t1`, because the AND path also needs `b`. A second formula `t3`
+derives from `[a]` under an unreviewed rule: knowing `a` does not
+derive `t3`, and `MinMemorizeFor([t3])` is `[t3]`. A third formula
+`t4` derives from `[a]` under an unreviewed rule or from `[b]`
+under a reviewed rule: knowing `a` does not derive `t4`, knowing
+`b` does.
+
+Migration: `MigrationReportFor` compares the graph a sheet produced
+before typed relationships (every path treated as certified) with
+the graph it produces now, and enumerates every changed root, edge,
+and coverage-curve point. Across the eight shipped sheets it lists
+zero changes, since no shipped formula uses the new fields; the
+report is documented in `docs/migration-ff02.md`.
 
 Prior knowledge and known sets:
 
@@ -117,12 +168,14 @@ could observe Go map order is sorted or driven by sheet order).
 
 ### New (construction)
 
-Builds `Paths`, `Prereqs`, `Children` from a loaded sheet. Each
-node's paths are sorted canonically: by length, then
-lexicographically. `Prereqs` and `Children` lists are sorted by id.
-Cost: dominated by sorting, `O(P log P)` worst case. Assumption: the
-sheet has already passed `models.Load` validation; `New` performs no
-validation of its own.
+Builds `Paths`, `Prereqs`, `Children` from a loaded sheet, using the
+certified derivation paths only (see "Typed relationships"), plus
+`Conceptual` and `ConceptualChildren` from the conceptual
+prerequisites. Each node's paths are sorted canonically: by length,
+then lexicographically. `Prereqs` and `Children` lists are sorted by
+id, as are the conceptual lists. Cost: dominated by sorting,
+`O(P log P)` worst case. Assumption: the sheet has already passed
+`models.Load` validation; `New` performs no validation of its own.
 
 ### FindCycle / AssertAcyclic
 
@@ -244,9 +297,10 @@ instead of dividing by the node count.
 
 ### Stats
 
-Bundles node/edge counts (edges = union prerequisite count), depth,
-wave count, root/leaf counts, the top-5 leverage ranking, and
-`MinMemorizeSet`. Rejects cyclic union graphs via `AssertAcyclic`.
+Bundles node/edge counts (edges = certified union prerequisite
+count), the conceptual edge count, depth, wave count, root/leaf
+counts, the top-5 leverage ranking, and `MinMemorizeSet`. Rejects
+cyclic union graphs via `AssertAcyclic`.
 
 ## Witness interpretation
 
