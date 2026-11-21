@@ -1,6 +1,6 @@
 # Changelog
 
-## [Unreleased]
+## [1.3.0] - 2026-11-20
 ### Added
 - Typed relationships for formula sheets (FF-02). Formulas can now
   list `conceptual_prerequisites`: ideas worth learning first that

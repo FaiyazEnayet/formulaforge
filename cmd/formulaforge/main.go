@@ -22,7 +22,7 @@ import (
 	"github.com/FaiyazEnayet/formulaforge/internal/search"
 )
 
-var version = "0.1.1"
+var version = "1.3.0"
 
 func mustSheet(name string) *models.Sheet {
 	s, err := models.LoadSheetByName(name)
