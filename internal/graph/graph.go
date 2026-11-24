@@ -64,6 +64,7 @@ type Graph struct {
 	Paths              map[string][][]string // node -> certified derivation paths; empty means root
 	Conceptual         map[string][]string   // node -> conceptual prerequisites (sorted, never derivability)
 	ConceptualChildren map[string][]string   // node -> formulas listing it as a conceptual prerequisite
+	compiled           *compiledGraph        // compiled derivation paths for forward-chaining closures (FF-05)
 }
 
 // New builds the graph for a sheet. Only certified derivation paths
@@ -161,6 +162,9 @@ func newGraph(sheet *models.Sheet, certifiedOnly bool) *Graph {
 	for n := range g.ConceptualChildren {
 		sort.Strings(g.ConceptualChildren[n])
 	}
+	// Compile the derivation paths once for forward-chaining
+	// closures (FF-05); Closure and the branch search share it.
+	g.compiled = compileGraph(g)
 	return g
 }
 
@@ -476,33 +480,24 @@ func (g *Graph) FoundationRanking() []LeverageEntry {
 // Closure returns the starting set plus everything derivable from it.
 // Only ids mapped to true count as known; false or unknown ids are
 // ignored, and the returned set contains graph nodes only.
+//
+// It runs on the compiled derivation paths (see compiled.go):
+// forward chaining over reverse incidence lists, one pass over the
+// paths that are actually affected, instead of rescanning every
+// node and every path until a fixpoint is reached. The result is
+// the same fixed point as the rescanning closure.
 func (g *Graph) Closure(known map[string]bool) map[string]bool {
-	out := make(map[string]bool, len(known))
-	for _, n := range g.Nodes {
+	seed := make([]bool, len(g.Nodes))
+	for i, n := range g.Nodes {
 		if known[n] {
-			out[n] = true
+			seed[i] = true
 		}
 	}
-	for changed := true; changed; {
-		changed = false
-		for _, n := range g.Nodes {
-			if out[n] {
-				continue
-			}
-			for _, path := range g.Paths[n] {
-				ok := true
-				for _, p := range path {
-					if !out[p] {
-						ok = false
-						break
-					}
-				}
-				if ok {
-					out[n] = true
-					changed = true
-					break
-				}
-			}
+	done := g.compiledForm().closure(seed)
+	out := make(map[string]bool, len(g.Nodes))
+	for i, n := range g.Nodes {
+		if done[i] {
+			out[n] = true
 		}
 	}
 	return out
@@ -885,16 +880,6 @@ func (b bitSet) empty() bool {
 	return true
 }
 
-// subsetOf reports whether every member of b is a member of other.
-func (b bitSet) subsetOf(other bitSet) bool {
-	for i, w := range b {
-		if w&^other[i] != 0 {
-			return false
-		}
-	}
-	return true
-}
-
 // key encodes the set as a string for memo maps.
 func (b bitSet) key() string {
 	buf := make([]byte, 0, len(b)*8)
@@ -920,7 +905,6 @@ type bbSearch struct {
 	g           *Graph
 	ids         []string // index -> node id
 	idx         map[string]int
-	pathBits    [][]bitSet // per node index: one bitset per derivation path
 	hasPaths    []bool
 	topoRank    map[string]int
 	ctx         context.Context
@@ -938,7 +922,7 @@ type bbSearch struct {
 }
 
 // newBoundedSearch builds the search state for g, precomputing the
-// node index and the per-path bitsets the memoized closure runs on.
+// node index; closures run on the graph's compiled paths (FF-05).
 func (g *Graph) newBoundedSearch(ctx context.Context, budget SearchBudget) *bbSearch {
 	s := &bbSearch{
 		g:           g,
@@ -955,19 +939,9 @@ func (g *Graph) newBoundedSearch(ctx context.Context, budget SearchBudget) *bbSe
 	for i, n := range g.Nodes {
 		s.idx[n] = i
 	}
-	s.pathBits = make([][]bitSet, len(g.Nodes))
 	s.hasPaths = make([]bool, len(g.Nodes))
 	for i, n := range g.Nodes {
-		paths := g.Paths[n]
-		s.hasPaths[i] = len(paths) > 0
-		s.pathBits[i] = make([]bitSet, len(paths))
-		for j, p := range paths {
-			bs := newBitSet(len(g.Nodes))
-			for _, m := range p {
-				bs.set(s.idx[m])
-			}
-			s.pathBits[i][j] = bs
-		}
+		s.hasPaths[i] = len(g.Paths[n]) > 0
 	}
 	return s
 }
@@ -986,7 +960,9 @@ func (s *bbSearch) bitsOf(ids []string) bitSet {
 // closureBits returns the derivation closure of known as a bitset,
 // memoized on the known set so repeated states share one fixpoint
 // run. The returned bitset is owned by the memo and must not be
-// mutated by callers.
+// mutated by callers. The fixpoint itself runs on the compiled
+// paths (forward chaining, FF-05) instead of rescanning every node
+// and path.
 func (s *bbSearch) closureBits(known bitSet) bitSet {
 	key := known.key()
 	if c, ok := s.closureMemo[key]; ok {
@@ -994,22 +970,7 @@ func (s *bbSearch) closureBits(known bitSet) bitSet {
 		return c
 	}
 	s.closureRuns++
-	out := known.clone()
-	for changed := true; changed; {
-		changed = false
-		for i := range s.ids {
-			if out.has(i) {
-				continue
-			}
-			for _, p := range s.pathBits[i] {
-				if p.subsetOf(out) {
-					out.set(i)
-					changed = true
-					break
-				}
-			}
-		}
-	}
+	out := s.g.compiledForm().closureBits(known)
 	s.closureMemo[key] = out
 	return out
 }
