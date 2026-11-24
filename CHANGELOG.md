@@ -1,5 +1,26 @@
 # Changelog
 
+## [Unreleased]
+### Changed
+- Compiled closure computation (FF-05). Derivation paths are now
+  compiled once into reverse incidence lists
+  (`internal/graph/compiled.go`): each path tracks its remaining
+  unmet prerequisites, and when a formula becomes known only the
+  paths waiting on it are updated, firing a consequent the moment
+  one of its paths reaches zero. `Graph.Closure` and the branch
+  search's memoized bitset closures run this forward chaining
+  instead of rescanning every node and path until a fixpoint. Every
+  answer is unchanged: closures match the independent FF-04
+  reference closure on all eight shipped sheets and on generated
+  graphs, and coverage curves, solver optima, witness validation,
+  and sheet stats are pinned to their previous values. Measured on
+  fixed instances (medians of three runs): closure 1.7x to 3.4x
+  faster across the shipped sheets and generated dense graphs,
+  coverage curve 2.2x to 2.6x faster, exact solver 2.3x to 2.6x
+  faster, bounded search 3.9x faster, with allocations at parity.
+  Regression test `TestStage3Formulaforge05` added, including
+  benchmarks on the same fixed instances.
+
 ## [1.3.0] - 2026-11-20
 ### Added
 - Typed relationships for formula sheets (FF-02). Formulas can now
